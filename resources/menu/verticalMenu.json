@@ -1,0 +1,225 @@
+{
+  "menu": [
+    {
+      "url": "/",
+      "name": "Dashboards",
+      "icon": "menu-icon tf-icons bx bx-home-circle",
+      "slug": "dashboard",
+      "badge": [
+        "danger",
+        "5"
+      ]
+    },
+    {
+      "url": "router-settings",
+      "name": "Router Settings",
+      "icon": "menu-icon tf-icons bx bx bx-dock-top",
+      "slug": "pages-account-settings"
+    },
+    {
+      "url": "packet-settings",
+      "name": "Packet Settings",
+      "icon": "menu-icon tf-icons bx bx bx-dock-top",
+      "slug": "packet-settings"
+    },
+    {
+      "menuHeader": "Components"
+    },
+    {
+      "name": "Cards",
+      "icon": "menu-icon tf-icons bx bx-collection",
+      "slug": "cards-basic",
+      "url": "cards/basic"
+    },
+    {
+      "name": "User interface",
+      "icon": "menu-icon tf-icons bx bx-box",
+      "slug": "ui",
+      "submenu": [
+        {
+          "url": "ui/accordion",
+          "name": "Accordion",
+          "slug": "ui-accordion"
+        },
+        {
+          "url": "ui/alerts",
+          "name": "Alerts",
+          "slug": "ui-alerts"
+        },
+        {
+          "url": "ui/badges",
+          "name": "Badges",
+          "slug": "ui-badges"
+        },
+        {
+          "url": "ui/buttons",
+          "name": "Buttons",
+          "slug": "ui-buttons"
+        },
+        {
+          "url": "ui/carousel",
+          "name": "Carousel",
+          "slug": "ui-carousel"
+        },
+        {
+          "url": "ui/collapse",
+          "name": "Collapse",
+          "slug": "ui-collapse"
+        },
+        {
+          "url": "ui/dropdowns",
+          "name": "Dropdowns",
+          "slug": "ui-dropdowns"
+        },
+        {
+          "url": "ui/footer",
+          "name": "Footer",
+          "slug": "ui-footer"
+        },
+        {
+          "url": "ui/list-groups",
+          "name": "List Groups",
+          "slug": "ui-list-groups"
+        },
+        {
+          "url": "ui/modals",
+          "name": "Modals",
+          "slug": "ui-modals"
+        },
+        {
+          "url": "ui/navbar",
+          "name": "Navbar",
+          "slug": "ui-navbar"
+        },
+        {
+          "url": "ui/offcanvas",
+          "name": "Offcanvas",
+          "slug": "ui-offcanvas"
+        },
+        {
+          "url": "ui/pagination-breadcrumbs",
+          "name": "Pagination & Breadcrumbs",
+          "slug": "ui-pagination-breadcrumbs"
+        },
+        {
+          "url": "ui/progress",
+          "name": "Progress",
+          "slug": "ui-progress"
+        },
+        {
+          "url": "ui/spinners",
+          "name": "Spinners",
+          "slug": "ui-spinners"
+        },
+        {
+          "url": "ui/tabs-pills",
+          "name": "Tabs & Pills",
+          "slug": "ui-tabs-pills"
+        },
+        {
+          "url": "ui/toasts",
+          "name": "Toasts",
+          "slug": "ui-toasts"
+        },
+        {
+          "url": "ui/tooltips-popovers",
+          "name": "Tooltips & Popovers",
+          "slug": "ui-tooltips-popovers"
+        },
+        {
+          "url": "ui/typography",
+          "name": "Typography",
+          "slug": "ui-typography"
+        }
+      ]
+    },
+    {
+      "name": "Extended UI",
+      "icon": "menu-icon tf-icons bx bx-copy",
+      "slug": "extended",
+      "submenu": [
+        {
+          "url": "extended/ui-perfect-scrollbar",
+          "name": "Perfect scrollbar",
+          "slug": "extended-ui-perfect-scrollbar"
+        },
+        {
+          "url": "extended/ui-text-divider",
+          "name": "Text Divider",
+          "slug": "extended-ui-text-divider"
+        }
+      ]
+    },
+    {
+      "url": "icons/boxicons",
+      "icon": "menu-icon tf-icons bx bx-crown",
+      "name": "Boxicons",
+      "slug": "icons-boxicons"
+    },
+    {
+      "menuHeader": "Forms & Tables"
+    },
+    {
+      "name": "Form Elements",
+      "icon": "menu-icon tf-icons bx bx-detail",
+      "slug": "forms",
+      "submenu": [
+        {
+          "url": "forms/basic-inputs",
+          "name": "Basic Inputs",
+          "slug": "forms-basic-inputs"
+        },
+        {
+          "url": "forms/input-groups",
+          "name": "Input groups",
+          "slug": "forms-input-groups"
+        }
+      ]
+    },
+    {
+      "name": "Form Layouts",
+      "icon": "menu-icon tf-icons bx bx-detail",
+      "slug": "form-layouts",
+      "submenu": [
+        {
+          "url": "form/layouts-vertical",
+          "name": "Vertical Form",
+          "slug": "form-layouts-vertical"
+        },
+        {
+          "url": "form/layouts-horizontal",
+          "name": "Horizontal Form",
+          "slug": "form-layouts-horizontal"
+        }
+      ]
+    },
+    {
+      "url": "https://demos.themeselection.com/sneat-bootstrap-html-laravel-admin-template/demo-1/form/validation",
+      "icon": "menu-icon tf-icons bx bx-list-check",
+      "name": "Form Validation",
+      "slug": "form-validation",
+      "target": "_blank",
+      "badge": [
+        "label-primary fs-tiny",
+        "Pro"
+      ]
+    },
+    {
+      "url": "tables/basic",
+      "icon": "menu-icon tf-icons bx bx-table",
+      "name": "Tables",
+      "slug": "tables-basic"
+    },
+    {
+      "url": "https://demos.themeselection.com/sneat-bootstrap-html-laravel-admin-template/demo-1/tables/datatables-basic",
+      "icon": "menu-icon tf-icons bx bx-grid",
+      "name": "Datatables",
+      "slug": "tables-datatables",
+      "target": "_blank",
+      "badge": [
+        "label-primary fs-tiny",
+        "Pro"
+      ]
+    }
+  ]
+}
