@@ -13,14 +13,20 @@
     {
       "url": "router-settings",
       "name": "Router Settings",
-      "icon": "menu-icon tf-icons bx bx bx-dock-top",
+      "icon": "menu-icon tf-icons bx bx-server",
       "slug": "pages-account-settings"
     },
     {
       "url": "packet-settings",
       "name": "Packet Settings",
-      "icon": "menu-icon tf-icons bx bx bx-dock-top",
+      "icon": "menu-icon tf-icons bx bx-globe",
       "slug": "packet-settings"
+    },
+    {
+      "url": "customers",
+      "name": "Data Pelanggan",
+      "icon": "menu-icon tf-icons bx bx-user",
+      "slug": "customers"
     },
     {
       "menuHeader": "Components"

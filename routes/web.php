@@ -15,6 +15,7 @@ use App\Http\Controllers\authentications\LoginBasic;
 use App\Http\Controllers\authentications\RegisterBasic;
 use App\Http\Controllers\authentications\ForgotPasswordBasic;
 use App\Http\Controllers\cards\CardBasic;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\dashboard\AnalyticsController;
 use App\Http\Controllers\user_interface\Accordion;
 use App\Http\Controllers\user_interface\Alerts;
@@ -54,6 +55,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/router-settings', RouterController::class);
     Route::resource('/packet-settings', PacketController::class);
+    Route::resource('customers', CustomerController::class);
 });
 
 // pages

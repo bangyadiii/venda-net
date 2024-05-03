@@ -8,7 +8,7 @@
 
 @section('content')
 <h4 class="py-3 mb-4">
-    <span class="text-muted fw-light">Router Settings</span>
+    <span class="text-muted fw-light">Data Pelanggan</span>
 </h4>
 
 <div class="row">
@@ -16,32 +16,46 @@
     <div class="card">
         <div class="card-body">
             <div class="text-end">
-                <a href="{{ route('packet-settings.create') }}" type="button" class="btn btn-primary">Tambah Paket</a>
+                <a href="{{ route('customers.create') }}" type="button" class="btn btn-primary">Tambah Data</a>
             </div>
             <div class="table-responsive text-nowrap">
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Nama Paket</th>
-                            <th>Kecepatan</th>
+                            <th>Nomor Pelanggan</th>
+                            <th>Nama</th>
+                            <th>Telp / WA</th>
+                            <th>Secret</th>
+                            <th>Paket</th>
                             <th>Tarif</th>
-                            <th>Router</th>
+                            <th>Discount</th>
+                            <th>Total Tarif</th>
+                            <th>Aktif</th>
+                            <th>Tgl. Isolir</th>
+                            <th>Isolir</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
                         <tr>
                             <td>Angular Project</td>
-                            <td>10Mbps</td>
+                            <td>Yanto</td>
+                            <td>08931293182</td>
+                            <td>Misalkan</td>
+                            <td>1 MB</td>
 
                             <td>Rp 150.000</td>
-                            <td>Router A</td>
+                            <td>Rp 10.000</td>
+                            <td>Rp 140.000</td>
+                            <td>YA</td>
+                            <td>08-02-2023</td>
+                            <td>YA</td>
                             <td>
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
                                         data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="{{ route('packet-settings.edit', 1) }}"><i
+                                        <a class="dropdown-item" href="{{ route('customers.edit', 1) }}"><i
                                                 class="bx bx-edit-alt me-1"></i> Edit</a>
                                         <a class="dropdown-item" href="javascript:void(0);"><i
                                                 class="bx bx-trash me-1"></i>

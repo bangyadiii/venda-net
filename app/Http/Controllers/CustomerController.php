@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class PacketController extends Controller
+class CustomerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('content.packet.index');
+        return view('content.customer.index');
     }
 
     /**
@@ -19,7 +19,7 @@ class PacketController extends Controller
      */
     public function create()
     {
-        return view('content.packet.create');
+        return view('content.customer.create');
     }
 
     /**
@@ -43,7 +43,7 @@ class PacketController extends Controller
      */
     public function edit(string $id)
     {
-        return view('content.packet.edit', compact('id'));
+        return view('content.customer.edit', compact('id'));
     }
 
     /**

@@ -30,7 +30,20 @@ class MikroTikService
         $this->client = new Client($config);
     }
 
-    public function connectWithCredentials($host, $username, $password)
+    /**
+     * Connect to the MikroTik Router with the given credentials
+     *
+     * @param string $host
+     * @param string $username
+     * @param string $password
+     * @return void
+     * @throws \RouterOS\Exceptions\ClientException
+     * @throws \RouterOS\Exceptions\ConfigException
+     * @throws \RouterOS\Exceptions\QueryException
+     * @throws \RouterOS\Exceptions\ConnectException
+     * @throws \RouterOS\Exceptions\BadCredentialsException
+     */
+    public function connectWithCredentials(string $host, string $username, string $password)
     {
         // Buat koneksi baru dengan informasi login
         $config = [
@@ -41,7 +54,6 @@ class MikroTikService
         ];
 
         $this->client = new Client($config);
-
         $this->saveConnectionToDatabase($username, $password, $host);
     }
 
@@ -107,9 +119,17 @@ class MikroTikService
         }
     }
 
-    private function saveConnectionToDatabase($username, $password, $host)
+    /**
+     * Save the connection to the database
+     *
+     * @param string $username
+     * @param string $password
+     * @param string $host
+     * @return Customer
+     */
+    private function saveConnectionToDatabase(string $username, string $password, string $host)
     {
-        Customer::create([
+        return Customer::create([
             'username' => $username,
             'password' => $password,
             'host' => $host,

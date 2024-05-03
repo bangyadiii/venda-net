@@ -13,5 +13,9 @@ class Router extends Model
         'host',
         'username',
         'password',
+
+        'auto_isolir',
+        'isolir_action',
+        'isolir_profile_id'
     ];
 }
