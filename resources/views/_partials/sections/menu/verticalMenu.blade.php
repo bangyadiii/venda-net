@@ -70,7 +70,7 @@
 
       {{-- submenu --}}
       @isset($menu->submenu)
-      @include('layouts.sections.menu.submenu',['menu' => $menu->submenu])
+      @include('_partials.sections.menu.submenu',['menu' => $menu->submenu])
       @endisset
     </li>
     @endif

@@ -46,12 +46,15 @@ use App\Http\Controllers\form_layouts\HorizontalForm;
 use App\Http\Controllers\PacketController;
 use App\Http\Controllers\RouterController;
 use App\Http\Controllers\tables\Basic as TablesBasic;
+use App\Livewire\Router\CreateRouter;
 
 require __DIR__ . '/auth.php';
 
 // Main Page Route
 Route::middleware('auth')->group(function () {
     Route::get('/', [AnalyticsController::class, 'index'])->name('dashboard-analytics');
+
+    Route::get('/routers/create', CreateRouter::class);
 
     Route::resource('/router-settings', RouterController::class);
     Route::resource('/packet-settings', PacketController::class);

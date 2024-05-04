@@ -1,5 +1,6 @@
 @extends('layouts/commonMaster' )
 
+
 @php
 /* Display elements */
 $contentNavbar = true;
@@ -22,7 +23,7 @@ $container = ($container ?? 'container-xxl');
   <div class="layout-container">
 
     @if ($isMenu)
-    @include('layouts/sections/menu/verticalMenu')
+    @include('_partials/sections/menu/verticalMenu')
     @endif
 
 
@@ -30,7 +31,7 @@ $container = ($container ?? 'container-xxl');
     <div class="layout-page">
       <!-- BEGIN: Navbar-->
       @if ($isNavbar)
-      @include('layouts/sections/navbar/navbar')
+      @include('_partials/sections/navbar/navbar')
       @endif
       <!-- END: Navbar-->
 
@@ -52,7 +53,7 @@ $container = ($container ?? 'container-xxl');
 
           <!-- Footer -->
           @if ($isFooter)
-          @include('layouts/sections/footer/footer')
+          @include('_partials/sections/footer/footer')
           @endif
           <!-- / Footer -->
           <div class="content-backdrop fade"></div>
@@ -69,5 +70,4 @@ $container = ($container ?? 'container-xxl');
     <!-- Drag Target Area To SlideIn Menu On Small Screens -->
     <div class="drag-target"></div>
   </div>
-  <!-- / Layout wrapper -->
-  @endsection
+@endsection

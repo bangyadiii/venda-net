@@ -1,5 +1,4 @@
 @extends('layouts/contentNavbarLayout')
-
 @section('title', 'Add Router')
 
 @section('content')
@@ -12,7 +11,7 @@
         <div class="col-xl">
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Tambah Router</h5> <small class="text-muted float-end">Default label</small>
+                    <h5 class="mb-0">Tambah Router</h5>
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
@@ -22,12 +21,13 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="username">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" placeholder="Username" required/>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Username"
+                            required />
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="password">Password</label>
                         <input type="password" id="password" name="password" class="form-control"
-                            placeholder="Input your password"/>
+                            placeholder="Input your password" />
                     </div>
                     <button class="btn btn-primary">Test Connection</button>
                 </div>
@@ -68,5 +68,4 @@
         </div>
     </div>
 </form>
-
 @endsection

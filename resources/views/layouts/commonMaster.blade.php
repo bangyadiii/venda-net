@@ -14,16 +14,18 @@
   <meta name="keywords" content="{{ config('variables.templateKeyword') ? config('variables.templateKeyword') : '' }}">
   <!-- laravel CRUD token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
+
+  @livewireStyles
   <!-- Canonical SEO -->
   <link rel="canonical" href="{{ config('variables.productPage') ? config('variables.productPage') : '' }}">
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" />
 
   <!-- Include Styles -->
-  @include('layouts/sections/styles')
+  @include('_partials/sections/styles')
 
   <!-- Include Scripts for customizer, helper, analytics, config -->
-  @include('layouts/sections/scriptsIncludes')
+  @include('_partials/sections/scriptsIncludes')
 </head>
 
 <body>
@@ -33,7 +35,7 @@
   <!--/ Layout Content -->
 
   <!-- Include Scripts -->
-  @include('layouts/sections/scripts')
+  @include('_partials/sections/scripts')
 
 </body>
 
