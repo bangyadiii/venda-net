@@ -14,7 +14,7 @@
       "url": "router-settings",
       "name": "Router Settings",
       "icon": "menu-icon tf-icons bx bx-server",
-      "slug": "pages-account-settings"
+      "slug": "packet-settings"
     },
     {
       "url": "packet-settings",
