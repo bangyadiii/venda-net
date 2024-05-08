@@ -38,7 +38,7 @@ return [
     |
     */
 
-    'layout' => 'components.layouts.contentNavbarLayout',
+    'layout' => 'layouts.contentNavbarLayout',
 
     /*
     |---------------------------------------------------------------------------
@@ -156,5 +156,5 @@ return [
     |
     */
 
-    'pagination_theme' => 'tailwind',
+    'pagination_theme' => 'bootstrap',
 ];

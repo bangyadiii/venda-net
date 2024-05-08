@@ -1,7 +1,7 @@
 {
   "menu": [
     {
-      "url": "/",
+      "url": "/dashboard",
       "name": "Dashboards",
       "icon": "menu-icon tf-icons bx bx-home-circle",
       "slug": "dashboard",
@@ -11,19 +11,19 @@
       ]
     },
     {
-      "url": "router-settings",
+      "url": "/dashboard/routers",
       "name": "Router Settings",
       "icon": "menu-icon tf-icons bx bx-server",
-      "slug": "packet-settings"
+      "slug": "routers"
     },
     {
-      "url": "packet-settings",
+      "url": "/dashboard/packets",
       "name": "Packet Settings",
       "icon": "menu-icon tf-icons bx bx-globe",
-      "slug": "packet-settings"
+      "slug": "packets"
     },
     {
-      "url": "customers",
+      "url": "/dashboard/customers",
       "name": "Data Pelanggan",
       "icon": "menu-icon tf-icons bx bx-user",
       "slug": "customers"

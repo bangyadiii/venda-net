@@ -1,5 +1,5 @@
 <div>
-    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Router/</span> Create</h4>
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Router/</span> Edit</h4>
 
     <!-- Basic Layout -->
     <form wire:submit='store'>
@@ -8,7 +8,7 @@
             <div class="col-xl">
                 <div class="card mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Tambah Router</h5>
+                        <h5 class="mb-0">Edit Router</h5>
                     </div>
                     <div class="card-body">
                         <div class="has-validation mb-3">
@@ -81,7 +81,7 @@
                                 is-invalid
                             @enderror" id="isolir_action" wire:model="form.isolir_action">
                                 <option value="change_profile">UBAH SECRET PROFILE</option>
-                                <option value="disable_secret">DISABLE SECRET</option>
+                                <option value="disabled_secret">DISABLE SECRET</option>
                             </select>
                             @error('form.isolir_action')
                             <div class="error">

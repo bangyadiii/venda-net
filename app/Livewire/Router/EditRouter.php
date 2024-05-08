@@ -6,13 +6,19 @@ use App\Livewire\Forms\RouterForm;
 use App\Models\Router;
 use Livewire\Component;
 
-class CreateRouter extends Component
+class EditRouter extends Component
 {
-    public RouterForm $form;
+    public ?RouterForm $form;
+
+    public function mount($id)
+    {
+        $router = Router::findOrFail($id);
+        $this->form->setRouter($router);
+    }
 
     public function render()
     {
-        return view('livewire.router.create-router');
+        return view('livewire.router.edit-router');
     }
 
     public function store()
@@ -24,13 +30,13 @@ class CreateRouter extends Component
         return redirect()->route('routers.index');
     }
 
-    public function testConnection(): void
+    public function testConnection()
     {
         $this->validate(
             [
-                'form.host' => 'required|string',
-                'form.username' => 'required',
-                'form.password' => 'nullable',
+                'router.host' => 'required|numeric',
+                'router.username' => 'required',
+                'router.password' => 'nullable',
             ]
         );
         try {

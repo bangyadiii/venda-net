@@ -7,7 +7,7 @@
 (function () {
   // Bootstrap toasts example
   // --------------------------------------------------------------------
-  const toastPlacementExample = document.querySelector('.toast-placement-ex'),
+  const toastPlacementExample = document.querySelector('.toast-container'),
     toastPlacementBtn = document.querySelector('#showToastPlacement');
   let selectedType, selectedPlacement, toastPlacement;
 

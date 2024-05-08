@@ -40,34 +40,30 @@ $container = ($container ?? 'container-xxl');
       <div class="content-wrapper">
 
         <!-- Content -->
-        @if ($isFlex)
-        <div class="{{$container}} d-flex align-items-stretch flex-grow-1 p-0">
-          @else
-          <div class="{{$container}} flex-grow-1 container-p-y">
-            @endif
+        <div class="{{$container}} flex-grow-1 container-p-y">
 
-            @yield('content')
+          {{ $slot }}
 
-          </div>
-          <!-- / Content -->
-
-          <!-- Footer -->
-          @if ($isFooter)
-          @include('_partials/sections/footer/footer')
-          @endif
-          <!-- / Footer -->
-          <div class="content-backdrop fade"></div>
         </div>
-        <!--/ Content wrapper -->
-      </div>
-      <!-- / Layout page -->
-    </div>
+        <!-- / Content -->
 
-    @if ($isMenu)
-    <!-- Overlay -->
-    <div class="layout-overlay layout-menu-toggle"></div>
-    @endif
-    <!-- Drag Target Area To SlideIn Menu On Small Screens -->
-    <div class="drag-target"></div>
+        <!-- Footer -->
+        @if ($isFooter)
+        @include('_partials/sections/footer/footer')
+        @endif
+        <!-- / Footer -->
+        <div class="content-backdrop fade"></div>
+      </div>
+      <!--/ Content wrapper -->
+    </div>
+    <!-- / Layout page -->
   </div>
+
+  @if ($isMenu)
+  <!-- Overlay -->
+  <div class="layout-overlay layout-menu-toggle"></div>
+  @endif
+  <!-- Drag Target Area To SlideIn Menu On Small Screens -->
+  <div class="drag-target"></div>
+</div>
 @endsection

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('host');
             $table->string('username');
             $table->string('password');
+            $table->datetime('last_connected_at')->nullable();
 
             $table->boolean('auto_isolir')->default(false);
             $table->string('isolir_action')->nullable();

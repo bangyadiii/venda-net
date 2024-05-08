@@ -36,13 +36,14 @@ class MikroTikService
      * @param string $host
      * @param string $username
      * @param string $password
-     * @return void
+     * @return bool
      * @throws \RouterOS\Exceptions\ClientException
      * @throws \RouterOS\Exceptions\ConfigException
      * @throws \RouterOS\Exceptions\QueryException
      * @throws \RouterOS\Exceptions\ConnectException
      * @throws \RouterOS\Exceptions\BadCredentialsException
      */
+
     public function connectWithCredentials(string $host, string $username, string $password)
     {
         // Buat koneksi baru dengan informasi login
@@ -54,7 +55,24 @@ class MikroTikService
         ];
 
         $this->client = new Client($config);
-        $this->saveConnectionToDatabase($username, $password, $host);
+    }
+
+    /**
+     * Attempt to connect to all available connections
+     *
+     * @return void
+     */
+    public function connectFirstAvailable(): void
+    {
+        $connections = Router::all();
+        foreach ($connections as $connection) {
+            try {
+                $this->connectWithCredentials($connection->host, $connection->username, $connection->password);
+                return;
+            } catch (\Exception $e) {
+                continue;
+            }
+        }
     }
 
     public function syncRouter()
@@ -125,14 +143,15 @@ class MikroTikService
      * @param string $username
      * @param string $password
      * @param string $host
-     * @return Customer
+     * @return Router
      */
     private function saveConnectionToDatabase(string $username, string $password, string $host)
     {
-        return Customer::create([
+        return Router::create([
             'username' => $username,
             'password' => $password,
             'host' => $host,
+            'last_connected_at' => now(),
         ]);
     }
     public function getClient(): ?Client

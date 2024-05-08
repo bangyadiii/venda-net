@@ -15,9 +15,11 @@
     "laravel/sanctum": "^3.2",
     "laravel/tinker": "^2.8",
     "livewire/livewire": "^3.4",
+    "masmerise/livewire-toaster": "^2.1",
     "yajra/laravel-datatables": "^10.1"
   },
   "require-dev": {
+    "barryvdh/laravel-debugbar": "^3.13",
     "fakerphp/faker": "^1.9.1",
     "laravel/pint": "^1.0",
     "laravel/sail": "^1.25",

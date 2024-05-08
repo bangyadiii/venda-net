@@ -8,16 +8,17 @@
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-  <title>@yield('title') | Venda NET</title>
+  <title>Venda NET</title>
   <meta name="description"
     content="{{ config('variables.templateDescription') ? config('variables.templateDescription') : '' }}" />
-  <meta name="keywords" content="{{ config('variables.templateKeyword') ? config('variables.templateKeyword') : '' }}">
+  <meta name="keywords"
+    content="{{ config('variables.templateKeyword') ? config('variables.templateKeyword') : '' }}" />
   <!-- laravel CRUD token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   @livewireStyles
   <!-- Canonical SEO -->
-  <link rel="canonical" href="{{ config('variables.productPage') ? config('variables.productPage') : '' }}">
+  <link rel="canonical" href="{{ config('variables.productPage') ? config('variables.productPage') : '' }}" />
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" />
 
@@ -36,7 +37,19 @@
 
   <!-- Include Scripts -->
   @include('_partials/sections/scripts')
+  @livewireScripts
+  <div x-data="{open: false}" x-show="open" @toast.window="Toastify({
+      text: $event.detail.title,
+      newWindow: true,
+      close: true,
+      gravity: 'bottom',
+      position: 'right',
+      stopOnFocus: true,
+      className: 'bg-success'
+      {{-- className: 'bg-' + $event.detail.type ? $event.detail.type : 'primary', --}}
+    }).showToast()">
 
+  </div>
 </body>
 
 </html>
