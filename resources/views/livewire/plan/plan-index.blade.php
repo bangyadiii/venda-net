@@ -41,7 +41,7 @@
                                             data-bs-toggle="dropdown"><i
                                                 class="bx bx-dots-vertical-rounded"></i></button>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="{{ route('plans.edit', $plan->id) }}"><i
+                                            <a class="dropdown-item" wire:navigate href="{{ route('plans.edit', $plan->id) }}"><i
                                                     class="bx bx-edit-alt me-1"></i> Edit</a>
                                             <button class="dropdown-item" wire:click='delete({{ $plan->id }})'><i
                                                     class="bx bx-trash me-1"></i>
