@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Customer;
-use App\Models\Packet;
+use App\Models\Plan;
 use App\Models\Router;
 use RouterOS\Client;
 use RouterOS\Query;
@@ -96,7 +96,7 @@ class MikroTikService
         $query = new Query('/ppp/profile/print');
         $response = $client->query($query)->read();
         foreach ($response as $packet) {
-            Packet::updateOrCreate(
+            Plan::updateOrCreate(
                 ['id' => $packet['.id']],
                 [
                     'id' => $packet['.id'],
@@ -131,7 +131,7 @@ class MikroTikService
                         'customer_name' => $client['name'],
                         'ppp_username' => $client['name'],
                         'ppp_password' => $client['password'],
-                        'packet_id' => Packet::where('name', $client['profile'])->first()->id ?? null,
+                        'packet_id' => Plan::where('name', $client['profile'])->first()->id ?? null,
                     ]
                 );
         }

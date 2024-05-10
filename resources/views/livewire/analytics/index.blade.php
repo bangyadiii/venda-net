@@ -128,7 +128,7 @@
                                 </div>
                             </div>
                             <span class="fw-semibold d-block mb-1">PPP Secret</span>
-                            <h3 class="card-title mb-2">{{ $secret ?? 0 }}</h3>
+                            <h3 class="card-title mb-2">{{ count($secret) ?? 0 }}</h3>
                         </div>
                     </div>
                 </div>
@@ -142,7 +142,7 @@
                                 </div>
                             </div>
                             <span class="fw-semibold d-block mb-1">PPP Online</span>
-                            <h3 class="card-title mb-2">{{ $onlineSecret ?? 0 }}</h3>
+                            <h3 class="card-title mb-2">{{ count($onlineSecret) ?? 0 }}</h3>
                         </div>
                     </div>
                 </div>

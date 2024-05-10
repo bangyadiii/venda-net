@@ -17,10 +17,10 @@
       "slug": "routers"
     },
     {
-      "url": "/dashboard/packets",
-      "name": "Packet Settings",
+      "url": "/dashboard/plans",
+      "name": "Plan Settings",
       "icon": "menu-icon tf-icons bx bx-globe",
-      "slug": "packets"
+      "slug": "plans"
     },
     {
       "url": "/dashboard/customers",

@@ -65,7 +65,9 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <label class="form-label" for="auto_isolir">Auto Isolir ?</label>
-                            <select class="form-select" id="auto_isolir" wire:model="form.auto_isolir">
+                            <select class="form-select @error('form.auto_isolir')
+                                is-invalid
+                            @enderror" id="auto_isolir" wire:model="form.auto_isolir">
                                 <option value="1">Ya</option>
                                 <option value="0" selected>Tidak</option>
                                 @error('form.auto_isolir')
@@ -91,10 +93,12 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="isolir_profile_id">Pilih Profile Isolir</label>
-                            <select class="form-select" id="isolir_profile_id" wire:model="form.isolir_profile_id">
+                            <select class="form-select @error('form.isolir_profile_id')
+                               is-invalid 
+                            @enderror" id="isolir_profile_id" wire:model="form.isolir_profile_id">
                                 <option>Pilih Options</option>
-                                <option value="*1">1 MB</option>
-                                <option value="*2">DISABLE</option>
+                                <option value="1">1 MB</option>
+                                <option value="2">DISABLE</option>
                             </select>
                             @error('form.isolir_profile_id')
                             <div class="error">

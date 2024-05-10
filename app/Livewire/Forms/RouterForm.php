@@ -12,7 +12,7 @@ class RouterForm extends Form
     public string $host;
     public $username;
     public $password;
-    public ?bool $auto_isolir;
+    public $auto_isolir;
     public $isolir_action;
     public $isolir_profile_id;
 
@@ -22,7 +22,7 @@ class RouterForm extends Form
         'password' => 'nullable|string',
         'auto_isolir' => 'required|boolean',
         'isolir_action' => 'required_if:auto_isolir,true|in:change_profile,disable_secret',
-        'isolir_profile_id' => 'required_if:isolir_action,change_profile',
+        'isolir_profile_id' => 'required_if:isolir_action,change_profile|integer',
     ];
 
     public function setRouter(Router $router)

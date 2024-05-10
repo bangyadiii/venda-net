@@ -17,16 +17,11 @@ class Customer extends Model
         'invoice_date',
         'ppp_username',
         'ppp_password',
-        'packet_id',
+        'plan_id',
     ];
 
-    public function packet()
+    public function plan()
     {
-        return $this->belongsTo(Packet::class);
-    }
-
-    public function customer()
-    {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(Plan::class);
     }
 }

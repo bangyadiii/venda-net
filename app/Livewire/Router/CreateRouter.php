@@ -17,11 +17,16 @@ class CreateRouter extends Component
 
     public function store()
     {
-        $this->validate();
-        Router::create($this->form->all());
+        $this->form->validate();
+        try {
+            Router::create($this->form->all());
 
-        $this->dispatch('toast', title: 'Saved to database', type: 'success');
-        return redirect()->route('routers.index');
+            $this->dispatch('toast', title: 'Saved to database', type: 'success');
+            return redirect()->route('routers.index');
+        } catch (\Throwable $th) {
+            $this->dispatch('toast', title: 'Failed to save to database', type: 'danger');
+            dd($th->getMessage());
+        }
     }
 
     public function testConnection(): void
@@ -34,7 +39,7 @@ class CreateRouter extends Component
             ]
         );
         try {
-            Router::getClient($this->host, $this->username, $this->password);
+            Router::getClient($this->form->host, $this->form->username, $this->form->password);
             $this->dispatch('toast', title: 'Connection successful', type: 'success');
         } catch (\Throwable $th) {
             $this->dispatch('toast', title: 'Connection failed', type: 'danger');

@@ -45,7 +45,7 @@
                                     @endif
                                 <td>{{ $router->isolir_profile_id  ?? '-'}}</td>
 
-                                <td><span
+                                <td><span wire:init="$router->isConnected()"
                                         class="badge bg-label-{{ $router->isConnected() ? 'success' : 'danger' }} me-1">{{ $router->isConnected() ? 'Connected' : 'Disconnected' }}</span></td>
                                 <td>
                                     <div class="dropdown">

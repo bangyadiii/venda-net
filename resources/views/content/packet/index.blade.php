@@ -16,7 +16,7 @@
     <div class="card">
         <div class="card-body">
             <div class="text-end">
-                <a href="{{ route('packet-settings.create') }}" type="button" class="btn btn-primary">Tambah Paket</a>
+                <a href="{{ route('plans.create') }}" type="button" class="btn btn-primary">Tambah Paket</a>
             </div>
             <div class="table-responsive text-nowrap">
                 <table class="table table-striped">
@@ -41,7 +41,7 @@
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
                                         data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="{{ route('packet-settings.edit', 1) }}"><i
+                                        <a class="dropdown-item" href="{{ route('plans.edit', 1) }}"><i
                                                 class="bx bx-edit-alt me-1"></i> Edit</a>
                                         <a class="dropdown-item" href="javascript:void(0);"><i
                                                 class="bx bx-trash me-1"></i>

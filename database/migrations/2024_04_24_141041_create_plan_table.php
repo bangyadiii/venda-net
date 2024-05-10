@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('packets', function (Blueprint $table) {
+        Schema::create('plans', function (Blueprint $table) {
             $table->id();
             $table->string('ppp_profile_id')->unique();
             $table->string('name');
             $table->string('speed_limit')->nullable();
             $table->integer('price')->nullable();
+            $table->foreignId('router_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('packets');
+        Schema::dropIfExists('plans');
     }
 };

@@ -38,14 +38,14 @@
   <!-- Include Scripts -->
   @include('_partials/sections/scripts')
   @livewireScripts
-  <div x-data="{open: false}" x-show="open" @toast.window="Toastify({
+  <div x-data="open: false" x-show="open" @toast.window="Toastify({
       text: $event.detail.title,
       newWindow: true,
       close: true,
       gravity: 'bottom',
       position: 'right',
       stopOnFocus: true,
-      className: 'bg-success'
+      className: 'bg-'+$event.detail.type ? $event.detail.type : 'primary',
       {{-- className: 'bg-' + $event.detail.type ? $event.detail.type : 'primary', --}}
     }).showToast()">
 

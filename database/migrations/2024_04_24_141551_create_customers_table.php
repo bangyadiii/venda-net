@@ -20,8 +20,8 @@ return new class extends Migration
             $table->datetime('invoice_date')->nullable();
             $table->string('ppp_username');
             $table->string('ppp_password');
-            $table->foreignId('packet_id')
-                ->constrained('packets')
+            $table->foreignId('plan_id')
+                ->constrained('plans')
                 ->cascadeOnDelete();
             $table->timestamps();
         });

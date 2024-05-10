@@ -23,7 +23,7 @@ class EditRouter extends Component
 
     public function store()
     {
-        $this->validate();
+        $this->form->validate();
         Router::create($this->form->all());
 
         $this->dispatch('toast', title: 'Saved to database', type: 'success');
@@ -34,16 +34,17 @@ class EditRouter extends Component
     {
         $this->validate(
             [
-                'router.host' => 'required|numeric',
-                'router.username' => 'required',
-                'router.password' => 'nullable',
+                'form.host' => 'required|string',
+                'form.username' => 'required',
+                'form.password' => 'nullable',
             ]
         );
         try {
-            Router::getClient($this->host, $this->username, $this->password);
+            Router::getClient($this->form->host, $this->form->username, $this->form->password);
             $this->dispatch('toast', title: 'Connection successful', type: 'success');
         } catch (\Throwable $th) {
             $this->dispatch('toast', title: 'Connection failed', type: 'danger');
+            dd($th->getMessage());
         }
     }
 }

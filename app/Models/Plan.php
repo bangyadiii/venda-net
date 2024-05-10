@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Packet extends Model
+class Plan extends Model
 {
     use HasFactory;
 
@@ -13,6 +13,12 @@ class Packet extends Model
         'ppp_profile_id',
         'name',
         'speed_limit',
-        'price'
+        'price',
+        'router_id'
     ];
+
+    public function router()
+    {
+        return $this->belongsTo(Router::class);
+    }
 }
