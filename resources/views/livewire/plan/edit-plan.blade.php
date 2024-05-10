@@ -1,5 +1,5 @@
 <div>
-    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Paket/</span> Edit</h4>
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Paket /</span> Edit</h4>
 
     <!-- Basic Layout -->
     <div class="row">
@@ -22,22 +22,59 @@
                             </div>
                             @enderror
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="speed">Kecepatan</label>
-                            <input type="text" class="form-control @error('form.speed_limit')
-                                is-invalid
-                            @enderror" wire:model="form.speed_limit" id="speed" placeholder="1" />
-                            @error('form.speed_limit')
-                            <div class="error">
-                                {{ $message }}
+
+                        <div x-data="{
+                                isSameSpeed: $wire.entangle('form.isSameSpeed'),
+                            }" class="mb-3">
+                            <div class="row mb-1">
+                                <div class="download-speed col-6">
+                                    <label class="form-label" for="download-speed">Kecepatan Download</label>
+                                    <div class="input-group">
+                                        <input type="text"
+                                            class="form-control @error('form.download_speed') is-invalid @enderror"
+                                            wire:model="form.download_speed" id="download-speed" placeholder="1" />
+                                        <span class="input-group-text">Mbps</span>
+                                    </div>
+                                    @error('form.download_speed')
+                                    <div class="error">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="upload-speed col-6">
+                                    <label class="form-label" for="upload-speed">Kecepatan Upload</label>
+                                    <div class="input-group">
+                                        <input x-bind:disabled="isSameSpeed" type="text"
+                                            class="form-control @error('form.upload_speed') is-invalid @enderror"
+                                            wire:model="form.upload_speed"
+                                            x-bind:value="isSameSpeed ? $wire.form.download_speed : $wire.form.upload_speed"
+                                            id="upload-speed" placeholder="1" />
+                                        <span class="input-group-text">Mbps</span>
+                                    </div>
+                                    @error('form.upload_speed')
+                                    <div class="error">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
                             </div>
-                            @enderror
+                            <div class="form-check">
+                                <input x-on:click="isSameSpeed = !isSameSpeed" x-bind:value='isSameSpeed' class="form-check-input" type="checkbox"
+                                    id="toggle-speed">
+                                <label class="form-check-label" for="toggle-speed">
+                                    Sama dengan download
+                                </label>
+                            </div>
+
                         </div>
+
                         <div class="mb-3">
                             <label class="form-label" for="tarif">Tarif per Bulan</label>
-                            <input type="text" id="tarif" class="form-control @error('form.price')
-                                is-invalid 
+                            <div class="input-group">
+                                <span class="input-group-text">Rp</span>
+                                <input type="number" id="tarif" class="form-control @error('form.price')
+                                is-invalid
                             @enderror" placeholder="Masukan Tarif per bulan" wire:model='form.price' />
+                            </div>
+
                             @error('form.price')
                             <div class="error">
                                 {{ $message }}

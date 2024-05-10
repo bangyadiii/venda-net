@@ -29,20 +29,20 @@ class EditPlan extends Component
         $router = Router::find($this->form->router_id);
         try {
             $client = Router::getClient($router->host, $router->username, $router->password);
-            $query = new Query('/ppp/profile/set', [
-                '.id' => $this->plan->ppp_profile_id,
-                'name' => $this->form->name,
-                'speed_limit' => $this->form->speed_limit,
-                'price' => $this->form->price,
-            ]);
-            $query->where('.id', $this->plan->ppp_profile_id);
+            $query = new Query('/ppp/profile/set');
+            $query->equal('.id', $this->plan->ppp_profile_id)
+                ->equal('name', $this->form->name)
+                ->equal('rate-limit', $this->form->speed_limit);
 
-            $profile = $client->query($query)->read();
-            dd($profile);
+            $res = $client->query($query)->read();
+            if (is_array($res) && count($res) != 0) {
+                throw new \Exception('Gagal mengupdate paket di mikrotik');
+            }
+
             $this->plan->fill($this->form->except('router_id'));
             $this->plan->save();
         } catch (\Throwable $th) {
-            $this->dispatch('toast', title: 'Tidak bisa terhubung dengan Mikrotik', type: 'danger');
+            $this->dispatch('toast', title: $th->getMessage(), type: 'danger');
             return \redirect()->back();
         }
 

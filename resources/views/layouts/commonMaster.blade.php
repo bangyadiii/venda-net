@@ -38,7 +38,7 @@
   <!-- Include Scripts -->
   @include('_partials/sections/scripts')
   @livewireScripts
-  <div x-data="open: false" x-show="open" @toast.window="Toastify({
+  <div x-data="{open: false}" x-show="open" @toast.window="Toastify({
       text: $event.detail.title,
       newWindow: true,
       close: true,

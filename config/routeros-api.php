@@ -30,9 +30,9 @@ return [
      |
      */
 
-    'attempts'        => 10,   // Count of attempts to establish TCP session
+    'attempts'        => 5,   // Count of attempts to establish TCP session
     'delay'           => 1,    // Delay between attempts in seconds
-    'timeout'         => 5,   // Max timeout for instantiating connection with RouterOS
+    'timeout'         => 2,   // Max timeout for instantiating connection with RouterOS
     'socket_timeout'  => 30,   // Max timeout for read from RouterOS
     'socket_blocking' => true, // Set blocking mode on a socket stream
 

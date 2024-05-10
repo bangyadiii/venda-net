@@ -45,7 +45,7 @@ class CreatePlan extends Component
             $query = new Query('/ppp/profile/add');
             $response = $client->query(
                 $query->add('=name=' . $this->form->name)
-                    ->add('=rate-limit=' . $this->form->speed_limit . 'M')
+                    ->add('=rate-limit=' . $this->form->speed_limit)
                     ->add('=local-address=pool_PPPoE')
                     ->add('=remote-address=pool_PPPoE')
             )->read();
@@ -53,7 +53,7 @@ class CreatePlan extends Component
             $plan->ppp_profile_id = $response['after']['ret'];
             $plan->save();
         } catch (\Throwable $th) {
-            $this->dispatch('toast', title: 'Tidak bisa terhubung dengan Mikrotik', type: 'danger');
+            $this->dispatch('toast', title: $th->getMessage(), type: 'danger');
             return \redirect()->back();
         }
 

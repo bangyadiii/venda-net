@@ -28,6 +28,10 @@ class AnalyticIndex extends Component
             $client = Router::getLastClient();
             $secret = Router::getPPPSecret($client);
             $onlineSecret = Router::getPPPSecret($client);
+            if($secret == null || $onlineSecret == null) {
+                return view('livewire.analytics.index', compact('customer', 'paymentComplete'));
+            }
+
             return view('livewire.analytics.index', compact('customer', 'paymentComplete', 'secret', 'onlineSecret'));
         } catch (\Throwable $th) {
             return view('livewire.analytics.index', compact('customer', 'paymentComplete'));

@@ -26,7 +26,7 @@ class PlanIndex extends Component
             $query = new Query('/ppp/profile/remove');
             $query->equal('.id', $plan->ppp_profile_id);
             $response = $client->query($query)->read();
-            if (count($response) != 0) {
+            if (\is_array($response) && count($response) != 0) {
                 throw new Exception('Failed to delete from Mikrotik');
             }
 
