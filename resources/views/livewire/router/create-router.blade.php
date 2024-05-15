@@ -2,7 +2,10 @@
     <h4 class="py-3 mb-4"><span class="text-muted fw-light">Router/</span> Create</h4>
 
     <!-- Basic Layout -->
-    <form wire:submit='store'>
+    <form wire:submit='store' x-data="{
+        autoIsolir: $wire.entangle('form.auto_isolir'),
+        isolirAction: $wire.entangle('form.isolir_action'),
+    }">
         @csrf
         <div class="row">
             <div class="col-xl">
@@ -54,6 +57,8 @@
                             </span>
                         </button>
 
+                        <a wire:navigate href="{{ route('routers.index') }}" wire:loading.attr='disabled'
+                            class="btn btn-secondary">Batal</a>
                     </div>
                 </div>
             </div>
@@ -67,9 +72,13 @@
                             <label class="form-label" for="auto_isolir">Auto Isolir ?</label>
                             <select class="form-select @error('form.auto_isolir')
                                 is-invalid
-                            @enderror" id="auto_isolir" wire:model="form.auto_isolir">
+                            @enderror" id="auto_isolir" wire:model="form.auto_isolir" x-model="autoIsolir" :change="() => {
+                                if (autoIsolir == false) {
+                                    isolirAction = null;
+                                }
+                            }">
                                 <option value="1">Ya</option>
-                                <option value="0" selected>Tidak</option>
+                                <option value="0">Tidak</option>
                                 @error('form.auto_isolir')
                                 <div class="error">
                                     {{ $message }}
@@ -81,7 +90,9 @@
                             <label class="form-label" for="isolir_action">Action Isolir</label>
                             <select class="form-select @error('form.isolir_action')
                                 is-invalid
-                            @enderror" id="isolir_action" wire:model="form.isolir_action">
+                            @enderror" id="isolir_action" wire:model="form.isolir_action" x-model="isolirAction"
+                                :disabled="autoIsolir == false">
+                                <option value>Pilih Action</option>
                                 <option value="change_profile">UBAH SECRET PROFILE</option>
                                 <option value="disable_secret">DISABLE SECRET</option>
                             </select>
@@ -94,11 +105,13 @@
                         <div class="mb-3">
                             <label class="form-label" for="isolir_profile_id">Pilih Profile Isolir</label>
                             <select class="form-select @error('form.isolir_profile_id')
-                               is-invalid 
-                            @enderror" id="isolir_profile_id" wire:model="form.isolir_profile_id">
-                                <option>Pilih Options</option>
-                                <option value="1">1 MB</option>
-                                <option value="2">DISABLE</option>
+                               is-invalid
+                            @enderror" id="isolir_profile_id" wire:model="form.isolir_profile_id"
+                                :disabled="isolirAction != 'change_profile'">
+                                <option value>Pilih Profile</option>
+                                @foreach ($form->profiles as $profile)
+                                <option value="{{ $profile['.id'] }}">{{ $profile['name'] }}</option>
+                                @endforeach
                             </select>
                             @error('form.isolir_profile_id')
                             <div class="error">
@@ -106,6 +119,7 @@
                             </div>
                             @enderror
                         </div>
+                        @if ($form->is_connected)
                         <button wire:loading.attr='disabled' type="submit" class="btn btn-primary">
                             <div class="spinner-border" role="status" wire:loading>
                                 <span class="visually-hidden">Loading...</span>
@@ -114,7 +128,7 @@
                                 Simpan
                             </span>
                         </button>
-                        <button wire:loading.attr='disabled' class="btn btn-secondary">Batal</button>
+                        @endif
                     </div>
                 </div>
             </div>

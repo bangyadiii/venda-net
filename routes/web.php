@@ -6,6 +6,9 @@ use App\Http\Controllers\dashboard\AnalyticsController;
 use App\Http\Controllers\PacketController;
 use App\Http\Controllers\RouterController;
 use App\Livewire\Analytics\AnalyticIndex;
+use App\Livewire\Customer\CreateCustomer;
+use App\Livewire\Customer\CustomerIndex;
+use App\Livewire\Customer\EditCustomer;
 use App\Livewire\Plan\CreatePlan;
 use App\Livewire\Plan\EditPlan;
 use App\Livewire\Plan\PlanIndex;
@@ -43,5 +46,14 @@ Route::middleware('auth')
                 Route::get('/', PlanIndex::class)->name('index');
                 Route::get('/create', CreatePlan::class)->name('create');
                 Route::get('/{id}/edit', EditPlan::class)->name('edit');
+            });
+
+        Route::name('customers.')
+            ->prefix('customers')->group(function () {
+                Route::get('/', CustomerIndex::class)->name('index');
+                Route::get('/create', CreateCustomer::class)->name('create');
+                Route::get('/{customer}/edit', EditCustomer::class)->name('edit');
+                Route::delete('/{customer}/delete', CreateCustomer::class)->name('delete');
+                // Route::get('/{id}/edit', EditPlan::class)->name('edit');
             });
     });

@@ -4,7 +4,7 @@
       "url": "/dashboard",
       "name": "Dashboards",
       "icon": "menu-icon tf-icons bx bx-home-circle",
-      "slug": "dashboard",
+      "slug": "analytics.index",
       "badge": [
         "danger",
         "5"
@@ -14,19 +14,19 @@
       "url": "/dashboard/routers",
       "name": "Router Settings",
       "icon": "menu-icon tf-icons bx bx-server",
-      "slug": "routers"
+      "slug": "routers.index"
     },
     {
       "url": "/dashboard/plans",
       "name": "Plan Settings",
       "icon": "menu-icon tf-icons bx bx-globe",
-      "slug": "plans"
+      "slug": "plans.index"
     },
     {
       "url": "/dashboard/customers",
       "name": "Data Pelanggan",
       "icon": "menu-icon tf-icons bx bx-user",
-      "slug": "customers"
+      "slug": "customers.index"
     },
     {
       "menuHeader": "Components"

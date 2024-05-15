@@ -129,8 +129,8 @@ class MikroTikService
                     [
                         'secret_id' => $client['.id'],
                         'customer_name' => $client['name'],
-                        'ppp_username' => $client['name'],
-                        'ppp_password' => $client['password'],
+                        'secret_username' => $client['name'],
+                        'secret_password' => $client['password'],
                         'packet_id' => Plan::where('name', $client['profile'])->first()->id ?? null,
                     ]
                 );

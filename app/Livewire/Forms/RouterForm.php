@@ -12,18 +12,24 @@ class RouterForm extends Form
     public string $host;
     public $username;
     public $password;
-    public $auto_isolir;
-    public $isolir_action;
+    public $auto_isolir = true;
+    public $isolir_action = 'disable_secret';
     public $isolir_profile_id;
+    public $is_connected = false;
 
-    public array $rules = [
-        'host' => 'required|string',
-        'username' => 'required|string',
-        'password' => 'nullable|string',
-        'auto_isolir' => 'required|boolean',
-        'isolir_action' => 'required_if:auto_isolir,true|in:change_profile,disable_secret',
-        'isolir_profile_id' => 'required_if:isolir_action,change_profile|integer',
-    ];
+    public $profiles = [];
+
+    public function rules()
+    {
+        return [
+            'host' => 'required|string|unique:routers,host',
+            'username' => 'required|string',
+            'password' => 'nullable|string',
+            'auto_isolir' => 'required|boolean',
+            'isolir_action' => 'nullable|required_if:auto_isolir,true|in:change_profile,disable_secret',
+            'isolir_profile_id' => 'nullable|required_if:isolir_action,change_profile|string',
+        ];
+    }
 
     public function setRouter(Router $router)
     {

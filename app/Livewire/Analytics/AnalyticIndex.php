@@ -15,10 +15,7 @@ class AnalyticIndex extends Component
     public function render()
     {
         $customer = Customer::count();
-        $paymentComplete = Payment::query()
-            ->where('transaction_status', 'settlement')
-            ->where(DB::raw('MONTH(transaction_time)'), '=', date('m'))
-            ->count();
+        $paymentComplete = 0;
 
         if (Router::count() <= 0) {
             return view('livewire.analytics.index', compact('customer', 'paymentComplete'));
