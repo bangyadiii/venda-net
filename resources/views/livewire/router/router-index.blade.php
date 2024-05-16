@@ -55,9 +55,9 @@
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item" href="{{ route('routers.edit', $router->id) }}"><i
                                                     class="bx bx-edit-alt me-1"></i> Edit</a>
-                                            <a class="dropdown-item" wire:click='delete({{ $router->id }})'><i
+                                            <button class="dropdown-item" wire:click='delete({{ $router->id }})' wire:confirm='Are you sure to delete this?'><i
                                                     class="bx bx-trash me-1"></i>
-                                                Delete</a>
+                                                Delete</button>
                                         </div>
                                     </div>
                                 </td>

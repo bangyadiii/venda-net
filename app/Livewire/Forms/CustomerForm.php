@@ -89,7 +89,7 @@ class CustomerForm extends Form
         'ppp_service' => 'required|string',
         'secret_username' => 'required|string',
         'secret_password' => 'required|string',
-        'secret_type' => 'required|string',
+        'secret_type' => 'required|string|in:add_secret,existing_secret',
         'local_address' => 'nullable|string|required_if:ip_type,remote_address',
         'remote_address' => 'nullable|string|required_if:ip_type,remote_address',
         'ip_type' => 'required|string|in:ip_pool,remote_address',

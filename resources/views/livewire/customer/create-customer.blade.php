@@ -1,7 +1,9 @@
 <div>
     <h4 class="py-3 mb-4"><span class="text-muted fw-light">Pelanggan/</span> Tambah</h4>
 
-    <form wire:submit='store' method="POST">
+    <form wire:submit='store' method="POST" x-data="{
+        planId: $wire.entangle('form.plan_id'),
+    }">
         @csrf
         <div class="col-xl">
             <div class="card mb-4">
@@ -52,9 +54,9 @@
                             <label class="form-label" for="plan">Pilih Paket Pelanggan</label>
                             <select type="text" id="plan" class="form-select @error('form.plan_id')
                             is-invalid
-                        @enderror" wire:model='form.plan_id'
+                        @enderror" wire:model='form.plan_id' x-model="planId"
                                 x-on:change="tarif = $event.target.selectedOptions[0].getAttribute('data-tarif')">
-                                <option>Pilih Paket</option>
+                                <option value>Pilih Paket</option>
                                 @foreach ($plans as $plan)
                                 <option value="{{ $plan->id }}" data-tarif="{{ $plan->price }}">
                                     {{ $plan->name . ' | ' . $plan->router->host }}
@@ -95,7 +97,7 @@
         </div>
 
 
-        <div class="card mb-4">
+        <div class="card mb-4" x-show="planId" x-transition>
             <div class="card-body" x-data="{
                 secretType: $wire.entangle('form.secret_type'),
                 username: $wire.entangle('form.secret_username'),

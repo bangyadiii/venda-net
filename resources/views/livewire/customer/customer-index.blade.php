@@ -6,8 +6,8 @@
         <div class="card-body">
             <div class="text-end mb-3">
                 <a href="{{ route('customers.create') }}" wire:navigate class="btn btn-primary">Tambah Pelanggan</a>
+                <button class="btn btn-secondary">Sinkron</button>
             </div>
-
             <livewire:customer-table />
         </div>
     </div>

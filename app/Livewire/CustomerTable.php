@@ -59,7 +59,7 @@ class CustomerTable extends DataTableComponent
                 ->sortable(),
             Column::make("Tanggal Aktif", "active_date")
                 ->sortable(),
-            Column::make("Tgl Batas Pembayaran", "payment_deadline")
+            Column::make("Isolir (Per Tanggal)", "payment_deadline")
                 ->sortable(),
             Column::make("Username Secret", "secret_username")
                 ->sortable()

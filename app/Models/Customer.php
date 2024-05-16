@@ -30,14 +30,14 @@ class Customer extends Model
     {
         parent::boot();
         self::creating(function ($model) {
-            $model->id = \random_int(100000, 999999);
+            $model->id = \random_int(100000, 9999999);
         });
     }
 
     public function setActiveDateAttribute($value)
     {
         if (strlen($value)) {
-            $this->attributes['active_date'] = Carbon::createFromFormat('d/m/Y', $value);
+            $this->attributes['active_date'] = Carbon::createFromFormat('Y-m-d', $value);
         } else {
             $this->attributes['active_date'] = null;
         }

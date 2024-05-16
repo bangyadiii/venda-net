@@ -53,9 +53,14 @@ class EditRouter extends Component
             ]
         );
         try {
-            Router::getClient($this->form->host, $this->form->username, $this->form->password);
+            $client = Router::getClient($this->form->host, $this->form->username, $this->form->password);
+            $this->form->is_connected = true;
+            $query = new Query('/ppp/profile/print');
+            $this->form->profiles = $client->query($query)->read();
             $this->dispatch('toast', title: 'Connection successful', type: 'success');
         } catch (\Throwable $th) {
+            $this->form->is_connected = false;
+            $this->form->profiles = [];
             $this->dispatch('toast', title: 'Connection failed', type: 'danger');
         }
     }
