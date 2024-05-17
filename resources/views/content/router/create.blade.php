@@ -12,7 +12,7 @@
         <div class="col-xl">
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Tambah Router</h5> 
+                    <h5 class="mb-0">Tambah Router</h5> <small class="text-muted float-end">Default label</small>
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
@@ -30,6 +30,7 @@
                             placeholder="Input your password"/>
                     </div>
                     <button class="btn btn-primary">Test Connection</button>
+                    
                 </div>
             </div>
         </div>

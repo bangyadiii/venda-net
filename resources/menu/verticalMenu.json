@@ -1,32 +1,50 @@
 {
   "menu": [
     {
-      "url": "/",
+      "url": "/dashboard",
       "name": "Dashboards",
       "icon": "menu-icon tf-icons bx bx-home-circle",
-      "slug": "dashboard",
+      "slug": "analytics.index",
       "badge": [
         "danger",
         "5"
       ]
     },
     {
-      "url": "router-settings",
+      "url": "/dashboard/routers",
       "name": "Router Settings",
       "icon": "menu-icon tf-icons bx bx-server",
-      "slug": "packet-settings"
+      "slug": "routers.index"
     },
     {
-      "url": "packet-settings",
-      "name": "Packet Settings",
+      "url": "/dashboard/plans",
+      "name": "Plan Settings",
       "icon": "menu-icon tf-icons bx bx-globe",
-      "slug": "packet-settings"
+      "slug": "plans.index"
     },
     {
-      "url": "customers",
+      "url": "/dashboard/customers",
       "name": "Data Pelanggan",
       "icon": "menu-icon tf-icons bx bx-user",
-      "slug": "customers"
+      "slug": "customers.index"
+    },
+    {
+      "menuHeader": "Transaksi"
+    },
+    {
+      "url": "/transactions",
+      "name": "Transaksi Pembayaran",
+      "icon": "menu-icon tf-icons bx bx-money-withdraw",
+      "slug": "transactions.index"
+    },
+    {
+      "menuHeader": "Settings"
+    },
+    {
+      "url": "/settings/notification",
+      "name": "Setting Notifikasi",
+      "icon": "menu-icon tf-icons bx bxs-megaphone",
+      "slug": "notifications.index"
     },
     {
       "menuHeader": "Components"

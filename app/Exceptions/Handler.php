@@ -38,10 +38,6 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        if ($exception instanceof NotFoundHttpException) {
-            return response()->view('content.pages.not-found', [], 500);
-        }
-
         return parent::render($request, $exception);
     }
 }

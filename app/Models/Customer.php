@@ -4,29 +4,61 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class Customer extends Model
 {
     use HasFactory;
 
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
-        'secret_id',
+        'id',
         'customer_name',
         'phone_number',
+        'address',
+        'plan_id',
+        'installment_status',
+        'service_status',
         'active_date',
-        'invoice_date',
-        'ppp_username',
-        'ppp_password',
-        'packet_id',
+        'isolir_date',
+        'secret_username',
     ];
 
-    public function packet()
+    public static function boot()
     {
-        return $this->belongsTo(Packet::class);
+        parent::boot();
+        self::creating(function ($model) {
+            $model->id = \random_int(100000, 9999999);
+        });
     }
 
-    public function customer()
+    public function setActiveDateAttribute($value)
     {
-        return $this->belongsTo(Customer::class);
+        if (strlen($value)) {
+            $this->attributes['active_date'] = Carbon::createFromFormat('Y-m-d', $value);
+        } else {
+            $this->attributes['active_date'] = null;
+        }
+    }
+
+    public function setIsolirDateAttribute($value)
+    {
+        if (strlen($value) && is_numeric($value)) {
+            $this->attributes['isolir_date'] = $value;
+        } else {
+            $this->attributes['isolir_date'] = null;
+        }
+    }
+
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class);
+    }
+
+    public function bills()
+    {
+        return $this->hasMany(Bill::class);
     }
 }

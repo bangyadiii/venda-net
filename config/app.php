@@ -16,7 +16,7 @@ return [
     |
     */
 
-  'name' => env('APP_NAME', 'Laravel'),
+  'name' => env('APP_NAME', 'Venda NET'),
 
   /*
     |--------------------------------------------------------------------------
@@ -166,10 +166,10 @@ return [
     App\Providers\AppServiceProvider::class,
     App\Providers\AuthServiceProvider::class,
     // App\Providers\BroadcastServiceProvider::class,
-    Yajra\DataTables\DataTablesServiceProvider::class,
     App\Providers\EventServiceProvider::class,
     App\Providers\RouteServiceProvider::class,
     App\Providers\MenuServiceProvider::class,
+    Barryvdh\Debugbar\ServiceProvider::class,
   ])->toArray(),
 
   /*
@@ -185,6 +185,7 @@ return [
 
   'aliases' => Facade::defaultAliases()->merge([
     // 'Example' => App\Facades\Example::class,
+    'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
   ])->toArray(),
 
 ];

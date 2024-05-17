@@ -23,7 +23,7 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>VPN Client</th>
+                            <th>Host</th>
                             <th>Auto Isolir</th>
                             <th>Action Isolir</th>
                             <th>Profiles Isolir</th>
@@ -33,8 +33,9 @@
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
+                        @foreach ($routers as $router)
                         <tr>
-                            <td><i class="bx bxl-angular bx-sm text-danger me-3"></i> <span class="fw-medium">Angular
+                            <td><span class="fw-medium">Angular
                                     Project</span></td>
                             <td>Albert Cook</td>
                             <td>Albert Cook</td>
@@ -57,6 +58,8 @@
                                 </div>
                             </td>
                         </tr>
+                        @endforeach
+
 
                     </tbody>
                 </table>
