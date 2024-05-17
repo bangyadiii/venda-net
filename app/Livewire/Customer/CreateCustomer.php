@@ -6,6 +6,7 @@ use App\Livewire\Forms\CustomerForm;
 use App\Models\Customer;
 use App\Models\Plan;
 use App\Models\Router;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 use RouterOS\Query;
@@ -60,6 +61,14 @@ class CreateCustomer extends Component
         ));
 
         $customer->save();
+        $isolirDate = Carbon::createFromDate(now()->year, now()->month, $customer->isolir_date);
+        $customer->bills()->create([
+            'due_date' => $isolirDate,
+            'plan_id' => $customer->plan_id,
+            'total_amount' => $plan->price,
+            'discount' => $this->form->discount,
+            'status' => 'unpaid',
+        ]);
         $this->dispatch('toast', title: 'Customer created successfully', type: 'success');
 
         return redirect()->route('customers.index');

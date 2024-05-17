@@ -82,6 +82,7 @@
                                 <span class="input-group-text">Rp</span>
                                 <input type="number" class="form-control" x-model='diskon' wire:model='form.discount' />
                             </div>
+                            <small class="text-body-secondary">*Diskon hanya untuk bulan pertama</small>
                         </div>
                         <div class="col-md-12 col-xl-3 mb-2">
                             <label class="form-label" for="total_price">Total</label>
@@ -229,7 +230,7 @@
                     'not_installed': ['inactive']
                 },
                 activeDate: $wire.entangle('form.active_date'),
-                paymentDeadline: $wire.entangle('form.payment_deadline'),
+                isolirDate: $wire.entangle('form.isolir_date'),
             }">
                 <div class="row mb-3">
                     <div class="col-md-3">
@@ -268,7 +269,7 @@
                         <input type="date" class="form-control @error('form.active_date')
                                 is-invalid
                             @enderror" id="active_date" wire:model="form.active_date" x-model="activeDate"
-                            x-on:change="togglePaymentDeadline"
+                            x-on:change="toggleIsolirDate"
                             :disabled="serviceStatus === 'inactive' || installmentStatus == 'not_installed'" />
                         @error('form.active_date')
                         <div class="error">
@@ -279,17 +280,17 @@
                 </div>
                 <div class="row">
                     <div class="col-md-4 mb-2">
-                        <label class="form-label" for="payment_deadline">Batas Pembayaran / ISOLIR</label>
-                        <select type="text" id="plan" class="form-select @error('form.payment_deadline')
+                        <label class="form-label" for="isolir_date">Batas Pembayaran / ISOLIR</label>
+                        <select type="text" id="isolir_date" class="form-select @error('form.isolir_date')
                             is-invalid
-                        @enderror" wire:model='form.payment_deadline' x-model="paymentDeadline" :disabled="isSameDate">
+                        @enderror" wire:model='form.isolir_date' x-model="isolirDate" :disabled="isSameDate">
                             <option value>Pilih Tanggal</option>
                             @for ($i = 1; $i <= 28; $i++) <option value="{{ $i }}">Tanggal {{ $i }}</option>
                                 @endfor
                                 <option value="last_day">Akhir Bulan</option>
 
                         </select>
-                        @error('form.payment_deadline')
+                        @error('form.isolir_date')
                         <div class="error">
                             {{ $message }}
                         </div>
@@ -297,7 +298,7 @@
                     </div>
                 </div>
                 <div class="form-check mb-3">
-                    <input class="form-check-input" type="checkbox" id="toggle-date" x-on:click="togglePaymentDeadline"
+                    <input class="form-check-input" type="checkbox" id="toggle-date" x-on:click="toggleIsolirDate"
                         x-model="isSameDate">
                     <label class="form-check-label" for="toggle-date">
                         Sesuai Tanggal Aktif Pemakaian
@@ -339,18 +340,18 @@
         if (this.installmentStatus === 'not_installed') {
            this.serviceStatus = 'inactive';
            this.activeDate = null;
-           this.paymentDeadline = null;
+           this.isolirDate = null;
         }
     }
     
-    function togglePaymentDeadline() {
+    function toggleIsolirDate() {
         if (this.isSameDate) {
             let active = new Date(this.activeDate);
             if(isNaN(active.getTime())) return;
             if (active.getDate() <= 28){
-                this.paymentDeadline = active.getDate();
+                this.isolirDate = active.getDate();
             } else{
-                this.paymentDeadline = 'last_day';
+                this.isolirDate = 'last_day';
             }
         }
     }

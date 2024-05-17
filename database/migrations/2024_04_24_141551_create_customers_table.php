@@ -25,7 +25,7 @@ return new class extends Migration
                 ->default('inactive');
 
             $table->date('active_date')->nullable();
-            $table->tinyInteger('payment_deadline')->nullable();
+            $table->tinyInteger('isolir_date')->nullable();
             $table->string('secret_username')->unique();
 
             $table->foreignId('plan_id')

@@ -2,7 +2,8 @@
 <script src="{{ asset(mix('assets/vendor/libs/jquery/jquery.js')) }}" data-navigate-track></script>
 <script src="{{ asset(mix('assets/vendor/libs/popper/popper.js')) }}" data-navigate-track></script>
 <script src="{{ asset(mix('assets/vendor/js/bootstrap.js')) }}" data-navigate-track></script>
-<script src="{{ asset(mix('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js')) }}" data-navigate-track></script>
+<script src="{{ asset(mix('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js')) }}" data-navigate-track>
+</script>
 <script src="{{ asset(mix('assets/vendor/js/menu.js')) }}" data-navigate-track></script>
 <script src="{{asset('assets/js/ui-toasts.js')}}"></script>
 

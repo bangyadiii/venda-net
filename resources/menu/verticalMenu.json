@@ -29,6 +29,24 @@
       "slug": "customers.index"
     },
     {
+      "menuHeader": "Transaksi"
+    },
+    {
+      "url": "/transactions",
+      "name": "Transaksi Pembayaran",
+      "icon": "menu-icon tf-icons bx bx-money-withdraw",
+      "slug": "transactions.index"
+    },
+    {
+      "menuHeader": "Settings"
+    },
+    {
+      "url": "/settings/notification",
+      "name": "Setting Notifikasi",
+      "icon": "menu-icon tf-icons bx bxs-megaphone",
+      "slug": "notifications.index"
+    },
+    {
       "menuHeader": "Components"
     },
     {

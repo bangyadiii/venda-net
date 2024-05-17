@@ -22,7 +22,7 @@ class Customer extends Model
         'installment_status',
         'service_status',
         'active_date',
-        'payment_deadline',
+        'isolir_date',
         'secret_username',
     ];
 
@@ -43,17 +43,22 @@ class Customer extends Model
         }
     }
 
-    public function setPaymentDeadlineAttribute($value)
+    public function setIsolirDateAttribute($value)
     {
         if (strlen($value) && is_numeric($value)) {
-            $this->attributes['payment_deadline'] = $value;
+            $this->attributes['isolir_date'] = $value;
         } else {
-            $this->attributes['payment_deadline'] = null;
+            $this->attributes['isolir_date'] = null;
         }
     }
 
     public function plan()
     {
         return $this->belongsTo(Plan::class);
+    }
+
+    public function bills()
+    {
+        return $this->hasMany(Bill::class);
     }
 }

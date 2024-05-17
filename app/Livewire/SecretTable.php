@@ -26,7 +26,7 @@ class SecretTable extends DataTableComponent
                 ->sortable(),
             Column::make('Action')
                 ->label(
-                    fn ($row, Column $column) => view('components.livewire.datatables.secret-action')->with(
+                    fn ($row, Column $column) => view('components.livewire.datatables.action-column')->with(
                         [
                             'selectMethod' => 'delete(' . $row->id . ')',
                         ]

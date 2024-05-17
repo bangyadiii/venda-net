@@ -11,17 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('invoices', function (Blueprint $table) {
+        Schema::create('bills', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->string('customer_id');
 
-            $table->decimal('total_amount', 10, 2);
-            $table->datetime('due_date');
+            $table->integer('discount')->default(0);
+            $table->decimal('tax_rate', 5, 2)->default(0);
+            $table->integer('total_amount');
+            $table->enum('status', ['paid', 'unpaid'])->default('unpaid');
+            $table->date('due_date');
             $table->timestamps();
 
             $table->foreign('customer_id')
                 ->references('id')
                 ->on('customers')
+                ->cascadeOnDelete();
+
+            $table->foreignId('plan_id')
+                ->constrained('plans')
                 ->cascadeOnDelete();
         });
     }
@@ -31,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('invoices');
+        Schema::dropIfExists('bills');
     }
 };

@@ -29,7 +29,7 @@ class CustomerTable extends DataTableComponent
                         ]
                     )
                 )->html(),
-            Column::make("ID Pelanggan", "id")
+            Column::make("No Pelanggan", "id")
                 ->sortable()
                 ->searchable(),
             Column::make("Name", "customer_name")
@@ -59,7 +59,7 @@ class CustomerTable extends DataTableComponent
                 ->sortable(),
             Column::make("Tanggal Aktif", "active_date")
                 ->sortable(),
-            Column::make("Isolir (Per Tanggal)", "payment_deadline")
+            Column::make("Tanggal Isolir", "isolir_date")
                 ->sortable(),
             Column::make("Username Secret", "secret_username")
                 ->sortable()

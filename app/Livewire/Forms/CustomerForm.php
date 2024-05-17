@@ -15,7 +15,7 @@ class CustomerForm extends Form
     public $installment_status = 'not_installed';
     public $service_status = 'inactive';
     public $active_date;
-    public $payment_deadline;
+    public $isolir_date;
     public $secret_type = 'add_secret';
     public $secretTypeSelect = [
         [
@@ -85,7 +85,7 @@ class CustomerForm extends Form
         'installment_status' => 'required|string|in:not_installed,installed',
         'service_status' => 'required|string|in:active,inactive',
         'active_date' => 'nullable|required_if:installment_status,installed|date',
-        'payment_deadline' => 'nullable|required_if:installment_status,installed|integer|between:1,31',
+        'isolir_date' => 'nullable|required_if:installment_status,installed|integer|between:1,31',
         'ppp_service' => 'required|string',
         'secret_username' => 'required|string',
         'secret_password' => 'required|string',
@@ -104,7 +104,7 @@ class CustomerForm extends Form
         $this->installment_status = $customer->installment_status;
         $this->service_status = $customer->service_status;
         $this->active_date = $customer->active_date;
-        $this->payment_deadline = $customer->payment_deadline;
+        $this->isolir_date = $customer->isolir_date;
         $this->secret_username = $customer->secret_username;
         $this->secret_password = $customer->secret_password;
     }

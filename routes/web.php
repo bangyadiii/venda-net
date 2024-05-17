@@ -9,12 +9,15 @@ use App\Livewire\Analytics\AnalyticIndex;
 use App\Livewire\Customer\CreateCustomer;
 use App\Livewire\Customer\CustomerIndex;
 use App\Livewire\Customer\EditCustomer;
+use App\Livewire\NotificationSetting;
 use App\Livewire\Plan\CreatePlan;
 use App\Livewire\Plan\EditPlan;
 use App\Livewire\Plan\PlanIndex;
 use App\Livewire\Router\CreateRouter;
 use App\Livewire\Router\EditRouter;
 use App\Livewire\Router\RouterIndex;
+use App\Livewire\Transaction\CreateTransaction;
+use App\Livewire\Transaction\TransactionIndex;
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/vendor.php';
@@ -56,4 +59,20 @@ Route::middleware('auth')
                 Route::delete('/{customer}/delete', CreateCustomer::class)->name('delete');
                 // Route::get('/{id}/edit', EditPlan::class)->name('edit');
             });
+    });
+
+
+Route::middleware('auth')
+    ->prefix('transactions')
+    ->name('transactions.')
+    ->group(function () {
+        Route::get('/', TransactionIndex::class)->name('index');
+        Route::get('/create', CreateTransaction::class)->name('create');
+    });
+
+
+Route::middleware('auth')
+    ->prefix('settings')
+    ->group(function () {
+        Route::get('/notification', NotificationSetting::class)->name('notifications.index');
     });
