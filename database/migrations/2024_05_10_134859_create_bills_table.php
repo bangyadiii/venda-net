@@ -20,7 +20,6 @@ return new class extends Migration
             $table->integer('total_amount');
             $table->enum('status', ['paid', 'unpaid'])->default('unpaid');
             $table->date('due_date');
-            $table->timestamps();
 
             $table->foreign('customer_id')
                 ->references('id')
@@ -30,6 +29,8 @@ return new class extends Migration
             $table->foreignId('plan_id')
                 ->constrained('plans')
                 ->cascadeOnDelete();
+
+            $table->timestamps();
         });
     }
 

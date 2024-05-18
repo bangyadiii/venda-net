@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 
 class Customer extends Model
 {
     use HasFactory;
+    use Notifiable;
 
     public $incrementing = false;
     protected $keyType = 'string';

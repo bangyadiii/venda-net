@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Jobs\GenerateMonthlyBills;
+use App\Models\Setting;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -12,7 +14,19 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->job(new GenerateMonthlyBills())
+            // ->monthlyOn(1, '00:00')
+            ;
+        $schedule->command('app:payment-reminder-command')
+            ->dailyAt('09:00')
+            ->when(function () {
+                $enabled = Setting::where('key', 'reminder_enabled')->first();
+                if (!$enabled || !$enabled->value) {
+                    \info('Payment reminder is disabled.');
+                    return false;
+                }
+                return (bool) $enabled->value;
+            });
     }
 
     /**
@@ -20,7 +34,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

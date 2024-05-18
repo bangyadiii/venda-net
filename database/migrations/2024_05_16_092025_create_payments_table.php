@@ -19,6 +19,11 @@ return new class extends Migration
             $table->string('method');
             $table->string('status')->default('pending');
             $table->timestamps();
+
+            $table->foreign('bill_id')
+                ->references('id')
+                ->on('bills')
+                ->cascadeOnDelete();
         });
     }
 
