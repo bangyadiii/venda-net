@@ -71,7 +71,7 @@ class CreateTransaction extends Component
         $this->resetElement();
 
         $this->dispatch('toast', title: 'Berhasil disimpan');
-        return \redirect()->route('transactions.index');
+        return $this->redirectRoute('transactions.index', navigate: true);
     }
 
     public function updatedCustomerId()

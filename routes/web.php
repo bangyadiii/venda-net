@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\dashboard\AnalyticsController;
+use App\Http\Controllers\MidtransCallbackController;
 use App\Http\Controllers\PacketController;
 use App\Http\Controllers\RouterController;
 use App\Livewire\Analytics\AnalyticIndex;
@@ -16,6 +16,8 @@ use App\Livewire\Plan\PlanIndex;
 use App\Livewire\Router\CreateRouter;
 use App\Livewire\Router\EditRouter;
 use App\Livewire\Router\RouterIndex;
+use App\Livewire\Transaction\BillCheck;
+use App\Livewire\Transaction\CreateOnlinePayment;
 use App\Livewire\Transaction\CreateTransaction;
 use App\Livewire\Transaction\TransactionIndex;
 
@@ -27,8 +29,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/', function () {
         return redirect()->route('analytics.index');
     });
-    // Route::get('/', [AnalyticsController::class, 'index'])->name('dashboard-analytics');
-
     Route::resource('/router-settings', RouterController::class);
     Route::resource('/packet-settings', PacketController::class);
     Route::resource('customers', CustomerController::class);
@@ -57,10 +57,8 @@ Route::middleware('auth')
                 Route::get('/create', CreateCustomer::class)->name('create');
                 Route::get('/{customer}/edit', EditCustomer::class)->name('edit');
                 Route::delete('/{customer}/delete', CreateCustomer::class)->name('delete');
-                // Route::get('/{id}/edit', EditPlan::class)->name('edit');
             });
     });
-
 
 Route::middleware('auth')
     ->prefix('transactions')
@@ -70,9 +68,11 @@ Route::middleware('auth')
         Route::get('/create', CreateTransaction::class)->name('create');
     });
 
-
 Route::middleware('auth')
     ->prefix('settings')
     ->group(function () {
-        Route::get('/notification', NotificationSetting::class)->name('notifications.index');
+        Route::get('/notifications', NotificationSetting::class)->name('notifications.index');
     });
+
+Route::get('/bill-checks', BillCheck::class)->name('bill_checks');
+Route::get('/payment/{id}', CreateOnlinePayment::class)->name('payment.index');

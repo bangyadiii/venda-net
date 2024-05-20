@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('bill_id');
             $table->decimal('amount', 10, 2);
             $table->datetime('payment_date');
-            $table->string('method');
-            $table->string('status')->default('pending');
+            $table->enum('method', ['cash', 'midtrans']);
+            $table->enum('status', ['success', 'pending', 'failed'])->default('pending');
             $table->timestamps();
 
             $table->foreign('bill_id')

@@ -37,13 +37,7 @@ $navbarDetached = ($navbarDetached ?? '');
       @endif
 
       <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-        <form class="navbar-nav flex-row align-items-center ms-auto" action="{{ route('logout') }}" method="POST">
-          @csrf
-          <button type="submit" class="btn text-danger">
-            <i class='bx bx-power-off me-2'></i>
-            <span class="align-middle">Log Out</span>
-          </button>
-        </form>
+        <livewire:logout-component />
       </div>
 
       @if(!isset($navbarDetached))

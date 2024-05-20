@@ -65,7 +65,8 @@ class CreateCustomer extends Component
         $customer->bills()->create([
             'due_date' => $isolirDate,
             'plan_id' => $customer->plan_id,
-            'total_amount' => $plan->price,
+            'total_amount' => ($plan->price - $this->form->discount) * 1.11,
+            'tax_rate' => 11, // TODO: get tax rate from setting
             'discount' => $this->form->discount,
             'status' => 'unpaid',
         ]);
