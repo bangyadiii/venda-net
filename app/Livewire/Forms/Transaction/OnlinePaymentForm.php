@@ -14,7 +14,7 @@ class OnlinePaymentForm extends Form
     public $address;
     public $plan_name;
     public $plan_price;
-    public $billStatus = 'paid';
+    public $billStatus = 'LUNAS';
 
     public function setCustomer(Customer $customer)
     {
@@ -28,6 +28,7 @@ class OnlinePaymentForm extends Form
 
     public function setBill($bill)
     {
-        $this->billStatus = isset($bill) ? 'unpaid' : 'paid';
+        $this->billStatus = isset($bill) && $bill->status == 'paid'
+            ? 'LUNAS' : 'BELUM LUNAS';
     }
 }

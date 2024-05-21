@@ -5,6 +5,7 @@ namespace App\Livewire\Transaction;
 use App\Livewire\Forms\Transaction\OnlinePaymentForm;
 use App\Models\Bill;
 use App\Models\Customer;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Sawirricardo\Midtrans\Dto\TransactionDto;
 use Sawirricardo\Midtrans\Laravel\Facades\Midtrans;
@@ -19,7 +20,7 @@ class CreateOnlinePayment extends Component
     {
         $this->customer = Customer::with('plan')->findOrFail($id);
         $this->bill = Bill::query()->where('customer_id', $id)
-            ->where('status', 'unpaid')->first();
+            ->latest()->first();
 
         $this->form->setCustomer($this->customer);
         $this->form->setBill($this->bill);
@@ -48,6 +49,7 @@ class CreateOnlinePayment extends Component
         try {
             $transactionToken = Midtrans::snap()
                 ->create(new TransactionDto($params));
+            Log::info('Transaction Token: ' . $transactionToken->token);
 
             $this->dispatch('midtrans:payment', snapToken: $transactionToken->token);
         } catch (\Exception $e) {

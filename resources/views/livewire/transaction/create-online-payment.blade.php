@@ -57,7 +57,7 @@
                                     disabled />
                             </div>
 
-                            @if ($form->billStatus == 'unpaid')
+                            @if ($form->billStatus != 'LUNAS')
                             <div class="mb-3">
                                 <button type="submit" class="btn btn-primary d-grid w-100" wire:loading.attr='disabled'>
                                     <div class="spinner-border" role="status" wire:loading>
@@ -69,6 +69,9 @@
                                 </button>
                             </div>
                             @endif
+                            <a href="{{ route('invoices', ['id' => $bill->id]) }}" class="btn btn-primary w-100 mb-3"
+                                wire:navigate>Lihat Invoice</a>
+
                             <a href="{{ route('bill_checks') }}" class="btn btn-secondary w-100"
                                 wire:navigate>Kembali</a>
                         </form>
@@ -85,6 +88,7 @@
                 snap.pay(event.snapToken, {
                     onSuccess: function(result) {
                         Livewire.dispatch('toast', {title: 'Pembayaran berhasil'});
+                        Livewire.navigate("{{ route('invoices', ['id' => $bill->id]) }}");
                     },
                     onPending: function(result) {
                         Livewire.dispatch('toast', {title: 'Pembayaran Pending'});

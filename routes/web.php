@@ -1,10 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\MidtransCallbackController;
-use App\Http\Controllers\PacketController;
-use App\Http\Controllers\RouterController;
 use App\Livewire\Analytics\AnalyticIndex;
 use App\Livewire\Customer\CreateCustomer;
 use App\Livewire\Customer\CustomerIndex;
@@ -20,6 +16,7 @@ use App\Livewire\Transaction\BillCheck;
 use App\Livewire\Transaction\CreateOnlinePayment;
 use App\Livewire\Transaction\CreateTransaction;
 use App\Livewire\Transaction\TransactionIndex;
+use App\Livewire\ViewInvoice;
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/vendor.php';
@@ -29,9 +26,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/', function () {
         return redirect()->route('analytics.index');
     });
-    Route::resource('/router-settings', RouterController::class);
-    Route::resource('/packet-settings', PacketController::class);
-    Route::resource('customers', CustomerController::class);
 });
 
 Route::middleware('auth')
@@ -74,5 +68,9 @@ Route::middleware('auth')
         Route::get('/notifications', NotificationSetting::class)->name('notifications.index');
     });
 
-Route::get('/bill-checks', BillCheck::class)->name('bill_checks');
-Route::get('/payment/{id}', CreateOnlinePayment::class)->name('payment.index');
+Route::middleware('guest')->group(function () {
+    Route::get('/bill-checks', BillCheck::class)->name('bill_checks');
+    Route::get('/payment/{id}', CreateOnlinePayment::class)->name('payment.index');
+});
+
+Route::get('/invoices/{id}/read', ViewInvoice::class)->name('invoices');

@@ -15,6 +15,11 @@ class MidtransCallbackController extends Controller
 {
     public function receive(Request $request)
     {
+        // testing purpose
+        if ($request->transaction_id == '513f1f01-c9da-474c-9fc9-d5c64364b709') {
+            return response()->json(['status' => 'success', 'message' => 'Callback received']);
+        }
+
         $notification = Notification::make($request->all());
         $notification
             ->whenSettlement(function (TransactionStatus $notification) {
@@ -33,7 +38,7 @@ class MidtransCallbackController extends Controller
                         'amount' => $bill->total_amount,
                         'payment_date' => \now(),
                         'status' => 'pending',
-                        'method' => 'midtrans',
+                        'method' => $notification->payment_type,
                     ]);
                 }
 

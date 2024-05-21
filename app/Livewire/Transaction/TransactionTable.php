@@ -6,10 +6,17 @@ use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Payment;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 
 class TransactionTable extends DataTableComponent
 {
-    protected $model = Payment::class;
+    public function builder(): Builder
+    {
+        return Payment::query()
+            ->with(['bill'])
+            ->select('*') // Eager load anything
+        ;
+    }
 
     public function configure(): void
     {
@@ -29,7 +36,7 @@ class TransactionTable extends DataTableComponent
                 ->sortable(),
             Column::make("Tagihan", "bill.due_date")
                 ->format(fn ($value) => Carbon::parse($value)->format('F Y')),
-            Column::make("PPN", "bill.tax_rate"),
+            Column::make("PPN(%)", "bill.tax_rate"),
             Column::make("Total", "amount")
                 ->sortable(),
             Column::make("Metode", "method")
@@ -38,7 +45,7 @@ class TransactionTable extends DataTableComponent
                 ->label(
                     fn ($row, Column $column) => view('components.livewire.datatables.action-column')->with(
                         [
-                            'printMethod' => 'delete(' . $row->id . ')',
+                            'printRoute' => route('invoices', ['id' => $row->bill_id]),
                             'deleteMethod' => 'delete(' . $row->id . ')',
                         ]
                     )

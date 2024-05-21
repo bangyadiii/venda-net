@@ -3,7 +3,6 @@
 namespace App\Livewire\Transaction;
 
 use App\Livewire\Forms\BillCheckForm;
-use App\Models\Customer;
 use Livewire\Component;
 
 class BillCheck extends Component
