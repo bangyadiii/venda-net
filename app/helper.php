@@ -10,3 +10,10 @@ if (!function_exists('replacePlaceholder')) {
         return $template;
     }
 }
+
+if (!function_exists('currency')) {
+    function currency($amount): string
+    {
+        return  'Rp. ' . number_format($amount, 0, ',', '.');
+    }
+}

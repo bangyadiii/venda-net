@@ -12,6 +12,16 @@ class Invoice extends LaravelDailyInvoice
      */
     public $dueDate;
 
+    /**
+     * @var CarbonInterface
+     */
+    public $paidDate;
+
+    /**
+     * @var CarbonInterface
+     */
+    public $periode;
+
     public function __construct()
     {
         parent::__construct();
@@ -27,5 +37,16 @@ class Invoice extends LaravelDailyInvoice
     public function getDueDate()
     {
         return $this->dueDate->format($this->date_format);
+    }
+
+    public function paidDate(CarbonInterface $paidDate)
+    {
+        $this->paidDate = $paidDate;
+        return $this;
+    }
+
+    public function getPaidDate()
+    {
+        return $this->paidDate->toDateTimeString();
     }
 }

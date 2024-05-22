@@ -10,6 +10,7 @@ return [
     'invoice'                => 'Invoice',
     'serial'                 => 'No. Invoice',
     'date'                   => 'Tanggal',
+    'payment_date'           => 'Tanggal Pembayaran',
     'seller'                 => 'Penjual',
     'buyer'                  => 'Pembeli',
     'address'                => 'Alamat',

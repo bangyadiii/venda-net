@@ -7,6 +7,7 @@ use App\Models\Bill;
 use App\Models\Customer;
 use App\Models\Plan;
 use App\Models\Router;
+use App\Models\Setting;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use LaravelDaily\Invoices\Classes\Buyer;
@@ -66,11 +67,12 @@ class CreateCustomer extends Component
 
         $customer->save();
         $isolirDate = Carbon::createFromDate(now()->year, now()->month, $customer->isolir_date);
+        $tax = (int) Setting::where('key', 'ppn')->first()->value ?? 0;
         $bill = $customer->bills()->create([
             'due_date' => $isolirDate,
             'plan_id' => $customer->plan_id,
-            'total_amount' => ($plan->price - $this->form->discount) * 1.11,
-            'tax_rate' => 11, // TODO: get tax rate from setting
+            'total_amount' => ($plan->price - $this->form->discount) * ($tax/100 + 1),
+            'tax_rate' => $tax,
             'discount' => $this->form->discount,
             'status' => 'unpaid',
         ]);

@@ -47,6 +47,12 @@
       "slug": "notifications.index"
     },
     {
+      "url": "/settings/tax",
+      "name": "Setting Pajak",
+      "icon": "menu-icon tf-icons bx bx-purchase-tag-alt",
+      "slug": "tax"
+    },
+    {
       "menuHeader": "Components"
     },
     {

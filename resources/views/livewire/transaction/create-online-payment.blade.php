@@ -47,8 +47,18 @@
 
                             <div class="mb-3">
                                 <label class="form-label" for="tarif">Tarif/Bulan</label>
-                                <input type="text" id="tarif" class="form-control" wire:model='form.plan_price'
+                                <input type="text" id="tarif" class="form-control" value='{{ currency($form->plan_price) }}'
                                     disabled />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="ppn">PPN (%)</label>
+                                <input type="text" id="ppn" class="form-control" value="{{ $form->tax }}" disabled />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="total">Total</label>
+                                <input type="text" id="total" class="form-control" value='{{ currency($form->total) }}' disabled />
                             </div>
 
                             <div class="mb-3">
@@ -69,7 +79,7 @@
                                 </button>
                             </div>
                             @endif
-                            <a href="{{ route('invoices', ['id' => $bill->id]) }}" class="btn btn-primary w-100 mb-3"
+                            <a href="{{ route('invoices', ['bill_id' => $bill->id]) }}" class="btn btn-primary w-100 mb-3"
                                 wire:navigate>Lihat Invoice</a>
 
                             <a href="{{ route('bill_checks') }}" class="btn btn-secondary w-100"
@@ -88,7 +98,7 @@
                 snap.pay(event.snapToken, {
                     onSuccess: function(result) {
                         Livewire.dispatch('toast', {title: 'Pembayaran berhasil'});
-                        Livewire.navigate("{{ route('invoices', ['id' => $bill->id]) }}");
+                        Livewire.navigate(result.finish_redirect_url);
                     },
                     onPending: function(result) {
                         Livewire.dispatch('toast', {title: 'Pembayaran Pending'});

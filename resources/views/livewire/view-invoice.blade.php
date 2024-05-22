@@ -15,6 +15,15 @@
                         <span
                             class="badge bg-{{ $invoice->status == __('invoices::invoice.paid') ? 'success' : 'secondary' }} font-size-12 ms-2">{{ $invoice->status }}</span>
                     </h4>
+                    @if ($invoice->status == __('invoices::invoice.paid'))
+                    <h6>
+                        {{ __('invoices::invoice.payment_date') }}:
+                    </h6>
+                    <span class="font-size-15">
+                        {{ $invoice->getPaidDate() }}
+                    </span>
+                    @endif
+
                 </div>
 
             </div>
@@ -39,7 +48,8 @@
                         </div>
                         <div class="mt-4">
                             <h5 class="font-size-15 mb-1">Periode</h5>
-                            <p>24 Juli - 23 Agustus</p>
+                            <p>{{ $invoice->dueDate->copy()->subMonth()->addDay()->format('d F') . ' - ' . $invoice->getDueDate()}}
+                            </p>
                         </div>
                     </div>
                 </div>

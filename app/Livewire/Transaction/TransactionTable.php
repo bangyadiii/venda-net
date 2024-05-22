@@ -33,11 +33,13 @@ class TransactionTable extends DataTableComponent
             Column::make("Telp/WA", "bill.customer.phone_number"),
             Column::make("Paket", "bill.plan.name"),
             Column::make("Tarif", "bill.plan.price")
+                ->format(fn ($value) => currency($value))
                 ->sortable(),
             Column::make("Tagihan", "bill.due_date")
                 ->format(fn ($value) => Carbon::parse($value)->format('F Y')),
             Column::make("PPN(%)", "bill.tax_rate"),
             Column::make("Total", "amount")
+                ->format(fn ($value) => currency($value))
                 ->sortable(),
             Column::make("Metode", "method")
                 ->sortable(),

@@ -7,6 +7,7 @@ use App\Models\Bill;
 use App\Models\Customer;
 use App\Models\Payment;
 use App\Models\PaymentLog;
+use App\Models\Setting;
 use Carbon\Carbon;
 use Livewire\Component;
 
@@ -31,8 +32,10 @@ class CreateTransaction extends Component
     public function mount()
     {
         $this->customers = Customer::all();
+        $tax = (int) Setting::where('key', 'ppn')->first()->value ?? 0;
         if ($this->customer_id) {
             $this->customer = Customer::with(['bills', 'plan'])->find($this->customer_id);
+            $this->form->tax_rate = $tax;
         }
     }
 
@@ -94,14 +97,15 @@ class CreateTransaction extends Component
                 ->where('customer_id', $this->customer_id)
                 ->latest()->first();
 
+            $tax = (int) Setting::where('key', 'ppn')->first()->value ?? 0;
             $this->currentBill = Bill::create([
                 'customer_id' => $this->customer_id,
                 'due_date' => $lastBill ? Carbon::parse($lastBill->due_date)->addMonth() : Carbon::createFromDate(now()->year, now()->month, $this->customer->isolir_date),
                 'plan_id' => $this->customer->plan_id,
-                'total_amount' => $this->customer->plan->price,
                 'discount' => 0,
-                'tax_rate' => 11,
+                'tax_rate' => $tax,
                 'status' => 'unpaid',
+                'total_amount' => $this->customer->plan->price * ($tax / 100 + 1),
             ]);
         }
 

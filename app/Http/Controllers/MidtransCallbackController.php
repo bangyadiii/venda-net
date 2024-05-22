@@ -38,7 +38,7 @@ class MidtransCallbackController extends Controller
                         'amount' => $bill->total_amount,
                         'payment_date' => \now(),
                         'status' => 'pending',
-                        'method' => $notification->payment_type,
+                        'method' => 'midtrans',
                     ]);
                 }
 
@@ -76,6 +76,13 @@ class MidtransCallbackController extends Controller
         return response()->json(['status' => 'success', 'message' => 'Callback received']);
     }
 
+    /**
+     * Update Payment Status
+     *
+     * @param TransactionStatus $notification
+     * @param string $status
+     * @return void
+     */
     private function updatePaymentStatus(TransactionStatus $notification, string $status)
     {
         $billId = explode('.', $notification->order_id)[1];
@@ -111,6 +118,16 @@ class MidtransCallbackController extends Controller
         });
     }
 
+    /**
+     * Check Midtrans Signature
+     *
+     * @param string $signature
+     * @param string $orderId
+     * @param string $statusCode
+     * @param string $grossAmount
+     * @param string $serverKey
+     * @return boolean
+     */
     private function checkSignature(string $signature, string $orderId, string $statusCode, string $grossAmount, string $serverKey): bool
     {
         $expectedSignature = hash('sha512', $orderId . $statusCode . $grossAmount . $serverKey);
