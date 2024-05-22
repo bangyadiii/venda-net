@@ -14,11 +14,13 @@
     "guzzlehttp/guzzle": "^7.2",
     "laravel/framework": "^10.3.3",
     "laravel/sanctum": "^3.2",
+    "laravel/telescope": "^5.0",
     "laravel/tinker": "^2.8",
     "laraveldaily/laravel-invoices": "^4.0",
     "livewire/livewire": "^3.4",
     "masmerise/livewire-toaster": "^2.1",
     "rappasoft/laravel-livewire-tables": "^3.2",
+    "sawirricardo/laravel-midtrans": "^1.6",
     "silvanix/wablas": "^1.0"
   },
   "require-dev": {

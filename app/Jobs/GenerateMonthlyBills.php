@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Bill;
 use App\Models\Customer;
+use App\Models\Setting;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -46,11 +47,12 @@ class GenerateMonthlyBills implements ShouldQueue
                     ->first();
 
                 if (!$bill) {
-                    $bill = Bill::create([
+                    $tax = (int) Setting::where('key', 'ppn')->first()->value ?? 0;
+                    Bill::create([
                         'customer_id' => $customer->id,
                         'discount' => 0,
-                        'tax_rate' => 11, // TODO: get tax rate from setting
-                        'total_amount' => $customer->plan->price * 1.11,
+                        'tax_rate' => $tax,
+                        'total_amount' => $customer->plan->price * (1 + $tax / 100),
                         'status' => 'unpaid',
                         'due_date' => $isolir,
                         'plan_id' => $customer->plan_id,

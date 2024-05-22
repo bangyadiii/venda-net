@@ -11,7 +11,7 @@ class TransactionForm extends Form
     public $discount;
     public $method;
     public $note;
-    public $tax_rate = 11;
+    public $tax_rate;
 
     public array $rules = [
         'method' => 'required|string|max:255',

@@ -48,7 +48,8 @@
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label class="form-label" for="diskon">Diskon</label>
-                                <input type="number" class="form-control" wire:model.live='form.discount' />
+                                <input type="number" class="form-control" wire:model.blur='form.discount'
+                                    wire:dirty.class="" />
                             </div>
                         </div>
                         <div class="row">
@@ -58,7 +59,7 @@
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label class="form-label" for="name">Untuk Periode Pemakaian</label>
-                                <input type="text" class="form-control" disabled wire:model='period'/>
+                                <input type="text" class="form-control" disabled wire:model='period' />
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label class="form-label" for="nominal">Nominal</label>

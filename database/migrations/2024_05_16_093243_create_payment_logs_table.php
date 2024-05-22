@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('payment_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('status');
-            $table->string('message')->nullable();
-            $table->foreignId('payment_id')
-                ->constrained('payments')
-                ->cascadeOnDelete();
+            $table->foreignId('payment_id')->constrained('payments')->onDelete('cascade');
+            $table->string('transaction_id')->nullable()->unique();
+            $table->string('status_code')->nullable();
+            $table->text('log_message')->nullable();
             $table->timestamps();
         });
     }

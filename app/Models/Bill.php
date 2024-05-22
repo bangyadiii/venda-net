@@ -21,6 +21,7 @@ class Bill extends Model
         'total_amount',
         'due_date',
         'status',
+        'invoice_link',
     ];
 
     public static function boot()

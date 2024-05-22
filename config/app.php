@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
+use Sawirricardo\Midtrans\Laravel\MidtransServiceProvider;
 
 return [
 
@@ -83,7 +84,7 @@ return [
     |
     */
 
-  'locale' => 'en',
+  'locale' => env('APP_LOCALE', 'id'),
 
   /*
     |--------------------------------------------------------------------------
@@ -168,8 +169,10 @@ return [
     // App\Providers\BroadcastServiceProvider::class,
     App\Providers\EventServiceProvider::class,
     App\Providers\RouteServiceProvider::class,
+        App\Providers\TelescopeServiceProvider::class,
     App\Providers\MenuServiceProvider::class,
     Barryvdh\Debugbar\ServiceProvider::class,
+    MidtransServiceProvider::class,
   ])->toArray(),
 
   /*

@@ -41,10 +41,16 @@
       "menuHeader": "Settings"
     },
     {
-      "url": "/settings/notification",
+      "url": "/settings/notifications",
       "name": "Setting Notifikasi",
       "icon": "menu-icon tf-icons bx bxs-megaphone",
       "slug": "notifications.index"
+    },
+    {
+      "url": "/settings/tax",
+      "name": "Setting Pajak",
+      "icon": "menu-icon tf-icons bx bx-purchase-tag-alt",
+      "slug": "tax"
     },
     {
       "menuHeader": "Components"

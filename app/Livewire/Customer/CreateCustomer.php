@@ -3,11 +3,16 @@
 namespace App\Livewire\Customer;
 
 use App\Livewire\Forms\CustomerForm;
+use App\Models\Bill;
 use App\Models\Customer;
 use App\Models\Plan;
 use App\Models\Router;
+use App\Models\Setting;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use LaravelDaily\Invoices\Classes\Buyer;
+use LaravelDaily\Invoices\Classes\InvoiceItem;
+use LaravelDaily\Invoices\Invoice;
 use Livewire\Component;
 use RouterOS\Query;
 
@@ -62,15 +67,43 @@ class CreateCustomer extends Component
 
         $customer->save();
         $isolirDate = Carbon::createFromDate(now()->year, now()->month, $customer->isolir_date);
-        $customer->bills()->create([
+        $tax = (int) Setting::where('key', 'ppn')->first()->value ?? 0;
+        $bill = $customer->bills()->create([
             'due_date' => $isolirDate,
             'plan_id' => $customer->plan_id,
-            'total_amount' => $plan->price,
+            'total_amount' => ($plan->price - $this->form->discount) * ($tax/100 + 1),
+            'tax_rate' => $tax,
             'discount' => $this->form->discount,
             'status' => 'unpaid',
         ]);
-        $this->dispatch('toast', title: 'Customer created successfully', type: 'success');
+        $bill->invoice_link = $this->createInvoice($customer, $bill, $plan);
+        $bill->save();
 
-        return redirect()->route('customers.index');
+        $this->dispatch('toast', title: 'Customer created successfully', type: 'success');
+        return $this->redirectRoute('customers.index', navigate: true);
+    }
+
+    private function createInvoice(Customer $customer, Bill $bill, Plan $plan): string
+    {
+        $buyer = new Buyer([
+            'name'          => $customer->customer_name,
+            'custom_fields' => [
+                'phone' => $customer->phone_number,
+                'address' => $customer->address,
+            ],
+        ]);
+
+        $item = InvoiceItem::make($plan->name)
+            ->pricePerUnit($plan->price)
+            ->discount($bill->discount);
+
+        $invoice = Invoice::make()
+            ->buyer($buyer)
+            ->taxRate($bill->tax_rate)
+            ->addItem($item)
+            ->filename($customer->id . '_' . $bill->id)
+            ->save('public');
+
+        return $link = $invoice->url();
     }
 }
