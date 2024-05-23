@@ -54,7 +54,7 @@ class CreateTransaction extends Component
         }
         $customer = Customer::find($this->customer_id);
 
-        UnisolateCustomerJob::dispatch($customer);
+        \dispatch(new UnisolateCustomerJob($customer));
 
         $payment = Payment::create([
             'bill_id' => $this->currentBill->id,

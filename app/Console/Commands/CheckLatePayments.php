@@ -15,6 +15,7 @@ class CheckLatePayments extends Command
 
     public function handle()
     {
+        /** @var \Illuminate\Database\Eloquent\Collection $customers */
         $customers = Customer::query()
             ->where('service_status', 'active')
             ->whereHas('plan.router', function ($query) {
@@ -32,7 +33,7 @@ class CheckLatePayments extends Command
         }
 
         foreach ($customers as $customer) {
-            IsolirCustomerJob::dispatch($customer);
+            \dispatch(new IsolirCustomerJob($customer));
         }
 
         return Command::SUCCESS;
