@@ -59,6 +59,6 @@ class CreatePlan extends Component
 
 
         $this->dispatch('toast', title: 'Saved to database', type: 'success');
-        return redirect()->route('plans.index');
+        return $this->redirectRoute('plans.index', navigate: true);
     }
 }

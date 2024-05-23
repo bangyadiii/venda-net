@@ -223,7 +223,7 @@
                 installmentStatus: $wire.entangle('form.installment_status'),
                 serviceStatus: $wire.entangle('form.service_status'),
                 serviceStatusOptions: {
-                    'installed': ['active', 'inactive'],
+                    'installed': $wire.entangle('form.serviceStatusOptions'),
                     'not_installed': ['inactive']
                 },
                 activeDate: $wire.entangle('form.active_date'),

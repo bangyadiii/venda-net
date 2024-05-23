@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\BillStatus;
+use App\Jobs\UnisolateCustomerJob;
 use App\Models\Bill;
 use App\Models\Payment;
 use App\Models\PaymentLog;
@@ -86,7 +88,7 @@ class MidtransCallbackController extends Controller
     private function updatePaymentStatus(TransactionStatus $notification, string $status)
     {
         $billId = explode('.', $notification->order_id)[1];
-        $bill = Bill::query()->findOrFail($billId);
+        $bill = Bill::query()->with('customer')->findOrFail($billId);
         $payment = Payment::query()->where('bill_id', $bill->id)
             ->firstOrFail();
 
@@ -103,7 +105,7 @@ class MidtransCallbackController extends Controller
                 'payment_date' => now(),
             ])->save();
 
-            $billStatus = $status === 'success' ? 'paid' : 'unpaid';
+            $billStatus = $status === 'success' ? BillStatus::PAID : BillStatus::UNPAID;
             $bill->fill(['status' => $billStatus])->save();
 
             $log = PaymentLog::query()->updateOrCreate([
@@ -116,6 +118,10 @@ class MidtransCallbackController extends Controller
 
             \info('Payment log created', $log->toArray());
         });
+
+        if ($status === 'success') {
+            \dispatch(new UnisolateCustomerJob($bill->customer));
+        }
     }
 
     /**

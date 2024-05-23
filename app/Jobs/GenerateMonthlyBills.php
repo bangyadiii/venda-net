@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\BillStatus;
 use App\Models\Bill;
 use App\Models\Customer;
 use App\Models\Setting;
@@ -40,6 +41,9 @@ class GenerateMonthlyBills implements ShouldQueue
         foreach ($customers as $customer) {
             if ($customer->plan) {
                 $isolir = Carbon::createFromDate(now()->year, now()->month, $customer->isolir_date);
+                if($isolir->isPast()) {
+                    $isolir->addMonth();
+                }
 
                 $bill = Bill::query()
                     ->where('customer_id', $customer->id)
@@ -53,7 +57,7 @@ class GenerateMonthlyBills implements ShouldQueue
                         'discount' => 0,
                         'tax_rate' => $tax,
                         'total_amount' => $customer->plan->price * (1 + $tax / 100),
-                        'status' => 'unpaid',
+                        'status' => BillStatus::UNPAID,
                         'due_date' => $isolir,
                         'plan_id' => $customer->plan_id,
                     ]);

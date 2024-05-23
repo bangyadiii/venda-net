@@ -53,6 +53,7 @@ class CustomerTable extends DataTableComponent
                     fn ($value) => match ($value) {
                         'active' => '<span class="badge text-bg-success">Aktif</span>',
                         'inactive' => '<span class="badge text-bg-secondary">Belum Aktif</span>',
+                        'suspended' => '<span class="badge text-bg-danger">Suspend</span>',
                         default => 'Tidak Diketahui',
                     }
                 )->html()

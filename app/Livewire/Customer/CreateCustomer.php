@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Customer;
 
+use App\Enums\BillStatus;
 use App\Livewire\Forms\CustomerForm;
 use App\Models\Bill;
 use App\Models\Customer;
@@ -67,14 +68,18 @@ class CreateCustomer extends Component
 
         $customer->save();
         $isolirDate = Carbon::createFromDate(now()->year, now()->month, $customer->isolir_date);
+        if ($isolirDate->isPast()) {
+            $isolirDate->addMonth();
+        }
+
         $tax = (int) Setting::where('key', 'ppn')->first()->value ?? 0;
         $bill = $customer->bills()->create([
             'due_date' => $isolirDate,
             'plan_id' => $customer->plan_id,
-            'total_amount' => ($plan->price - $this->form->discount) * ($tax/100 + 1),
+            'total_amount' => ($plan->price - $this->form->discount) * ($tax / 100 + 1),
             'tax_rate' => $tax,
             'discount' => $this->form->discount,
-            'status' => 'unpaid',
+            'status' => BillStatus::UNPAID,
         ]);
         $bill->invoice_link = $this->createInvoice($customer, $bill, $plan);
         $bill->save();

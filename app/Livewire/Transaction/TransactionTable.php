@@ -27,6 +27,7 @@ class TransactionTable extends DataTableComponent
     {
         return [
             Column::make("Tanggal", "payment_date")
+                ->format(fn ($value) => Carbon::parse($value))
                 ->sortable(),
             Column::make("No Pelanggan", "bill.customer.id"),
             Column::make("Nama", "bill.customer.customer_name"),
