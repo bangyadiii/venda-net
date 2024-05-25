@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use GuzzleHttp\Psr7\Query;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use RouterOS\Client;
+use RouterOS\Query;
 
 class Router extends Model
 {
@@ -62,7 +62,10 @@ class Router extends Model
             'host' => $host,
             'user' => $username,
             'pass' => $password,
-            'port' => 8728, // Port default untuk API MikroTik RouterOS
+            'port' => 8728,
+            'attempts' => 1,
+            'timeout' => 2,
+            'socket_timeout' => 20,
         ];
 
         return new Client($config);
@@ -102,9 +105,21 @@ class Router extends Model
         return $client->query('/ppp/secret/print')->read();
     }
 
-    public function getOnlinePPP($client)
+    public static function getOnlinePPP($client)
     {
         $query = new Query('/ppp/active/print');
         return $client->query($query)->read();
+    }
+
+    public static function getRouterInfo(Client $client)
+    {
+        $query = new Query('/system/resource/print');
+        $response = $client->query($query)->read();
+
+        if (!empty($response)) {
+            return $response[0];
+        }
+
+        return [];
     }
 }

@@ -44,7 +44,7 @@
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label class="form-label" for="tarif">Tarif Paket</label>
-                                <input wire:model='plan_price' type="text" class="form-control" disabled />
+                                <input value="{{ $plan_price ? currency($plan_price) : null }}" type="text" class="form-control" disabled />
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label class="form-label" for="diskon">Diskon</label>
@@ -63,21 +63,21 @@
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label class="form-label" for="nominal">Nominal</label>
-                                <input type="number" class="form-control" disabled wire:model='nominal' />
+                                <input type="text" class="form-control" disabled value="{{ $nominal ? currency($nominal) : null }}" />
                             </div>
                         </div>
                         <div class="row">
                             <div class="mb-3 col-md-4">
-                                <label class="form-label" for="ppn">PPN</label>
+                                <label class="form-label" for="ppn">PPN (%)</label>
                                 <input type="text" class="form-control" disabled wire:model='form.tax_rate'></input>
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label class="form-label" for="total_ppn">Total PPN</label>
-                                <input type="text" class="form-control" disabled wire:model='total_ppn' />
+                                <input type="text" class="form-control" disabled value='{{ $total_ppn ? currency($total_ppn) : null }}' />
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label class="form-label" for="tagihan">Total Tagihan</label>
-                                <input type="number" class="form-control" disabled wire:model='grand_total' />
+                                <input type="number" class="form-control" disabled wire:model="grand_total" />
                             </div>
                         </div>
 

@@ -6,6 +6,7 @@ use App\Livewire\Forms\CustomerForm;
 use App\Models\Customer;
 use App\Models\Plan;
 use App\Models\Router;
+use Exception;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 use RouterOS\Query;
@@ -51,11 +52,12 @@ class EditCustomer extends Component
             }
             $response = $client->query($query)->read();
             if (!isset($response['after']['ret'])) {
-                throw new \Exception($response['after']['message'] ?? 'Failed to create customer');
+                throw new Exception($response['after']['message'] ?? 'Failed to create customer');
             }
             $customer->fill($this->form->only(
                 Customer::make()->getFillable()
             ));
+            $customer->secret_id = $response['after']['ret'];
 
             $customer->save();
         } catch (\Throwable $th) {
@@ -65,6 +67,6 @@ class EditCustomer extends Component
 
         $this->dispatch('toast', title: 'Customer created successfully', type: 'success');
 
-        return redirect()->route('customers.index');
+        return $this->redirectRoute('customers.index', navigate: true);
     }
 }

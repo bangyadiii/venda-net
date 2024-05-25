@@ -21,11 +21,13 @@ return new class extends Migration
 
             $table->enum('installment_status', ['not_installed', 'installed'])
                 ->default('not_installed');
-            $table->enum('service_status', ['active', 'inactive'])
-                ->default('inactive');
+            
+            $table->enum('service_status', ['active', 'inactive', 'suspended'])
+                ->default('active');
 
             $table->date('active_date')->nullable();
             $table->tinyInteger('isolir_date')->nullable();
+            $table->string('secret_id')->unique();
             $table->string('secret_username')->unique();
 
             $table->foreignId('plan_id')

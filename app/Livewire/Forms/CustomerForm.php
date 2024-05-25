@@ -74,6 +74,12 @@ class CustomerForm extends Form
         ],
     ];
 
+    public $serviceStatusOptions = [
+        'active',
+        'inactive',
+        'suspended',
+    ];
+    
     public $isSameDate = true;
 
     public array $rules = [

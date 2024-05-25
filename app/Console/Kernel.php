@@ -15,14 +15,13 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->job(new GenerateMonthlyBills())
-            // ->monthlyOn(1, '00:00')
-            ;
+            ->monthlyOn(1, '00:00');
+        $schedule->command('check:late-payments')->dailyAt('00:30');
         $schedule->command('app:payment-reminder-command')
             ->dailyAt('09:00')
             ->when(function () {
                 $enabled = Setting::where('key', 'reminder_enabled')->first();
                 if (!$enabled || !$enabled->value) {
-                    \info('Payment reminder is disabled.');
                     return false;
                 }
                 return (bool) $enabled->value;

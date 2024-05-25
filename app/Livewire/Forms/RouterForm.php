@@ -3,6 +3,7 @@
 namespace App\Livewire\Forms;
 
 use App\Models\Router;
+use Illuminate\Validation\Rule;
 use Livewire\Form;
 
 class RouterForm extends Form
@@ -22,7 +23,9 @@ class RouterForm extends Form
     public function rules()
     {
         return [
-            'host' => 'required|string|unique:routers,host',
+            'host' => [
+                'required', 'string',
+            ],
             'username' => 'required|string',
             'password' => 'nullable|string',
             'auto_isolir' => 'required|boolean',

@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Transaction;
 
+use App\Enums\BillStatus;
+use App\Jobs\UnisolateCustomerJob;
 use App\Livewire\Forms\TransactionForm;
 use App\Models\Bill;
 use App\Models\Customer;
@@ -46,30 +48,32 @@ class CreateTransaction extends Component
 
     public function store()
     {
-        if (!$this->currentBill || $this->currentBill->status !== 'unpaid') {
+        if (!$this->currentBill || $this->currentBill->status !== BillStatus::UNPAID) {
             $this->dispatch('toast', title: 'Tagihan tidak ditemukan');
             return \redirect()->back();
         }
+        $customer = Customer::find($this->customer_id);
+
+        \dispatch(new UnisolateCustomerJob($customer));
 
         $payment = Payment::create([
             'bill_id' => $this->currentBill->id,
             'amount' => $this->grand_total,
-            'status' => 'paid',
+            'status' => 'success',
             'method' => 'cash',
             'payment_date' => now(),
         ]);
 
         if (!$payment) {
             $this->dispatch('toast', title: 'Gagal menyimpan transaksi');
-            return \redirect()->back();
+            return $this->redirect('transactions.create', navigate: true);
         }
 
         PaymentLog::create([
             'payment_id' => $payment->id,
-            'status' => 'success',
             'message' => $this->form->note,
         ]);
-        $this->currentBill->status = 'paid';
+        $this->currentBill->status = BillStatus::PAID;
         $this->currentBill->save();
         $this->resetElement();
 
@@ -85,12 +89,20 @@ class CreateTransaction extends Component
         }
 
         $this->customer = Customer::with('plan')
-            ->where('service_status', 'active')
+            ->where('installment_status', 'installed')
             ->find($this->customer_id);
+        if (!$this->customer) {
+            $this->dispatch('toast', title: 'Pelanggan tidak ditemukan');
+            $this->customer_id = null;
+            return;
+        }
+
         $this->currentBill = Bill::query()
             ->where('customer_id', $this->customer_id)
-            ->where('status', 'unpaid')
+            ->where('total_amount', '>', 0)
+            ->where('status', BillStatus::UNPAID)
             ->first();
+
         if (!$this->currentBill) {
             info('create new bill');
             $lastBill = Bill::query()
@@ -104,7 +116,7 @@ class CreateTransaction extends Component
                 'plan_id' => $this->customer->plan_id,
                 'discount' => 0,
                 'tax_rate' => $tax,
-                'status' => 'unpaid',
+                'status' => BillStatus::UNPAID,
                 'total_amount' => $this->customer->plan->price * ($tax / 100 + 1),
             ]);
         }
@@ -118,12 +130,14 @@ class CreateTransaction extends Component
         $this->isolir_month = Carbon::parse($this->currentBill->due_date)->format('F Y');
         $this->nominal = $this->plan_price - $this->form->discount;
         $this->period = Carbon::parse($this->currentBill->due_date)->subMonth()->addDay()->format('d F Y') . ' - ' . Carbon::parse($this->currentBill->due_date)->format('d F Y');
+        $this->form->tax_rate =  $this->currentBill->tax_rate;
         $this->total_ppn =  $this->nominal * ($this->form->tax_rate / 100);
         $this->grand_total = $this->nominal + $this->total_ppn;
     }
 
     private function resetElement()
     {
+        $this->form->reset();
         $this->phone_number = null;
         $this->address = null;
         $this->secret_username = null;

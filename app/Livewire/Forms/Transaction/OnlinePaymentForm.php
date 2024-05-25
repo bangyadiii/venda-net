@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Forms\Transaction;
 
+use App\Enums\BillStatus;
 use App\Models\Bill;
 use App\Models\Customer;
 use Livewire\Attributes\Validate;
@@ -33,7 +34,7 @@ class OnlinePaymentForm extends Form
     {
         $this->tax = $bill->tax_rate;
         $this->total = $bill->total_amount;
-        $this->billStatus = isset($bill) && $bill->status == 'paid'
+        $this->billStatus = isset($bill) && $bill->status == BillStatus::PAID
             ? 'LUNAS' : 'BELUM LUNAS';
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Console\Commands\CheckLatePayments;
 use App\Console\Commands\PaymentReminderCommand;
 
 return [
@@ -16,7 +17,8 @@ return [
     */
 
     'commands' => [
-        PaymentReminderCommand::class
+        PaymentReminderCommand::class,
+        CheckLatePayments::class,
     ],
 
     /*

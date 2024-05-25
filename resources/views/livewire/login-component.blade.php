@@ -34,12 +34,6 @@
                                 @enderror
                             </div>
                             <div class="mb-3 form-password-toggle">
-                                <div class="d-flex justify-content-between">
-                                    <label class="form-label" for="password">Password</label>
-                                    <a href="{{url('auth/forgot-password-basic')}}">
-                                        <small>Forgot Password?</small>
-                                    </a>
-                                </div>
                                 <div class="input-group input-group-merge">
                                     <input type="password" id="password" class="form-control" wire:model="password"
                                         placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\BillStatus;
 use App\Models\Customer;
 use App\Models\Setting;
 use App\Notifications\PaymentReminderNotification;
@@ -34,7 +35,7 @@ class PaymentReminderCommand extends Command
             ->where('service_status', 'active')
             ->withWhereHas('bills', function ($query) {
                 $query->whereDate('due_date', now()->addDay())
-                    ->where('status', 'unpaid')
+                    ->where('status', BillStatus::UNPAID)
                     ->where('total_amount', '>', 0);
             })
             ->get();
@@ -54,5 +55,6 @@ class PaymentReminderCommand extends Command
             $notification = new PaymentReminderNotification($customer->phone_number, $content);
             $customer->notify($notification);
         }
+        return Command::SUCCESS;
     }
 }

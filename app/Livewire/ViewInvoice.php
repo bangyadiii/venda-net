@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Classes\Invoice;
+use App\Enums\BillStatus;
 use App\Models\Bill;
 use App\Models\Customer;
 use App\Models\Plan;
@@ -41,8 +42,8 @@ class ViewInvoice extends Component
             $billId = \explode('.', $this->orderId)[1];
             $this->bill = Bill::query()->where('id', $billId)->with(['customer', 'plan'])->first();
 
-            if ($this->bill->status == 'unpaid' && $this->trxStatus == 'settlement') {
-                $this->bill->status = 'paid';
+            if ($this->bill->status == BillStatus::UNPAID && $this->trxStatus == 'settlement') {
+                $this->bill->status = BillStatus::PAID;
             }
         }
 
@@ -73,7 +74,7 @@ class ViewInvoice extends Component
             ->discount($this->bill->discount);
 
         $invoice = Invoice::make();
-        if ($this->bill->payment->status == 'success') {
+        if (isset($this->bill->payment) && $this->bill->payment->status == 'success') {
             $invoice->paidDate(Carbon::parse($this->bill->payment->payment_date));
         }
 
@@ -82,7 +83,7 @@ class ViewInvoice extends Component
             ->taxRate($this->bill->tax_rate)
             ->addItem($item)
             ->dueDate(Carbon::parse($this->bill->due_date))
-            ->status($this->bill->status == 'paid' ? __('invoices::invoice.paid') : __('invoices::invoice.unpaid'))
+            ->status($this->bill->status == BillStatus::PAID ? __('invoices::invoice.paid') : __('invoices::invoice.unpaid'))
             ->filename($this->customer->id . '_' . $this->bill->id)
             ->save('public');
     }

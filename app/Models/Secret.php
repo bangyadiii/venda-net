@@ -18,6 +18,7 @@ class Secret extends Model
     protected $schema = [
         'id' => 'integer',
         'name' => 'string',
+        'password' => 'string',
         'profile' => 'string',
         'service' => 'string'
     ];

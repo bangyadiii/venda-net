@@ -53,6 +53,7 @@ class CustomerTable extends DataTableComponent
                     fn ($value) => match ($value) {
                         'active' => '<span class="badge text-bg-success">Aktif</span>',
                         'inactive' => '<span class="badge text-bg-secondary">Belum Aktif</span>',
+                        'suspended' => '<span class="badge text-bg-danger">Suspend</span>',
                         default => 'Tidak Diketahui',
                     }
                 )->html()
@@ -74,10 +75,11 @@ class CustomerTable extends DataTableComponent
             $router = $customer->plan->router;
             $client = Router::getClient($router->host, $router->username, $router->password);
             $query = new Query('/ppp/secret/remove');
-            $query->equal('name', $customer->secret_username);
+            $query->equal('.id', $customer->secret_id);
             $response = $client->query($query)->read();
+            
+            \throw_if(!empty($response), \Exception::class, 'Failed to delete customer secret');
             $customer->delete();
-            dd($response);
             $this->dispatch('toast', title: 'Customer deleted successfully', type: 'success');
         } catch (\Throwable $th) {
             $this->dispatch('toast', title: $th->getMessage(), type: 'danger');

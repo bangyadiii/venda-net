@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\BillStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -32,6 +33,19 @@ class Bill extends Model
         });
     }
 
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'status' => BillStatus::class,
+        ];
+    }
+
+    // Relationships
     public function customer()
     {
         return $this->belongsTo(Customer::class);
