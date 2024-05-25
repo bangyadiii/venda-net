@@ -12,14 +12,12 @@
                         <!-- Logo -->
                         <div class="app-brand justify-content-center">
                             <a href="{{url('/')}}" class="app-brand-link gap-2">
-                                <span
-                                    class="app-brand-logo demo">@include('_partials.macros',["width"=>25,"withbg"=>'var(--bs-primary)'])</span>
-                                <span
-                                    class="app-brand-text demo text-body fw-bold uppercase">{{config('app.name')}}</span>
+                                <span class="app-brand-logo demo">@include('_partials.logo',["width"=>150, 'height' =>
+                                    80,"fillColor"=>'#697A8D'])</span>
                             </a>
                         </div>
                         <!-- /Logo -->
-                        <p class="mb-4">Please sign-in to your account and start the adventure</p>
+                        <p class="mb-4">Sistem Manajemen Pelanggan Internet Venda NET</p>
 
                         <form id="formAuthentication" class="mb-3" wire:submit='store'>
                             @csrf
@@ -34,7 +32,8 @@
                                 @enderror
                             </div>
                             <div class="mb-3 form-password-toggle">
-                                <div class="input-group input-group-merge">
+                                <label class="form-label" for="password">Password</label>
+                                <div class="input-group">
                                     <input type="password" id="password" class="form-control" wire:model="password"
                                         placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                         aria-describedby="password" />

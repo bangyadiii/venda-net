@@ -45,8 +45,9 @@
                                     @endif
                                 <td>{{ $router->isolir_profile_id  ?? '-'}}</td>
 
-                                <td><span wire:init="$router->isConnected()"
-                                        class="badge bg-label-{{ $router->isConnected() ? 'success' : 'danger' }} me-1">{{ $router->isConnected() ? 'Connected' : 'Disconnected' }}</span></td>
+                                <td><span
+                                        class="badge bg-label-{{ $router->isConnected ? 'success' : 'danger' }} me-1">{{ $router->isConnected ? 'Connected' : 'Disconnected' }}</span>
+                                </td>
                                 <td>
                                     <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
@@ -55,7 +56,8 @@
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item" href="{{ route('routers.edit', $router->id) }}"><i
                                                     class="bx bx-edit-alt me-1"></i> Edit</a>
-                                            <button class="dropdown-item" wire:click='delete({{ $router->id }})' wire:confirm='Are you sure to delete this?'><i
+                                            <button class="dropdown-item" wire:click='delete({{ $router->id }})'
+                                                wire:confirm='Are you sure to delete this?'><i
                                                     class="bx bx-trash me-1"></i>
                                                 Delete</button>
                                         </div>

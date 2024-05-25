@@ -20,7 +20,6 @@ use App\Livewire\Transaction\TransactionIndex;
 use App\Livewire\ViewInvoice;
 
 require __DIR__ . '/auth.php';
-require __DIR__ . '/vendor.php';
 
 // Main Page Route
 Route::middleware('auth')->group(function () {

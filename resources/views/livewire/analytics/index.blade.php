@@ -4,60 +4,64 @@
             <div class="col-md-3 col-12 mb-4">
                 <div class="card">
                     <div class="card-body">
-                        <div class="card-title d-flex align-items-start justify-content-between">
+                        <div class="card-title d-flex justify-content-between">
+                            <div>
+                                <span class="fw-semibold d-block mb-1">Pelanggan</span>
+                                <h3 class="card-title mb-2">{{ $totalCustomer }}</h3>
+                            </div>
                             <div class="avatar flex-shrink-0">
-                                <img src="{{asset('assets/img/icons/unicons/chart-success.png')}}" alt="chart success"
+                                <img src="{{asset('assets/img/icons/unicons/users.png')}}" alt="chart success"
                                     class="rounded">
                             </div>
-
                         </div>
-                        <span class="fw-semibold d-block mb-1">Pelanggan</span>
-                        <h3 class="card-title mb-2">{{ $totalCustomer }}</h3>
-
                     </div>
                 </div>
             </div>
             <div class="col-md-3 col-12 mb-4">
                 <div class="card">
                     <div class="card-body">
-                        <div class="card-title d-flex align-items-start justify-content-between">
+                        <div class="card-title d-flex justify-content-between">
+                            <div>
+                                <span class="fw-semibold d-block mb-1">Sudah Bayar</span>
+                                <h3 class="card-title text-nowrap mb-1">{{ $paymentComplete }}</h3>
+                            </div>
                             <div class="avatar flex-shrink-0">
-                                <img src="{{asset('assets/img/icons/unicons/wallet-info.png')}}" alt="Credit Card"
+                                <img src="{{asset('assets/img/icons/unicons/coin.png')}}" alt="Credit Card"
                                     class="rounded">
                             </div>
                         </div>
-                        <span>Sudah Bayar</span>
-                        <h3 class="card-title text-nowrap mb-1">{{ $paymentComplete }}</h3>
-
                     </div>
                 </div>
             </div>
             <div class="col-md-3 col-12 mb-4">
                 <div class="card">
                     <div class="card-body">
-                        <div class="card-title d-flex align-items-start justify-content-between">
+                        <div class="card-title d-flex justify-content-between">
+                            <div>
+                                <span class="fw-semibold d-block mb-1">Belum Bayar</span>
+                                <h3 class="card-title text-nowrap mb-1">{{ $totalCustomer - $paymentComplete }}</h3>
+                            </div>
                             <div class="avatar flex-shrink-0">
-                                <img src="{{asset('assets/img/icons/unicons/wallet-info.png')}}" alt="Credit Card"
+                                <img src="{{asset('assets/img/icons/unicons/coin-warning.png')}}" alt="Credit Card"
                                     class="rounded">
                             </div>
                         </div>
-                        <span>Belum Bayar</span>
-                        <h3 class="card-title text-nowrap mb-1">{{ $totalCustomer - $paymentComplete }}</h3>
-
                     </div>
                 </div>
             </div>
             <div class="col-md-3 col-12 mb-4">
                 <div class="card">
                     <div class="card-body">
-                        <div class="card-title d-flex align-items-start justify-content-between">
+                        <div class="card-title d-flex justify-content-between">
+                            <div>
+                                <span class="fw-semibold d-block mb-1">Suspended</span>
+                                <h3 class="card-title text-nowrap mb-1">{{ $suspended }}</h3>
+                            </div>
                             <div class="avatar flex-shrink-0">
-                                <img src="{{asset('assets/img/icons/unicons/wallet-info.png')}}" alt="Credit Card"
+                                <img src="{{asset('assets/img/icons/unicons/warning.png')}}" alt="Credit Card"
                                     class="rounded">
                             </div>
                         </div>
-                        <span>Suspended</span>
-                        <h3 class="card-title text-nowrap mb-1">{{ $suspended }}</h3>
                     </div>
                 </div>
             </div>
@@ -135,8 +139,7 @@
                     <div class="d-flex px-xxl-4 px-lg-2 p-4 gap-xxl-3 gap-lg-1 gap-3 justify-content-between">
                         <div class="d-flex">
                             <div class="me-2">
-                                <span class="badge bg-label-primary p-2"><i
-                                        class="bx bx-dollar text-primary"></i></span>
+                                <span class="badge bg-label-primary p-2"><i class='bx bx-chip'></i></span>
                             </div>
                             <div class="d-flex flex-column">
                                 <small>Board Name</small>
@@ -145,7 +148,9 @@
                         </div>
                         <div class="d-flex">
                             <div class="me-2">
-                                <span class="badge bg-label-info p-2"><i class="bx bx-wallet text-info"></i></span>
+                                <span class="badge bg-label-info p-2">
+                                    <i class='bx bx-calendar-check'></i>
+                                </span>
                             </div>
                             <div class="d-flex flex-column">
                                 <small>Version</small>

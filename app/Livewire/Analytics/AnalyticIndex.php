@@ -33,7 +33,7 @@ class AnalyticIndex extends Component
     public $totalCustomer = 0;
     public $paymentComplete = 0;
     public $suspended = 0;
-    public $secret;
+    public $secret = 0;
     public $onlineSecret = 0;
 
     public function mount()
@@ -53,23 +53,13 @@ class AnalyticIndex extends Component
 
     protected function initializeRouter()
     {
-        if (!$this->connectToRouter()) {
+        if (!$this->router->isConnected) {
             $this->dispatch('toast', title: 'Could not connect to the router', type: 'error');
             $this->hasError = true;
             return;
         }
         $this->getRouterInfo();
         $this->fetchRouterResource();
-    }
-
-    protected function connectToRouter()
-    {
-        try {
-            Router::getClient($this->router->host, $this->router->username, $this->router->password);
-            return true;
-        } catch (\Throwable $th) {
-            return false;
-        }
     }
 
     public function fetchRouterResource()

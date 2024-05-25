@@ -22,6 +22,8 @@ class Router extends Model
         'isolir_profile_id'
     ];
 
+    public ?bool $isConnected = null;
+
     public static function getLastClient(): ?Client
     {
         $router =  Router::latest()->first();
@@ -31,9 +33,13 @@ class Router extends Model
         return self::getClient($router->host, $router->username, $router->password);
     }
 
+    public function setIsConnectedAttribute($value)
+    {
+        $this->isConnected = (bool) $value;
+    }
+
     public function isConnected(): bool
     {
-
         try {
             self::getClient($this->host, $this->username, $this->password);
         } catch (\Exception $e) {

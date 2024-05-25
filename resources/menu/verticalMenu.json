@@ -2,19 +2,19 @@
   "menu": [
     {
       "url": "/dashboard",
-      "name": "Dashboards",
+      "name": "Dashboard",
       "icon": "menu-icon tf-icons bx bx-home-circle",
       "slug": "analytics.index"
     },
     {
       "url": "/dashboard/routers",
-      "name": "Router Settings",
+      "name": "Setting Router",
       "icon": "menu-icon tf-icons bx bx-server",
       "slug": "routers.index"
     },
     {
       "url": "/dashboard/plans",
-      "name": "Plan Settings",
+      "name": "Setting Paket",
       "icon": "menu-icon tf-icons bx bx-globe",
       "slug": "plans.index"
     },
