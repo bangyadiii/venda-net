@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Enums\BillStatus;
+use App\Enums\PaymentMethod;
+use App\Enums\PaymentStatus;
 use App\Jobs\UnisolateCustomerJob;
 use App\Models\Bill;
 use App\Models\Payment;
@@ -25,7 +27,7 @@ class MidtransCallbackController extends Controller
         $notification = Notification::make($request->all());
         $notification
             ->whenSettlement(function (TransactionStatus $notification) {
-                $this->updatePaymentStatus($notification, 'success');
+                $this->updatePaymentStatus($notification, PaymentStatus::SUCCESS);
             })
             ->whenPending(function (TransactionStatus $notification) {
                 // create a new payment and payment log
@@ -39,8 +41,8 @@ class MidtransCallbackController extends Controller
                         'bill_id' => $bill->id,
                         'amount' => $bill->total_amount,
                         'payment_date' => \now(),
-                        'status' => 'pending',
-                        'method' => 'midtrans',
+                        'status' => PaymentStatus::PENDING,
+                        'method' => PaymentMethod::MIDTRANS,
                     ]);
                 }
 
@@ -64,13 +66,13 @@ class MidtransCallbackController extends Controller
                 ]);
             })
             ->whenDenied(function (TransactionStatus $notification) {
-                $this->updatePaymentStatus($notification, 'failed');
+                $this->updatePaymentStatus($notification, PaymentStatus::FAILED);
             })
             ->whenExpired(function (TransactionStatus $notification) {
-                $this->updatePaymentStatus($notification, 'failed');
+                $this->updatePaymentStatus($notification, PaymentStatus::FAILED);
             })
             ->whenCancelled(function (TransactionStatus $notification) {
-                $this->updatePaymentStatus($notification, 'failed');
+                $this->updatePaymentStatus($notification, PaymentStatus::FAILED);
             })
             ->listen();
 
@@ -85,7 +87,7 @@ class MidtransCallbackController extends Controller
      * @param string $status
      * @return void
      */
-    private function updatePaymentStatus(TransactionStatus $notification, string $status)
+    private function updatePaymentStatus(TransactionStatus $notification, PaymentStatus $status)
     {
         $billId = explode('.', $notification->order_id)[1];
         $bill = Bill::query()->with('customer')->findOrFail($billId);
@@ -105,7 +107,7 @@ class MidtransCallbackController extends Controller
                 'payment_date' => now(),
             ])->save();
 
-            $billStatus = $status === 'success' ? BillStatus::PAID : BillStatus::UNPAID;
+            $billStatus = $status ===  PaymentStatus::SUCCESS ? BillStatus::PAID : BillStatus::UNPAID;
             $bill->fill(['status' => $billStatus])->save();
 
             $log = PaymentLog::query()->updateOrCreate([
@@ -119,7 +121,7 @@ class MidtransCallbackController extends Controller
             \info('Payment log created', $log->toArray());
         });
 
-        if ($status === 'success') {
+        if ($status === PaymentStatus::SUCCESS) {
             \dispatch(new UnisolateCustomerJob($bill->customer));
         }
     }

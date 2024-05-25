@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Enums\BillStatus;
+use App\Enums\ServiceStatus;
 use Illuminate\Console\Command;
 use App\Models\Customer;
 use App\Jobs\IsolirCustomerJob;
@@ -17,7 +18,7 @@ class CheckLatePayments extends Command
     {
         /** @var \Illuminate\Database\Eloquent\Collection $customers */
         $customers = Customer::query()
-            ->where('service_status', 'active')
+            ->where('service_status', ServiceStatus::ACTIVE)
             ->whereHas('plan.router', function ($query) {
                 $query->where('auto_isolir', true);
             })

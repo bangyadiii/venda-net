@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\ServiceStatus;
 use App\Models\Customer;
 use App\Models\Router;
 use Illuminate\Bus\Queueable;
@@ -34,7 +35,7 @@ class IsolirCustomerJob implements ShouldQueue
             $this->changePPPProfile($client, $this->customer->secret_username, $router->isolir_profile_id);
         }
 
-        $this->customer->update(['service_status' => 'suspended']);
+        $this->customer->update(['service_status' => ServiceStatus::SUSPENDED]);
     }
 
     private function disablePPPSecret(Client $client, $username)

@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\ServiceStatus;
 use App\Models\Customer;
 use App\Models\Router;
 use Illuminate\Bus\Queueable;
@@ -34,8 +35,8 @@ class UnisolateCustomerJob implements ShouldQueue
             $this->changePPPProfile($client, $this->customer->secret_username);
         }
 
-        if ($this->customer->service_status == 'suspended') {
-            $this->customer->update(['service_status' => 'active']);
+        if ($this->customer->service_status == ServiceStatus::SUSPENDED) {
+            $this->customer->update(['service_status' => ServiceStatus::ACTIVE]);
         }
     }
 

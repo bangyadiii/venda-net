@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Classes\Invoice;
 use App\Enums\BillStatus;
+use App\Enums\PaymentStatus;
 use App\Models\Bill;
 use App\Models\Customer;
 use App\Models\Plan;
@@ -74,7 +75,7 @@ class ViewInvoice extends Component
             ->discount($this->bill->discount);
 
         $invoice = Invoice::make();
-        if (isset($this->bill->payment) && $this->bill->payment->status == 'success') {
+        if (isset($this->bill->payment) && $this->bill->payment->status == PaymentStatus::SUCCESS) {
             $invoice->paidDate(Carbon::parse($this->bill->payment->payment_date));
         }
 

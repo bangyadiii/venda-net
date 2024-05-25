@@ -3,6 +3,7 @@
 namespace App\Livewire\Analytics;
 
 use App\Enums\BillStatus;
+use App\Enums\ServiceStatus;
 use App\Models\Customer;
 use App\Models\Router;
 use Exception;
@@ -45,7 +46,7 @@ class AnalyticIndex extends Component
             ->whereHas('bills', function ($query) {
                 $query->where('status', BillStatus::PAID);
             })->count();
-        $this->suspended = Customer::where('service_status', 'suspended')->count();
+        $this->suspended = Customer::where('service_status', ServiceStatus::SUSPENDED)->count();
 
         $this->initializeRouter();
     }

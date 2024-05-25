@@ -3,6 +3,9 @@
 namespace App\Livewire\Transaction;
 
 use App\Enums\BillStatus;
+use App\Enums\InstallmentStatus;
+use App\Enums\PaymentMethod;
+use App\Enums\PaymentStatus;
 use App\Jobs\UnisolateCustomerJob;
 use App\Livewire\Forms\TransactionForm;
 use App\Models\Bill;
@@ -48,7 +51,7 @@ class CreateTransaction extends Component
 
     public function store()
     {
-        if (!$this->currentBill || $this->currentBill->status !== BillStatus::UNPAID) {
+        if (!$this->currentBill || $this->currentBill->status != BillStatus::UNPAID) {
             $this->dispatch('toast', title: 'Tagihan tidak ditemukan');
             return \redirect()->back();
         }
@@ -59,8 +62,8 @@ class CreateTransaction extends Component
         $payment = Payment::create([
             'bill_id' => $this->currentBill->id,
             'amount' => $this->grand_total,
-            'status' => 'success',
-            'method' => 'cash',
+            'status' => PaymentStatus::SUCCESS,
+            'method' => PaymentMethod::CASH,
             'payment_date' => now(),
         ]);
 
@@ -89,7 +92,7 @@ class CreateTransaction extends Component
         }
 
         $this->customer = Customer::with('plan')
-            ->where('installment_status', 'installed')
+            ->where('installment_status', InstallmentStatus::INSTALLED)
             ->find($this->customer_id);
         if (!$this->customer) {
             $this->dispatch('toast', title: 'Pelanggan tidak ditemukan');

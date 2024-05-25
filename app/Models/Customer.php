@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\InstallmentStatus;
+use App\Enums\ServiceStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -36,6 +38,16 @@ class Customer extends Model
             $model->id = \random_int(100000, 9999999);
         });
     }
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'installment_status' => InstallmentStatus::class,
+        'service_status' => ServiceStatus::class,
+    ];
 
     public function setActiveDateAttribute($value)
     {
