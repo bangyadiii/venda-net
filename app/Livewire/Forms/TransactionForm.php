@@ -3,6 +3,7 @@
 namespace App\Livewire\Forms;
 
 use App\Models\Customer;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 
@@ -11,6 +12,7 @@ class TransactionForm extends Form
     public $discount;
     public $method;
     public $note;
+    #[Locked]
     public $tax_rate;
 
     public array $rules = [

@@ -82,16 +82,16 @@
       <div class="row row-bordered g-0">
         <div class="col-md-8">
           <h5 class="card-header m-0 me-2">Traffic</h5>
-          <div id="totalRevenueChart" class="px-2"></div>
+          <div id="speedMikrotik" class="px-2"></div>
         </div>
         <div class="col-md-4 pt-3">
           <div class="row">
-            <div id="growthChart"></div>
+            <div id="cpuChart"></div>
             <div class="text-center fw-medium pt-3 mb-2">CPU Load</div>
           </div>
 
           <div class="row">
-            <div id="growthChart1"></div>
+            <div id="memoryLoadChart"></div>
             <div class="text-center fw-medium pt-3 mb-2">Memory Load</div>
           </div>
 

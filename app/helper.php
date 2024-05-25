@@ -17,3 +17,16 @@ if (!function_exists('currency')) {
         return  'Rp. ' . number_format($amount, 0, ',', '.');
     }
 }
+
+if (!function_exists('convertSpeed')) {
+    function convertSpeed($value)
+    {
+        if ($value >= 1000000) {
+            return round($value / 1000000, 2) . ' Mbps';
+        } elseif ($value >= 1000) {
+            return round($value / 1000, 2) . ' kbps';
+        } else {
+            return $value . ' bps';
+        }
+    }
+}

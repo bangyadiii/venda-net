@@ -10,6 +10,7 @@ use App\Models\Plan;
 use App\Models\Router;
 use App\Models\Setting;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Collection;
 use LaravelDaily\Invoices\Classes\Buyer;
 use LaravelDaily\Invoices\Classes\InvoiceItem;
@@ -54,7 +55,7 @@ class CreateCustomer extends Component
                 }
                 $response = $client->query($query)->read();
                 if (!isset($response['after']['ret'])) {
-                    throw new \Exception($response['after']['message'] ?? 'Failed to create customer');
+                    throw new Exception($response['after']['message'] ?? 'Failed to create customer');
                 }
             } catch (\Throwable $th) {
                 $this->dispatch('toast', title: $th->getMessage(), type: 'danger');
@@ -65,8 +66,9 @@ class CreateCustomer extends Component
         $customer->fill($this->form->only(
             Customer::make()->getFillable()
         ));
-
+        $customer->secret_id = $response['after']['ret'];
         $customer->save();
+
         $isolirDate = Carbon::createFromDate(now()->year, now()->month, $customer->isolir_date);
         if ($isolirDate->isPast()) {
             $isolirDate->addMonth();
@@ -109,6 +111,6 @@ class CreateCustomer extends Component
             ->filename($customer->id . '_' . $bill->id)
             ->save('public');
 
-        return $link = $invoice->url();
+        return $invoice->url();
     }
 }
