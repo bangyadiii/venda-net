@@ -2,6 +2,8 @@
 
 namespace App\Livewire;
 
+use App\Enums\InstallmentStatus;
+use App\Enums\ServiceStatus;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Customer;
@@ -43,17 +45,17 @@ class CustomerTable extends DataTableComponent
             Column::make("Status Pemasangan", "installment_status")
                 ->format(
                     fn ($value) => match ($value) {
-                        'installed' => '<span class="badge text-bg-success">Terpasang</span>',
-                        'not_installed' => '<span class="badge text-bg-secondary">Belum Terpasang</span>',
+                        InstallmentStatus::INSTALLED => '<span class="badge text-bg-success">Terpasang</span>',
+                        InstallmentStatus::NOT_INSTALLED => '<span class="badge text-bg-secondary">Belum Terpasang</span>',
                         default => 'Tidak Diketahui',
                     }
                 )->html(),
             Column::make("Status Layanan", "service_status")
                 ->format(
-                    fn ($value) => match ($value) {
-                        'active' => '<span class="badge text-bg-success">Aktif</span>',
-                        'inactive' => '<span class="badge text-bg-secondary">Belum Aktif</span>',
-                        'suspended' => '<span class="badge text-bg-danger">Suspend</span>',
+                    fn ($status) => match ($status) {
+                        ServiceStatus::ACTIVE => '<span class="badge text-bg-success">Aktif</span>',
+                        ServiceStatus::INACTIVE => '<span class="badge text-bg-secondary">Belum Aktif</span>',
+                        ServiceStatus::SUSPENDED => '<span class="badge text-bg-danger">Suspend</span>',
                         default => 'Tidak Diketahui',
                     }
                 )->html()
@@ -77,7 +79,7 @@ class CustomerTable extends DataTableComponent
             $query = new Query('/ppp/secret/remove');
             $query->equal('.id', $customer->secret_id);
             $response = $client->query($query)->read();
-            
+
             \throw_if(!empty($response), \Exception::class, 'Failed to delete customer secret');
             $customer->delete();
             $this->dispatch('toast', title: 'Customer deleted successfully', type: 'success');
