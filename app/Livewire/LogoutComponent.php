@@ -20,6 +20,6 @@ class LogoutComponent extends Component
 
         request()->session()->regenerateToken();
 
-        return $this->redirectRoute('login');
+        return \to_route('login');
     }
 }

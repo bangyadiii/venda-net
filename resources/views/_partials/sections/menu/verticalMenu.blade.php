@@ -4,7 +4,7 @@
   <div class="app-brand demo d-flex justify-content-center">
     <a href="{{url('/')}}" class="app-brand-link">
       <span class="app-brand-logo">
-        @include('_partials.logo',[ "height" => 50, 'width' => 120,"fillColor"=>'var(--bs-primary)'])
+        @include('_partials.logo',[ "height" => 50, 'width' => 120,"fillColor"=>'#697A8D'])
       </span>
     </a>
 

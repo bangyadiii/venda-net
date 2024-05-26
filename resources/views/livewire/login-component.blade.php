@@ -50,9 +50,9 @@
                             </div>
                             <div class="mb-3">
                                 <button type="submit" class="btn btn-primary d-grid w-100" wire:loading.attr='disabled'>
-                                    <div class="spinner-border" role="status" wire:loading>
+                                    <output class="spinner-border" wire:loading>
                                         <span class="visually-hidden">Loading...</span>
-                                    </div>
+                                    </output>
                                     <span wire:loading.remove>
                                         Sign In
                                     </span>

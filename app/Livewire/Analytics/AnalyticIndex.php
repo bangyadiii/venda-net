@@ -8,7 +8,6 @@ use App\Models\Customer;
 use App\Models\Router;
 use Exception;
 use Livewire\Component;
-use RouterOS\Query;
 
 class AnalyticIndex extends Component
 {
@@ -26,8 +25,8 @@ class AnalyticIndex extends Component
         'total' => 0,
     ];
     public $interfaces = [];
-    public $boardName = '';
-    public $version = '';
+    public $boardName = '-';
+    public $version = '-';
     public $interface = 'ether1';
     public $hasError = false;
     public $totalCustomer = 0;
@@ -47,14 +46,12 @@ class AnalyticIndex extends Component
                 $query->where('status', BillStatus::PAID);
             })->count();
         $this->suspended = Customer::where('service_status', ServiceStatus::SUSPENDED)->count();
-
-        $this->initializeRouter();
     }
 
     protected function initializeRouter()
     {
         if (!$this->router->isConnected) {
-            $this->dispatch('toast', title: 'Could not connect to the router', type: 'error');
+            $this->dispatch('toast', title: 'Tidak bisa terhubung ke router', type: 'error');
             $this->hasError = true;
             return;
         }
@@ -91,12 +88,7 @@ class AnalyticIndex extends Component
 
         try {
             $client = Router::getClient($this->router->host, $this->router->username, $this->router->password);
-
-            $query = new Query('/interface/monitor-traffic');
-            $query->equal('interface', $this->interface);
-            $query->equal('once');
-
-            $response = $client->query($query)->read();
+            $response = Router::getTrafficData($client, $this->interface);
         } catch (\Throwable $th) {
             if (!$this->hasError) {
                 $this->dispatch('toast', title: 'Failed to fetch traffic data', type: 'error');
@@ -156,11 +148,13 @@ class AnalyticIndex extends Component
             return view('livewire.analytics.index');
         }
 
+        $this->initializeRouter();
+
         try {
             $client = Router::getClient($this->router->host, $this->router->username, $this->router->password);
             $secrets = Router::getPPPSecret($client);
             $onlineSecrets = Router::getOnlinePPP($client);
-            if (empty($secrets) && empty($onlineSecrets)){
+            if (empty($secrets) && empty($onlineSecrets)) {
                 throw new Exception('No secret or online secret available');
             }
             $this->secret = count($secrets);
@@ -177,10 +171,9 @@ class AnalyticIndex extends Component
         try {
             $client = Router::getClient($this->router->host, $this->router->username, $this->router->password);
             $response = Router::getRouterInfo($client);
-            $this->boardName = $response['board-name'] ?? '';
-            $this->version = $response['version'] ?? '';
-            $query = (new Query('/interface/print'))->where('type', 'ether');
-            $response = $client->query($query)->read();
+            $this->boardName = $response['board-name'] ?? '-';
+            $this->version = $response['version'] ?? '-';
+            $response = Router::getInterfaces($client);
             $this->interfaces = array_map(fn ($interface) => $interface['name'], $response ?? []);
         } catch (\Throwable $th) {
             $this->dispatch('toast', title: $th->getMessage(), type: 'error');

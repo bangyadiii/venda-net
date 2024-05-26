@@ -7,3 +7,8 @@
     data-client-key="{{ config('midtrans.sandbox_client_key') }}">
 </script> --}}
 @midtransSnapScripts
+
+<script src="{{asset('assets/vendor/libs/apex-charts/apexcharts.js')}}"></script>
+<!-- BEGIN: Page JS-->
+@yield('page-script')
+<!-- END: Page JS-->

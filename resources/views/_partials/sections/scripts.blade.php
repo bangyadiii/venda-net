@@ -11,11 +11,3 @@
 <!-- END: Page Vendor JS-->
 <!-- BEGIN: Theme JS-->
 <script src="{{ asset(mix('assets/js/main.js')) }}"></script>
-
-<!-- END: Theme JS-->
-<!-- Pricing Modal JS-->
-@stack('pricing-script')
-<!-- END: Pricing Modal JS-->
-<!-- BEGIN: Page JS-->
-@yield('page-script')
-<!-- END: Page JS-->
