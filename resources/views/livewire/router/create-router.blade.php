@@ -3,8 +3,19 @@
 
     <!-- Basic Layout -->
     <form wire:submit='store' x-data="{
+        host: $wire.entangle('form.host'),
+        username: $wire.entangle('form.username'),
+        password: $wire.entangle('form.password'),
+
         autoIsolir: $wire.entangle('form.auto_isolir'),
         isolirAction: $wire.entangle('form.isolir_action'),
+        showSaveButton: $wire.entangle('form.is_connected'),
+
+        init() {
+            this.$watch('host', value => this.showSaveButton = false);
+            this.$watch('username', value => this.showSaveButton = false);
+            this.$watch('password', value => this.showSaveButton = false);
+        }
     }">
         @csrf
         <div class="row">
@@ -49,9 +60,9 @@
                         </div>
                         <button class="btn btn-primary" wire:click='testConnection' wire:loading.attr='disabled'
                             type="button">
-                            <div class="spinner-border" role="status" wire:loading wire:target='testConnection'>
+                            <output class="spinner-border" wire:loading wire:target='testConnection'>
                                 <span class="visually-hidden">Loading...</span>
-                            </div>
+                            </output>
                             <span wire:loading.remove wire:target='testConnection'>
                                 Test Connection
                             </span>
@@ -110,7 +121,7 @@
                                 :disabled="isolirAction != 'change_profile'">
                                 <option value>Pilih Profile</option>
                                 @foreach ($form->profiles as $profile)
-                                <option value="{{ $profile['.id'] }}">{{ $profile['name'] }}</option>
+                                <option value="{{ $profile['id'] }}">{{ $profile['name'] }}</option>
                                 @endforeach
                             </select>
                             @error('form.isolir_profile_id')
@@ -120,10 +131,11 @@
                             @enderror
                         </div>
                         @if ($form->is_connected)
-                        <button wire:loading.attr='disabled' type="submit" class="btn btn-primary">
-                            <div class="spinner-border" role="status" wire:loading>
+                        <button wire:loading.attr='disabled' type="submit" class="btn btn-primary"
+                            x-show="showSaveButton">
+                            <output class="spinner-border" wire:loading>
                                 <span class="visually-hidden">Loading...</span>
-                            </div>
+                            </output>
                             <span wire:loading.remove>
                                 Simpan
                             </span>
