@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Transaction;
 
+use App\Enums\PaymentMethod;
+use App\Enums\PaymentStatus;
 use App\Livewire\Forms\Transaction\OnlinePaymentForm;
 use App\Models\Bill;
 use App\Models\Customer;
@@ -52,8 +54,8 @@ class CreateOnlinePayment extends Component
             DB::beginTransaction();
             $payment = $this->bill->payment()->create([
                 'amount' => $this->bill->total_amount,
-                'method' => 'midtrans',
-                'status' => 'pending',
+                'method' => PaymentMethod::MIDTRANS,
+                'status' => PaymentStatus::PENDING,
                 'payment_date' => now(),
             ]);
 

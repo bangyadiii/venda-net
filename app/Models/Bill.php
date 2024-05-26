@@ -34,16 +34,14 @@ class Bill extends Model
     }
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
-     * @return array<string, string>
+     * @var array
      */
-    protected function casts(): array
-    {
-        return [
-            'status' => BillStatus::class,
-        ];
-    }
+    protected $casts =
+    [
+        'status' => BillStatus::class,
+    ];
 
     // Relationships
     public function customer()

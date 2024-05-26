@@ -3,10 +3,10 @@
 namespace App\Livewire\Plan;
 
 use App\Models\Plan;
+use App\Models\Profile;
 use App\Models\Router;
 use Exception;
 use Livewire\Component;
-use RouterOS\Query;
 
 class PlanIndex extends Component
 {
@@ -23,18 +23,13 @@ class PlanIndex extends Component
         $router = $plan->router;
         try {
             $client = Router::getClient($router->host, $router->username, $router->password);
-            $query = new Query('/ppp/profile/remove');
-            $query->equal('.id', $plan->ppp_profile_id);
-            $response = $client->query($query)->read();
-            if (\is_array($response) && count($response) != 0) {
-                throw new Exception('Failed to delete from Mikrotik');
-            }
-
+            $deleted = Profile::deleteProfile($client, $plan->ppp_profile_id);
+            \throw_if(!$deleted, new Exception('Failed to delete profile from mikrotik'));
             $plan->delete();
 
             $this->dispatch('toast', title: 'Deleted from database', type: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('toast', title: $th->getMessage(), type: 'danger');
+            $this->dispatch('toast', title: $th->getMessage(), type: 'error');
         }
     }
 }

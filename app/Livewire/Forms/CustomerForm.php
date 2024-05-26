@@ -2,18 +2,22 @@
 
 namespace App\Livewire\Forms;
 
+use App\Enums\InstallmentStatus;
+use App\Enums\ServiceStatus;
 use App\Models\Customer;
+use Illuminate\Validation\Rule;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 
 class CustomerForm extends Form
 {
+    public $customer_id;
     public $customer_name;
     public $phone_number;
     public $address;
     public $plan_id;
-    public $installment_status = 'not_installed';
-    public $service_status = 'inactive';
+    public $installment_status = INstallmentStatus::NOT_INSTALLED;
+    public $service_status = ServiceStatus::INACTIVE;
     public $active_date;
     public $isolir_date;
     public $secret_type = 'add_secret';
@@ -79,30 +83,34 @@ class CustomerForm extends Form
         'inactive',
         'suspended',
     ];
-    
+
     public $isSameDate = true;
 
-    public array $rules = [
-        'customer_name' => 'required|string',
-        'phone_number' => 'required|string|unique:customers,phone_number',
-        'address' => 'nullable|string',
-        'plan_id' => 'required|integer',
-        'discount' => 'nullable|integer',
-        'installment_status' => 'required|string|in:not_installed,installed',
-        'service_status' => 'required|string|in:active,inactive',
-        'active_date' => 'nullable|required_if:installment_status,installed|date',
-        'isolir_date' => 'nullable|required_if:installment_status,installed|integer|between:1,31',
-        'ppp_service' => 'required|string',
-        'secret_username' => 'required|string',
-        'secret_password' => 'required|string',
-        'secret_type' => 'required|string|in:add_secret,existing_secret',
-        'local_address' => 'nullable|string|required_if:ip_type,remote_address',
-        'remote_address' => 'nullable|string|required_if:ip_type,remote_address',
-        'ip_type' => 'required|string|in:ip_pool,remote_address',
-    ];
+    public function rules()
+    {
+        return [
+            'customer_name' => 'required|string',
+            'phone_number' => ['required', 'string', Rule::unique('customers', 'phone_number')->ignore($this->customer_id)],
+            'address' => 'nullable|string',
+            'plan_id' => 'required|integer',
+            'discount' => 'nullable|integer',
+            'installment_status' => ['required', Rule::enum(InstallmentStatus::class)],
+            'service_status' => ['required', Rule::enum(ServiceStatus::class)],
+            'active_date' => 'nullable|required_if:installment_status,installed|date',
+            'isolir_date' => 'nullable|required_if:installment_status,installed|integer|between:1,31',
+            'ppp_service' => 'required|string',
+            'secret_username' => 'required|string',
+            'secret_password' => 'required|string',
+            'secret_type' => 'required|string|in:add_secret,existing_secret',
+            'local_address' => 'nullable|string|required_if:ip_type,remote_address',
+            'remote_address' => 'nullable|string|required_if:ip_type,remote_address',
+            'ip_type' => 'required|string|in:ip_pool,remote_address',
+        ];
+    }
 
     public function setCustomer(Customer $customer)
     {
+        $this->customer_id = $customer->id;
         $this->customer_name = $customer->customer_name;
         $this->phone_number = $customer->phone_number;
         $this->address = $customer->address;
@@ -111,7 +119,5 @@ class CustomerForm extends Form
         $this->service_status = $customer->service_status;
         $this->active_date = $customer->active_date;
         $this->isolir_date = $customer->isolir_date;
-        $this->secret_username = $customer->secret_username;
-        $this->secret_password = $customer->secret_password;
     }
 }

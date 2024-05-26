@@ -38,16 +38,30 @@
   <!-- Include Scripts -->
   @livewireScripts
   @include('_partials/sections/scripts')
-  <div x-data="{open: false}" x-show="open" @toast.window="Toastify({
-      text: $event.detail.title,
-      newWindow: true,
-      close: true,
-      gravity: 'bottom',
-      position: 'right',
-      stopOnFocus: true,
-      className: 'bg-'+$event.detail.type ? $event.detail.type : 'primary',
-      {{-- className: 'bg-' + $event.detail.type ? $event.detail.type : 'primary', --}}
-    }).showToast()">
+  <div x-data="{open: false}" x-show="open" @toast.window="
+      console.log($event.detail.type);
+      let bgColor = 'linear-gradient(to right, #00b09b, #96c93d)';
+      if($event.detail.type === 'success') {
+        bgColor = 'linear-gradient(to right, #00b09b, #96c93d)';
+      } else if($event.detail.type === 'error') {
+        bgColor = 'linear-gradient(to right, #ff5e3a, #ff2e63)';
+      } else if($event.detail.type === 'warning') {
+        bgColor = 'linear-gradient(to right, #f8b250, #ff5e3a)';
+      } else if($event.detail.type === 'info') {
+        bgColor = 'linear-gradient(to right, #00b09b, #96c93d)';
+      }
+
+      Toastify({
+        text: $event.detail.title,
+        newWindow: true,
+        close: true,
+        gravity: 'bottom',
+        position: 'right',
+        stopOnFocus: true,
+        style: {
+          background: bgColor,
+        }
+      }).showToast()">
 
   </div>
 </body>

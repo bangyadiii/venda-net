@@ -4,13 +4,6 @@
     width: $menu-collapsed-width;
   }
 
-  .app-brand-logo,
-  .app-brand-link,
-  .app-brand-text {
-    margin-right: auto;
-    margin-left: auto;
-  }
-
   .app-brand-logo ~ .app-brand-text {
     overflow: hidden;
     text-overflow: ellipsis;

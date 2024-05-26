@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Enums\BillStatus;
+use App\Enums\ServiceStatus;
 use App\Models\Customer;
 use App\Models\Setting;
 use App\Notifications\PaymentReminderNotification;
@@ -32,7 +33,7 @@ class PaymentReminderCommand extends Command
         $template = Setting::where('key', 'whatsapp_template')->first()->value;
 
         $customers = Customer::with(['bills', 'plan'])
-            ->where('service_status', 'active')
+            ->where('service_status', ServiceStatus::ACTIVE)
             ->withWhereHas('bills', function ($query) {
                 $query->whereDate('due_date', now()->addDay())
                     ->where('status', BillStatus::UNPAID)

@@ -4,10 +4,10 @@ namespace App\Livewire\Plan;
 
 use App\Livewire\Forms\PlanForm;
 use App\Models\Plan;
+use App\Models\Profile;
 use App\Models\Router;
 use Illuminate\Support\Collection;
 use Livewire\Component;
-use RouterOS\Query;
 
 class CreatePlan extends Component
 {
@@ -32,31 +32,26 @@ class CreatePlan extends Component
         try {
             $client = Router::getClient($router->host, $router->username, $router->password);
             // check if the ppp profile is exist on mikrotik or not
-            $query = new Query('/ppp/profile/print');
-            $query->where('name', $this->form->name);
-            $profile = $client->query($query)->read();
+            $profiles = Profile::getProfile($client, $this->form->name);
             $plan = Plan::query()->where('name', $this->form->name)->first();
-            if (count($profile) > 0 || $plan) {
-                $this->dispatch('toast', title: 'Paket dengan nama ' . $this->form->name . 'sudah ada', type: 'danger');
-                return \redirect()->back();
-            }
+            \throw_if(!empty($profiles) || $plan, new \Exception('Paket dengan nama ' . $this->form->name . ' sudah ada'));
 
             // add plan to router
-            $query = new Query('/ppp/profile/add');
-            $response = $client->query(
-                $query->add('=name=' . $this->form->name)
-                    ->add('=rate-limit=' . $this->form->speed_limit)
-                    ->add('=local-address=pool_PPPoE')
-                    ->add('=remote-address=pool_PPPoE')
-            )->read();
+            $id = Profile::createProfile(
+                $client,
+                $this->form->name,
+                $this->form->speed_limit,
+                'pool_PPPoE', // TODO: change this to dynamic value
+                'pool_PPPoE' // TODO: change this to dynamic value
+            );
+            \throw_if(!$id, new \Exception('Failed to create profile'));
             $plan = new Plan($this->form->all());
-            $plan->ppp_profile_id = $response['after']['ret'];
+            $plan->ppp_profile_id = $id;
             $plan->save();
         } catch (\Throwable $th) {
-            $this->dispatch('toast', title: $th->getMessage(), type: 'danger');
+            $this->dispatch('toast', title: $th->getMessage(), type: 'error');
             return \redirect()->back();
         }
-
 
         $this->dispatch('toast', title: 'Saved to database', type: 'success');
         return $this->redirectRoute('plans.index', navigate: true);

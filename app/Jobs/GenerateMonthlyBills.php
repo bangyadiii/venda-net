@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Enums\BillStatus;
+use App\Enums\ServiceStatus;
 use App\Models\Bill;
 use App\Models\Customer;
 use App\Models\Setting;
@@ -32,7 +33,7 @@ class GenerateMonthlyBills implements ShouldQueue
     public function handle(): void
     {
         $customers = Customer::with('plan')
-            ->where('service_status', 'active')
+            ->where('service_status', ServiceStatus::ACTIVE)
             ->whereDoesntHave('bills', function ($query) {
                 $query->where(DB::raw('MONTH(due_date)'), now()->month);
             })

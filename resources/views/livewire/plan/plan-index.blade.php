@@ -33,7 +33,7 @@
                                 <td>{{ $plan->name }}</td>
                                 <td>{{ $plan->speed_limit }}</td>
 
-                                <td>Rp. {{ $plan->price }}</td>
+                                <td>{{ currency($plan->price) }}</td>
                                 <td>{{ $plan->router->host }}</td>
                                 <td>
                                     <div class="dropdown">

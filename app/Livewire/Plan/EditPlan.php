@@ -4,6 +4,7 @@ namespace App\Livewire\Plan;
 
 use App\Livewire\Forms\PlanForm;
 use App\Models\Plan;
+use App\Models\Profile;
 use App\Models\Router;
 use Illuminate\Support\Collection;
 use Livewire\Component;
@@ -29,26 +30,24 @@ class EditPlan extends Component
         $router = Router::find($this->form->router_id);
         try {
             $client = Router::getClient($router->host, $router->username, $router->password);
-            $query = new Query('/ppp/profile/set');
-            $query->equal('.id', $this->plan->ppp_profile_id)
-                ->equal('name', $this->form->name)
-                ->equal('rate-limit', $this->form->speed_limit);
+            $res = Profile::updateProfile(
+                $client,
+                $this->plan->ppp_profile_id,
+                $this->form->name,
+                $this->form->speed_limit,
+            );
 
-            $res = $client->query($query)->read();
-            if (is_array($res) && count($res) != 0) {
-                throw new \Exception('Gagal mengupdate paket di mikrotik');
-            }
+            \throw_if(!$res, new \Exception('Failed to update profile'));
 
             $this->plan->fill($this->form->except('router_id'));
             $this->plan->save();
         } catch (\Throwable $th) {
-            $this->dispatch('toast', title: $th->getMessage(), type: 'danger');
+            $this->dispatch('toast', title: $th->getMessage(), type: 'error');
             return \redirect()->back();
         }
 
-
         $this->dispatch('toast', title: 'Saved to database', type: 'success');
-        return redirect()->route('plans.index');
+        return $this->redirectRoute('plans.index');
     }
 
     public function render()

@@ -1,6 +1,6 @@
 <div>
     @isset( $editLink )
-    <a href="{{ $editLink }}" class="p-0">
+    <a href="{{ $editLink }}" class="btn btn-link p-0" wire:navigate wire:loading.attr='disabled'>
         <i class='bx bx-pencil'></i>
     </a>
     @endif

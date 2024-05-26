@@ -8,6 +8,7 @@ use App\Models\Bill;
 use App\Models\Customer;
 use App\Models\Plan;
 use App\Models\Router;
+use App\Models\Secret;
 use App\Models\Setting;
 use Carbon\Carbon;
 use Exception;
@@ -16,7 +17,6 @@ use LaravelDaily\Invoices\Classes\Buyer;
 use LaravelDaily\Invoices\Classes\InvoiceItem;
 use LaravelDaily\Invoices\Invoice;
 use Livewire\Component;
-use RouterOS\Query;
 
 class CreateCustomer extends Component
 {
@@ -41,32 +41,34 @@ class CreateCustomer extends Component
 
         $router = $plan->router;
         $customer = new Customer();
-        if ($this->form->secret_type === 'add_secret') {
-            try {
-                $client = Router::getClient($router->host, $router->username, $router->password);
-                $query = new Query('/ppp/secret/add');
-                $query->add('=name=' . $this->form->secret_username)
-                    ->add('=password=' . $this->form->secret_password)
-                    ->add('=service=' . $this->form->ppp_service)
-                    ->add('=profile=' . $plan->ppp_profile_id);
-                if ($this->form->ip_type === 'remote_address') {
-                    $query->add('=remote-address=' . $this->form->remote_address);
-                    $query->add('=local-address=' . $this->form->local_address);
-                }
-                $response = $client->query($query)->read();
-                if (!isset($response['after']['ret'])) {
-                    throw new Exception($response['after']['message'] ?? 'Failed to create customer');
-                }
-            } catch (\Throwable $th) {
-                $this->dispatch('toast', title: $th->getMessage(), type: 'danger');
-                return redirect()->back();
-            }
-        }
-
         $customer->fill($this->form->only(
             Customer::make()->getFillable()
         ));
-        $customer->secret_id = $response['after']['ret'];
+
+        if ($this->form->secret_type === 'add_secret') {
+            try {
+                $client = Router::getClient($router->host, $router->username, $router->password);
+                $id = Secret::addSecret(
+                    $client,
+                    $this->form->secret_username,
+                    $this->form->secret_password,
+                    $this->form->ppp_service,
+                    $plan->ppp_profile_id,
+                    $this->form->local_address,
+                    $this->form->remote_address,
+                    $this->form->ip_type,
+                );
+                \throw_if(!$id, new Exception('Failed to create secret'));
+
+                $customer->secret_id = $id;
+            } catch (\Throwable $th) {
+                $this->dispatch('toast', title: $th->getMessage(), type: 'error');
+                return redirect()->back();
+            }
+        } else {
+            $customer->secret_id = '';
+        }
+
         $customer->save();
 
         $isolirDate = Carbon::createFromDate(now()->year, now()->month, $customer->isolir_date);

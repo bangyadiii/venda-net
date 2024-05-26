@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Transaction;
 
+use App\Enums\PaymentMethod;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Payment;
@@ -43,7 +44,13 @@ class TransactionTable extends DataTableComponent
                 ->format(fn ($value) => currency($value))
                 ->sortable(),
             Column::make("Metode", "method")
-                ->sortable(),
+                ->sortable()
+                ->format(fn ($value) => match($value) {
+                    PaymentMethod::CASH => '<span class="badge text-bg-success">Tunai</span>',
+                    PaymentMethod::MIDTRANS => '<span class="badge text-bg-secondary">Midtrans</span>',
+                })
+                ->html()
+                ,
             Column::make('Action')
                 ->label(
                     fn ($row, Column $column) => view('components.livewire.datatables.action-column')->with(

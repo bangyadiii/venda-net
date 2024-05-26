@@ -6,22 +6,32 @@ use App\Livewire\Forms\CustomerForm;
 use App\Models\Customer;
 use App\Models\Plan;
 use App\Models\Router;
+use App\Models\Secret;
 use Exception;
 use Illuminate\Support\Collection;
 use Livewire\Component;
-use RouterOS\Query;
 
 class EditCustomer extends Component
 {
     public Collection $plans;
     public CustomerForm $form;
     public ?Customer $customer;
+    public ?Router $router;
 
     public function mount(Customer $customer)
     {
         $this->customer = $customer->load('plan.router');
         $this->plans = Plan::with('router')->get();
+        $this->router = $this->customer->plan->router;
+
         $this->form->setCustomer($this->customer);
+        $client = Router::getClient($this->router->host, $this->router->username, $this->router->password);
+        $secret = Secret::getSecret($client, $this->customer->secret_id);
+        $this->form->secret_password = $secret['password'];
+        $this->form->secret_username = $secret['name'];
+        $this->form->ppp_service = $secret['service'];
+        $this->form->local_address = $secret['local-address'] ?? null;
+        $this->form->remote_address = $secret['remote-address'] ?? null;
     }
 
     public function render()
@@ -37,31 +47,34 @@ class EditCustomer extends Component
             ->findOrFail($this->form->plan_id);
 
         $router = $plan->router;
-        $customer = new Customer();
+        $this->customer->fill($this->form->all());
 
         try {
             $client = Router::getClient($router->host, $router->username, $router->password);
-            $query = new Query('/ppp/secret/add');
-            $query->add('=name=' . $this->form->secret_username)
-                ->add('=password=' . $this->form->secret_password)
-                ->add('=service=' . $this->form->ppp_service)
-                ->add('=profile=' . $plan->ppp_profile_id);
-            if ($this->form->ip_type === 'remote_address') {
-                $query->add('=remote-address=' . $this->form->remote_address);
-                $query->add('=local-address=' . $this->form->local_address);
-            }
-            $response = $client->query($query)->read();
-            if (!isset($response['after']['ret'])) {
-                throw new Exception($response['after']['message'] ?? 'Failed to create customer');
-            }
-            $customer->fill($this->form->only(
-                Customer::make()->getFillable()
-            ));
-            $customer->secret_id = $response['after']['ret'];
+            $values = [
+                'name' => $this->form->secret_username,
+                'password' => $this->form->secret_password,
+                'service' => $this->form->ppp_service,
+                'profile' => $plan->ppp_profile_id,
+            ];
 
-            $customer->save();
+            if ($this->form->ip_type === 'remote_address') {
+                $values['remote-address'] = $this->form->remote_address;
+                $values['local-address'] = $this->form->local_address;
+            }
+            
+            $id = Secret::updateSecret(
+                $client,
+                $this->customer->secret_id,
+                $values
+            );
+            \throw_if(!$id, new Exception('Failed to update secret'));
+
+            $this->customer->secret_id = $id;
+
+            $this->customer->save();
         } catch (\Throwable $th) {
-            $this->dispatch('toast', title: $th->getMessage(), type: 'danger');
+            $this->dispatch('toast', title: $th->getMessage(), type: 'error');
             return redirect()->back();
         }
 
