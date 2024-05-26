@@ -28,7 +28,6 @@ class Customer extends Model
         'active_date',
         'isolir_date',
         'secret_id',
-        'secret_username',
     ];
 
     public static function boot()

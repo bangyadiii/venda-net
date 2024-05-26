@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use RouterOS\Client;
@@ -23,6 +24,7 @@ class Router extends Model
     ];
 
     public ?bool $isConnected = null;
+    public Collection $profiles;
 
     public static function getLastClient(): ?Client
     {
@@ -127,5 +129,27 @@ class Router extends Model
         }
 
         return [];
+    }
+
+    public static function getInterfaces(Client $client, $interfaceType = 'ether')
+    {
+        $query = (new Query('/interface/print'))
+            ->where('type', $interfaceType);
+        $response = $client->query($query)->read();
+
+        if (!empty($response)) {
+            return $response;
+        }
+
+        return [];
+    }
+
+    public static function getTrafficData(Client $client, $interface)
+    {
+        $query = new Query('/interface/monitor-traffic');
+        $query->equal('interface', $interface);
+        $query->equal('once');
+
+        return $client->query($query)->read();
     }
 }

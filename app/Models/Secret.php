@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
+use RouterOS\Client;
 use RouterOS\Query;
 use Sushi\Sushi;
 
@@ -13,7 +14,7 @@ class Secret extends Model
     use Sushi;
 
     protected $keyType = 'string';
-    private Query $query;
+    protected static ?Client $client = null;
 
     protected $schema = [
         'id' => 'integer',
@@ -22,13 +23,6 @@ class Secret extends Model
         'profile' => 'string',
         'service' => 'string'
     ];
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->query = new Query('/ppp/secret/print');
-    }
-
 
     public function getRows(): array
     {
@@ -43,45 +37,149 @@ class Secret extends Model
         }, $this->fetchSecrets());
     }
 
+    public static function queryForClient(Client $client): Builder
+    {
+        static::$client = $client;
+
+        return static::query();
+    }
+
     private function fetchSecrets()
     {
         try {
-            $client = Router::getLastClient();
             $this->query = new Query('/ppp/secret/print');
-            return $client->query($this->query)->read();
+            if (!$this->client) {
+                $this->client = Router::getLastClient();
+            }
+
+            return $this->client->query($this->query)->read();
         } catch (\Throwable $th) {
             return [];
         }
     }
 
-
-    public static function fetchAvailableSecrets()
+    public static function deleteSecret(Client $client, string $id): bool
     {
-        $customers = Customer::all();
-        $secrets = static::all();
-        $availableSecrets = [];
-        foreach ($secrets as $secret) {
-            $isAvailable = true;
-            foreach ($customers as $customer) {
-                if ($customer->secret_username === $secret['name']) {
-                    $isAvailable = false;
-                    break;
-                }
-            }
-            if ($isAvailable) {
-                $availableSecrets[] = $secret;
-            }
+        $query = (new Query('/ppp/secret/remove'))
+            ->equal('.id', $id);
+        $resp = $client->query($query)->read();
+        if (empty($resp)) {
+            return true;
         }
-        return $availableSecrets;
+
+        return false;
     }
 
-    public function scopeWhere($query, $column, $operator, $value)
+    public static function disableSecret(Client $client, string $id): bool
     {
-        return $this->query->where($column, $operator, $value);
+        $query = (new Query('/ppp/secret/disable'))
+            ->equal('.id', $id);
+        $resp = $client->query($query)->read();
+        if (empty($resp)) {
+            return true;
+        }
+
+        return false;
     }
 
-    public function customer()
+    public static function changePPPProfile(Client $client, $secretId, $profileId): bool
     {
-        return $this->hasOne(Customer::class, 'secret_username', 'name');
+        try {
+            $setProfileQuery = (new Query('/ppp/secret/set'))
+                ->equal('.id', $secretId)
+                ->equal('profile', $profileId);
+
+            $client->query($setProfileQuery)->read();
+            return true;
+        } catch (\Throwable $th) {
+            \info('error: ' . $th->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Create a new PPP secret
+     *
+     * @param Client $client
+     * @param string $username
+     * @param string $pw
+     * @param string $service
+     * @param string $profile
+     * @param string $remote
+     * @param string $local
+     * @param string $type
+     * @return false|string
+     */
+    public static function addSecret(Client $client, string $username, string $pw, $service, $profile, $remote, $local, $type): false|string
+    {
+        $query = new Query('/ppp/secret/add');
+        $query->add('=name=' . $username)
+            ->add('=password=' . $pw)
+            ->add('=service=' . $service)
+            ->add('=profile=' . $profile);
+        if ($type === 'remote_address') {
+            $query->add('=remote-address=' . $remote);
+            $query->add('=local-address=' . $local);
+        }
+        $response = $client->query($query)->read();
+        if (!isset($response['after']['ret'])) {
+            return false;
+        }
+
+        return $response['after']['ret'];
+    }
+
+    public static function getSecret(Client $client, string $id): array
+    {
+        $query = (new Query('/ppp/secret/print'))
+            ->where('.id', $id);
+
+        $res =  $client->query($query)->read();
+        if(isset($res['after']['message'])) {
+            throw new Exception($res['after']['message']);
+        }
+        return $res[0];
+    }
+
+    public static function updateSecret(Client $client, string $id, array $values): false|string
+    {
+        $query = (new Query('/ppp/secret/set'))
+            ->equal('.id', $id);
+        foreach ($values as $key => $value) {
+            $query->equal($key, $value);
+        }
+
+        $resp = $client->query($query)->read();
+
+        if (empty($resp)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static function enableSecret(Client $client, string $id, string $type, ?string $default = 'default'): bool
+    {
+        if (in_array($type, ['disable_secret', 'change_profile']) === false) {
+            return false;
+        }
+
+        try {
+            if ($type == 'disable_secret') {
+                $query = (new Query('/ppp/secret/enable'))
+                    ->equal('.id', $id);
+
+                $client->query($query)->read();
+            } elseif ($type == 'change_profile') {
+                $query = (new Query('/ppp/secret/set'))
+                    ->equal('.id', $id)
+                    ->equal('profile', $default);
+
+                $client->query($query)->read();
+            }
+        } catch (\Throwable $th) {
+            return false;
+        }
+
+        return true;
     }
 }

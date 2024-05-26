@@ -11,6 +11,7 @@ use Livewire\Form;
 
 class CustomerForm extends Form
 {
+    public $customer_id;
     public $customer_name;
     public $phone_number;
     public $address;
@@ -89,7 +90,7 @@ class CustomerForm extends Form
     {
         return [
             'customer_name' => 'required|string',
-            'phone_number' => 'required|string|unique:customers,phone_number',
+            'phone_number' => ['required', 'string', Rule::unique('customers', 'phone_number')->ignore($this->customer_id)],
             'address' => 'nullable|string',
             'plan_id' => 'required|integer',
             'discount' => 'nullable|integer',
@@ -109,6 +110,7 @@ class CustomerForm extends Form
 
     public function setCustomer(Customer $customer)
     {
+        $this->customer_id = $customer->id;
         $this->customer_name = $customer->customer_name;
         $this->phone_number = $customer->phone_number;
         $this->address = $customer->address;
@@ -117,7 +119,5 @@ class CustomerForm extends Form
         $this->service_status = $customer->service_status;
         $this->active_date = $customer->active_date;
         $this->isolir_date = $customer->isolir_date;
-        $this->secret_username = $customer->secret_username;
-        $this->secret_password = $customer->secret_password;
     }
 }

@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
+        $schedule->command('telescope:prune --hours=48')->daily();
         $schedule->job(new GenerateMonthlyBills())
             ->monthlyOn(1, '00:00');
         $schedule->command('check:late-payments')->dailyAt('00:30');

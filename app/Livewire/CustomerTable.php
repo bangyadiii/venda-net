@@ -8,11 +8,12 @@ use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Customer;
 use App\Models\Router;
-use RouterOS\Query;
+use App\Models\Secret;
 
 class CustomerTable extends DataTableComponent
 {
     protected $model = Customer::class;
+    public $secrets;
 
     public function configure(): void
     {
@@ -64,9 +65,10 @@ class CustomerTable extends DataTableComponent
                 ->sortable(),
             Column::make("Tanggal Isolir", "isolir_date")
                 ->sortable(),
-            Column::make("Username Secret", "secret_username")
-                ->sortable()
-                ->searchable(),
+            // TODO: Tambahkan kolom secret_username (tambahkan relation)
+            // Column::make("Username Secret", "secret_username")
+            //     ->sortable()
+            //     ->searchable(),
         ];
     }
 
@@ -76,15 +78,13 @@ class CustomerTable extends DataTableComponent
             $customer->load('plan.router');
             $router = $customer->plan->router;
             $client = Router::getClient($router->host, $router->username, $router->password);
-            $query = new Query('/ppp/secret/remove');
-            $query->equal('.id', $customer->secret_id);
-            $response = $client->query($query)->read();
+            $deleted = Secret::deleteSecret($client, $customer->secret_id);
 
-            \throw_if(!empty($response), \Exception::class, 'Failed to delete customer secret');
+            \throw_if(!$deleted, \Exception::class, 'Failed to delete customer secret');
             $customer->delete();
             $this->dispatch('toast', title: 'Customer deleted successfully', type: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('toast', title: $th->getMessage(), type: 'danger');
+            $this->dispatch('toast', title: $th->getMessage(), type: 'error');
         }
     }
 }
