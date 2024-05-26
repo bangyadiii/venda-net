@@ -50,7 +50,7 @@ class AnalyticIndex extends Component
 
     protected function initializeRouter()
     {
-        if (!$this->rotuer || !$this->router->isConnected) {
+        if (!$this->router || !$this->router->isConnected) {
             $this->dispatch('toast', title: 'Tidak bisa terhubung ke router', type: 'error');
             $this->hasError = true;
             return;
