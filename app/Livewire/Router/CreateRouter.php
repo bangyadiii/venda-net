@@ -24,7 +24,7 @@ class CreateRouter extends Component
             Router::create($this->form->all());
 
             $this->dispatch('toast', title: 'Saved to database', type: 'success');
-            return $this->redirectRoute('routers.index');
+            return $this->redirectRoute('routers.index', navigate: true);
         } catch (\Throwable $th) {
             $this->dispatch('toast', title: 'Failed to save to database', type: 'error');
         }

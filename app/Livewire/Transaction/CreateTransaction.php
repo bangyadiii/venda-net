@@ -95,7 +95,7 @@ class CreateTransaction extends Component
             ->where('installment_status', InstallmentStatus::INSTALLED)
             ->find($this->customer_id);
         if (!$this->customer) {
-            $this->dispatch('toast', title: 'Pelanggan tidak ditemukan');
+            $this->dispatch('toast', title: 'Pelanggan tidak ditemukan atau belum terinstallasi');
             $this->customer_id = null;
             return;
         }

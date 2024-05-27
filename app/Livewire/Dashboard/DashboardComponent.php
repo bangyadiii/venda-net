@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Analytics;
+namespace App\Livewire\Dashboard;
 
 use App\Enums\BillStatus;
 use App\Enums\ServiceStatus;
@@ -9,7 +9,7 @@ use App\Models\Router;
 use Exception;
 use Livewire\Component;
 
-class AnalyticIndex extends Component
+class DashboardComponent extends Component
 {
     public ?Router $router;
     public $routers;

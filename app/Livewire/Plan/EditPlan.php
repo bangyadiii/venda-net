@@ -47,7 +47,7 @@ class EditPlan extends Component
         }
 
         $this->dispatch('toast', title: 'Saved to database', type: 'success');
-        return $this->redirectRoute('plans.index');
+        return $this->redirectRoute('plans.index', navigate: true);
     }
 
     public function render()

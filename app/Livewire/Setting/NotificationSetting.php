@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Setting;
 
 use App\Livewire\Forms\NotificationForm;
 use App\Models\Setting;
@@ -23,7 +23,7 @@ class NotificationSetting extends Component
 
     public function render()
     {
-        return view('livewire.notification-setting');
+        return view('livewire.setting.notification-setting');
     }
 
     public function store()

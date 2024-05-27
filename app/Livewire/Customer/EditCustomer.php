@@ -25,13 +25,17 @@ class EditCustomer extends Component
         $this->router = $this->customer->plan->router;
 
         $this->form->setCustomer($this->customer);
-        $client = Router::getClient($this->router->host, $this->router->username, $this->router->password);
-        $secret = Secret::getSecret($client, $this->customer->secret_id);
-        $this->form->secret_password = $secret['password'];
-        $this->form->secret_username = $secret['name'];
-        $this->form->ppp_service = $secret['service'];
-        $this->form->local_address = $secret['local-address'] ?? null;
-        $this->form->remote_address = $secret['remote-address'] ?? null;
+        try {
+            $client = Router::getClient($this->router->host, $this->router->username, $this->router->password);
+            $secret = Secret::getSecret($client, $this->customer->secret_id);
+            $this->form->secret_password = $secret['password'];
+            $this->form->secret_username = $secret['name'];
+            $this->form->ppp_service = $secret['service'];
+            $this->form->local_address = $secret['local-address'] ?? null;
+            $this->form->remote_address = $secret['remote-address'] ?? null;
+        } catch (\Throwable $th) {
+            $this->dispatch('toast', title: $th->getMessage(), type: 'error');
+        }
     }
 
     public function render()
@@ -62,7 +66,7 @@ class EditCustomer extends Component
                 $values['remote-address'] = $this->form->remote_address;
                 $values['local-address'] = $this->form->local_address;
             }
-            
+
             $id = Secret::updateSecret(
                 $client,
                 $this->customer->secret_id,

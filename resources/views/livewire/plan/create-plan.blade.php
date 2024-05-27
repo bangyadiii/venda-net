@@ -98,9 +98,9 @@
                             @enderror
                         </div>
                         <button type="submit" class="btn btn-primary" wire:loading.attr='disabled'>
-                            <div class="spinner-border" role="status" wire:loading>
+                            <output class="spinner-border" wire:loading>
                                 <span class="visually-hidden">Loading...</span>
-                            </div>
+                            </output>
                             <span wire:loading.remove>
                                 Simpan
                             </span>
