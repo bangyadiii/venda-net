@@ -36,7 +36,7 @@ class CustomerIndex extends Component
         $secrets = $secrets->filter(fn ($secret) => !in_array($secret->id, $customerIds));
         $plans = Plan::query()->where('router_id', $routerId)->get();
         if ($plans->isEmpty() && $secrets->isNotEmpty()) {
-            return $this->dispatch('toast', title: 'Silakan sinkron paket terlebih dahulu', type: 'error');
+            return $this->dispatch('toast', title: 'Silakan import paket terlebih dahulu', type: 'error');
         }
         $errorCustomers = collect();
         $secrets->each(function ($secret) use ($plans, $errorCustomers) {
@@ -58,7 +58,7 @@ class CustomerIndex extends Component
 
         $this->dispatch('toast', title: 'Synced with mikrotik', type: 'success');
         if ($errorCustomers->isNotEmpty())
-            $this->dispatch('toast', title: 'Failed to sync customers: ' . $errorCustomers->implode(', '), type: 'error');
+            $this->dispatch('toast', title: 'Gagal untuk mengimport secret: ' . $errorCustomers->implode(', '), type: 'error');
 
         return $this->redirectRoute('customers.index', navigate: true);
     }

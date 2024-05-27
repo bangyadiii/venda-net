@@ -1,7 +1,3 @@
-@section('page-script')
-<script src="{{asset('assets/js/pages-account-settings-account.js')}}"></script>
-@endsection
-
 <div>
     <h4 class="py-3 mb-4">
         <span class="text-muted fw-light">Router Settings</span>
@@ -16,13 +12,13 @@
                 </div>
                 <div class="table-responsive text-nowrap">
 
-                    <table class="table table-striped" x-init="checkConnection">
+                    <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th>Host</th>
                                 <th>Auto Isolir</th>
                                 <th>Action Isolir</th>
-                                <th>Profiles Isolir</th>
+                                <th>Profile Isolir</th>
                                 <th>Koneksi</th>
                                 <th>Actions</th>
                             </tr>
@@ -55,8 +51,8 @@
                                             data-bs-toggle="dropdown"><i
                                                 class="bx bx-dots-vertical-rounded"></i></button>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="{{ route('routers.edit', $router->id) }}"><i
-                                                    class="bx bx-edit-alt me-1"></i> Edit</a>
+                                            <a class="dropdown-item" href="{{ route('routers.edit', $router->id) }}"
+                                                wire:navigate><i class="bx bx-edit-alt me-1"></i> Edit</a>
                                             <button class="dropdown-item" wire:click='delete({{ $router->id }})'
                                                 wire:confirm='Are you sure to delete this?'><i
                                                     class="bx bx-trash me-1"></i>

@@ -1,7 +1,3 @@
-@section('page-script')
-<script src="{{asset('assets/js/pages-account-settings-account.js')}}"></script>
-@endsection
-
 <div>
     <h4 class="py-3 mb-4">
         <span class="text-muted fw-light">Setting Paket</span>
@@ -11,7 +7,7 @@
         <!-- Striped Rows -->
         <div class="card">
             <div class="card-body">
-                <div class="d-flex gap-2 mb-2">
+                <div class="d-flex justify-content-end gap-2 mb-2">
                     <a href="{{ route('plans.create') }}" wire:navigate type="button" class="btn btn-primary">Tambah
                         Paket</a>
                     <div class="dropdown" wire:loading.attr='disabled'>
@@ -20,7 +16,7 @@
                             <output class="spinner-border me-2 spinner-border-sm" wire:loading>
                                 <span class="visually-hidden">Loading...</span>
                             </output>
-                            Sinkron Paket
+                            Import Paket
                         </button>
                         <ul class="dropdown-menu">
                             @foreach ($routers as $router)

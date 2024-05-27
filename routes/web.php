@@ -1,17 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Livewire\Analytics\AnalyticIndex;
 use App\Livewire\Customer\CreateCustomer;
 use App\Livewire\Customer\CustomerIndex;
 use App\Livewire\Customer\EditCustomer;
-use App\Livewire\NotificationSetting;
+use App\Livewire\Dashboard\DashboardComponent;
 use App\Livewire\Plan\CreatePlan;
 use App\Livewire\Plan\EditPlan;
 use App\Livewire\Plan\PlanIndex;
 use App\Livewire\Router\CreateRouter;
 use App\Livewire\Router\EditRouter;
 use App\Livewire\Router\RouterIndex;
+use App\Livewire\Setting\NotificationSetting;
 use App\Livewire\Setting\TaxSetting;
 use App\Livewire\Transaction\BillCheck;
 use App\Livewire\Transaction\CreateOnlinePayment;
@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')
     ->prefix('dashboard')
     ->group(function () {
-        Route::get('/', AnalyticIndex::class)->name('analytics.index');
+        Route::get('/', DashboardComponent::class)->name('analytics.index');
         Route::prefix('routers')->group(function () {
             Route::get('/', RouterIndex::class)->name('routers.index');
             Route::get('/create', CreateRouter::class)->name('routers.create');

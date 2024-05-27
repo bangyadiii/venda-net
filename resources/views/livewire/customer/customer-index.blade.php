@@ -4,7 +4,7 @@
     </h4>
     <div class="card">
         <div class="card-body">
-            <div class="text-end mb-3">
+            <div class="text-end mb-3 d-flex gap-2 justify-content-end">
                 <a href="{{ route('customers.create') }}" wire:navigate class="btn btn-primary">Tambah Pelanggan</a>
                 <div>
                     <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
@@ -12,7 +12,7 @@
                         <output class="spinner-border me-2 spinner-border-sm" wire:loading>
                             <span class="visually-hidden">Loading...</span>
                         </output>
-                        Sinkron
+                        Import
                     </button>
                     <ul class="dropdown-menu">
                         @foreach ($routers as $router)
