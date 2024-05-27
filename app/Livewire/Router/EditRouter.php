@@ -41,7 +41,7 @@ class EditRouter extends Component
         $this->router->saveOrFail();
 
         $this->dispatch('toast', title: 'Saved to database', type: 'success');
-        return $this->redirectRoute('routers.index');
+        return $this->redirectRoute('routers.index', navigate: true);
     }
 
     public function testConnection()

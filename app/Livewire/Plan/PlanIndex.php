@@ -10,11 +10,45 @@ use Livewire\Component;
 
 class PlanIndex extends Component
 {
+    public $routers;
+
+    public function mount()
+    {
+        $this->routers = Router::all();
+    }
+
     public function render()
     {
         $plans = Plan::with('router')->get();
 
         return view('livewire.plan.plan-index', \compact('plans'));
+    }
+
+    public function syncPlan($routerId)
+    {
+        $router = Router::findOrFail($routerId);
+        $client = Router::getClient($router->host, $router->username, $router->password);
+        /**
+         * @var \Illuminate\Database\Eloquent\Collection $profiles
+         */
+        $profiles = Profile::queryForClient($client)->get();
+        $plans = Plan::query()->where('router_id', $routerId)->get();
+        $planIds = $plans->pluck('ppp_profile_id')->toArray();
+        $profiles = $profiles->filter(
+            fn ($profile) =>
+            !in_array($profile->id, $planIds) && !\in_array($profile->name, ['default', 'default-encryption'])
+        );
+        $profiles->each(function ($profile) use ($router) {
+            Plan::create([
+                'router_id' => $router->id,
+                'ppp_profile_id' => $profile->id,
+                'name' => $profile->name,
+                'speed_limit' => $profile->rate_limit,
+                'price' => 0,
+            ]);
+        });
+
+        $this->dispatch('toast', title: 'Synced with mikrotik', type: 'success');
     }
 
     public function delete($id)

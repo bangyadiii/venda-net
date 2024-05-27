@@ -7,6 +7,7 @@ use App\Livewire\Forms\CustomerForm;
 use App\Models\Bill;
 use App\Models\Customer;
 use App\Models\Plan;
+use App\Models\Profile;
 use App\Models\Router;
 use App\Models\Secret;
 use App\Models\Setting;
@@ -44,16 +45,17 @@ class CreateCustomer extends Component
         $customer->fill($this->form->only(
             Customer::make()->getFillable()
         ));
-
         if ($this->form->secret_type === 'add_secret') {
             try {
                 $client = Router::getClient($router->host, $router->username, $router->password);
+                $profile = Profile::getProfile($client, $plan->ppp_profile_id);
+
                 $id = Secret::addSecret(
                     $client,
                     $this->form->secret_username,
                     $this->form->secret_password,
                     $this->form->ppp_service,
-                    $plan->ppp_profile_id,
+                    $profile['name'],
                     $this->form->local_address,
                     $this->form->remote_address,
                     $this->form->ip_type,

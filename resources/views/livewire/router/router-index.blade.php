@@ -16,7 +16,7 @@
                 </div>
                 <div class="table-responsive text-nowrap">
 
-                    <table class="table table-striped">
+                    <table class="table table-striped" x-init="checkConnection">
                         <thead>
                             <tr>
                                 <th>Host</th>
