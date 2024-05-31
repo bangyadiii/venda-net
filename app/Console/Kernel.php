@@ -17,8 +17,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('telescope:prune --hours=48')->daily();
         $schedule->job(new GenerateMonthlyBills())
             ->monthlyOn(1, '00:00');
-        $schedule->command('check:late-payments')->dailyAt('00:30');
-        $schedule->command('app:payment-reminder-command')
+        $schedule->command('app:late-payments')->dailyAt('00:30');
+        $schedule->command('app:payment-reminder')
             ->dailyAt('09:00')
             ->when(function () {
                 $enabled = Setting::where('key', 'reminder_enabled')->first();

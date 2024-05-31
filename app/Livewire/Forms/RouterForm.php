@@ -34,6 +34,15 @@ class RouterForm extends Form
         ];
     }
 
+    public array $validationAttributes = [
+        'host' => 'Host',
+        'username' => 'Username',
+        'password' => 'Password',
+        'auto_isolir' => 'Auto Isolir',
+        'isolir_action' => 'Isolir Action',
+        'isolir_profile_id' => 'Isolir Profile',
+    ];
+
     public function setRouter(Router $router)
     {
         $this->host = $router->host;

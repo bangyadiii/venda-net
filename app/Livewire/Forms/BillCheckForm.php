@@ -12,4 +12,8 @@ class BillCheckForm extends Form
     public array $rules = [
         'customer_id' => 'required|exists:customers,id',
     ];
+
+    public array $validationAttributes = [
+        'customer_id' => 'Pelanggan',
+    ];
 }

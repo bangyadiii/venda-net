@@ -20,6 +20,7 @@
     "livewire/livewire": "^3.4",
     "rappasoft/laravel-livewire-tables": "^3.2",
     "sawirricardo/laravel-midtrans": "^1.6",
+    "sentry/sentry-laravel": "*",
     "silvanix/wablas": "^1.0"
   },
   "require-dev": {

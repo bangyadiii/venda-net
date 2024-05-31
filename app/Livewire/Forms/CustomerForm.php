@@ -20,17 +20,6 @@ class CustomerForm extends Form
     public $service_status = ServiceStatus::INACTIVE;
     public $active_date;
     public $isolir_date;
-    public $secret_type = 'add_secret';
-    public $secretTypeSelect = [
-        [
-            'value' => 'add_secret',
-            'label' => 'Tambah Secret',
-        ],
-        [
-            'value' => 'existing_secret',
-            'label' => 'Ambil Secret dari Router',
-        ],
-    ];
 
     public $secret_username;
     public $secret_password;
@@ -101,12 +90,29 @@ class CustomerForm extends Form
             'ppp_service' => 'required|string',
             'secret_username' => 'required|string',
             'secret_password' => 'required|string',
-            'secret_type' => 'required|string|in:add_secret,existing_secret',
             'local_address' => 'nullable|string|required_if:ip_type,remote_address',
             'remote_address' => 'nullable|string|required_if:ip_type,remote_address',
             'ip_type' => 'required|string|in:ip_pool,remote_address',
         ];
     }
+
+    public array $validationAttributes = [
+        'customer_name' => 'Nama',
+        'phone_number' => 'Telp/WA',
+        'address' => 'Alamat',
+        'plan_id' => 'Paket',
+        'discount' => 'Diskon',
+        'installment_status' => 'Status Pemasangan',
+        'service_status' => 'Status Layanan',
+        'active_date' => 'Tanggal Aktif',
+        'isolir_date' => 'Tanggal Isolir',
+        'ppp_service' => 'Service',
+        'secret_username' => 'Secret Username',
+        'secret_password' => 'Secret Password',
+        'local_address' => 'Local Address',
+        'remote_address' => 'Remote Address',
+        'ip_type' => 'IP Type',
+    ];
 
     public function setCustomer(Customer $customer)
     {

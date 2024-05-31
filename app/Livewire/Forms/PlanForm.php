@@ -25,6 +25,14 @@ class PlanForm extends Form
         'router_id' => 'required|integer',
     ];
 
+    public array $validationAttributes = [
+        'name' => 'Nama',
+        'download_speed' => 'Kecepatan Download',
+        'upload_speed' => 'Kecepatan Upload',
+        'price' => 'Harga',
+        'router_id' => 'Router',
+    ];
+
     public function setPlan(Plan $plan)
     {
         $this->name = $plan->name;

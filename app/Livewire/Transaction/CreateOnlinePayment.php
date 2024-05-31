@@ -7,6 +7,7 @@ use App\Enums\PaymentStatus;
 use App\Livewire\Forms\Transaction\OnlinePaymentForm;
 use App\Models\Bill;
 use App\Models\Customer;
+use App\Models\Payment;
 use App\Models\Setting;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -52,7 +53,10 @@ class CreateOnlinePayment extends Component
 
         try {
             DB::beginTransaction();
-            $payment = $this->bill->payment()->create([
+
+            $payment = Payment::query()->updateOrCreate([
+                'bill_id' => $this->bill->id,
+            ], [
                 'amount' => $this->bill->total_amount,
                 'method' => PaymentMethod::MIDTRANS,
                 'status' => PaymentStatus::PENDING,

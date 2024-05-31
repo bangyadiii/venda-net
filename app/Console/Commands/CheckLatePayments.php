@@ -11,7 +11,7 @@ use Carbon\Carbon;
 
 class CheckLatePayments extends Command
 {
-    protected $signature = 'check:late-payments';
+    protected $signature = 'app:late-payments';
     protected $description = 'Check for customers with late payments and suspend their service';
 
     public function handle()

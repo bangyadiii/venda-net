@@ -20,4 +20,9 @@ class NotificationForm extends Form
         'enabled' => 'required|boolean',
         'template' => 'required|string|min:2|max:1200',
     ];
+
+    public array $validationAttributes = [
+        'enabled' => 'Enabled',
+        'template' => 'Template',
+    ];
 }

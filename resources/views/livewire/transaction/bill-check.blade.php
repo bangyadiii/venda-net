@@ -12,10 +12,8 @@
                         <!-- Logo -->
                         <div class="app-brand justify-content-center">
                             <a href="{{url('/')}}" class="app-brand-link gap-2">
-                                <span
-                                    class="app-brand-logo demo">@include('_partials.macros',["width"=>25,"withbg"=>'var(--bs-primary)'])</span>
-                                <span
-                                    class="app-brand-text demo text-body fw-bold uppercase">{{config('app.name')}}</span>
+                                <span class="app-brand-logo">
+                                    @include('_partials.logo',[ "height" => 60, 'width' => 150,"fillColor"=>'#697A8D'])
                             </a>
                         </div>
                         <form id="formAuthentication" class="mb-3" wire:submit.prevent='store'>

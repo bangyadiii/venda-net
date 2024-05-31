@@ -55,7 +55,7 @@ class TransactionTable extends DataTableComponent
                 ->label(
                     fn ($row, Column $column) => view('components.livewire.datatables.action-column')->with(
                         [
-                            'printRoute' => route('invoices', ['id' => $row->bill_id]),
+                            'printRoute' => route('invoices', ['bill_id' => $row->bill_id]),
                             'deleteMethod' => 'delete(' . $row->id . ')',
                         ]
                     )

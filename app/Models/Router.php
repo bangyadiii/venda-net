@@ -105,14 +105,6 @@ class Router extends Model
         );
     }
 
-    /**
-     * Get PPP secret from the MikroTik Router
-     */
-    public static function getPPPSecret(Client $client)
-    {
-        return $client->query('/ppp/secret/print')->read();
-    }
-
     public static function getOnlinePPP($client)
     {
         $query = new Query('/ppp/active/print');

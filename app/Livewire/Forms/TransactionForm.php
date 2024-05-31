@@ -25,4 +25,10 @@ class TransactionForm extends Form
             'discount' => 'nullable|integer',
         ];
     }
+
+    public array $validationAttributes = [
+        'method' => 'Metode',
+        'note' => 'Catatan',
+        'discount' => 'Diskon',
+    ];
 }

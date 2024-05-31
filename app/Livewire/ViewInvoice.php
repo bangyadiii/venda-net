@@ -23,17 +23,17 @@ class ViewInvoice extends Component
     private Plan $plan;
 
     #[Url(as: 'bill_id', except: '')]
-    public $billId;
+    public ?int $billId;
 
     #[Url(as: 'order_id', except: '')]
-    public $orderId;
+    public ?string $orderId;
 
     #[Url(as: 'transaction_status', except: '')]
-    public $trxStatus;
+    public ?string $trxStatus;
 
     public function mount()
     {
-        if (!$this->billId && !$this->orderId) {
+        if (!isset($this->billId) && !isset($this->orderId)) {
             throw new NotFoundHttpException();
         }
 

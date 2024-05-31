@@ -16,7 +16,7 @@ class PaymentReminderCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'app:payment-reminder-command';
+    protected $signature = 'app:payment-reminder';
 
     /**
      * The console command description.

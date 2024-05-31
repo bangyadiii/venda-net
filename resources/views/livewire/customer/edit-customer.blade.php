@@ -97,32 +97,11 @@
 
         <div class="card mb-4">
             <div class="card-body" x-data="{
-                secretType: $wire.entangle('form.secret_type'),
                 username: $wire.entangle('form.secret_username'),
                 password: $wire.entangle('form.secret_password'),
              
             }">
                 <div class="row mb-3">
-                    <div class="col-md-3">
-                        <label class="form-label" for="secret_type">PPP Secret</label>
-                        <select type="text" id="secret_type" class="form-select @error('form.secret_type')
-                        is-invalid
-                        @enderror" wire:model='form.secret_type' x-model="secretType" x-on:change="
-                        if ($event.target.value === 'existing_secret') {
-                            username = '';
-                            password = '';
-                        }">
-                            @foreach ($form->secretTypeSelect as $secretType)
-                            <option value="{{ $secretType['value'] }}">{{ $secretType['label'] }}</option>
-                            @endforeach
-                        </select>
-                        @error('form.secret_type')
-                        <div class="error">
-                            {{ $message }}
-                        </div>
-                        @enderror
-
-                    </div>
                     <div class="col-md-3">
                         <label class="form-label" for="secret_username">PPP Username</label>
                         <input type="text" class="form-control @error('form.secret_username')
@@ -134,18 +113,12 @@
                         </div>
                         @enderror
 
-                        <button x-show="secretType == 'existing_secret'" x-transition
-                            class="btn btn-secondary btn-sm mt-2" type="button" data-bs-toggle="offcanvas"
-                            data-bs-target="#searchUsername" aria-controls="searchUsername">
-                            Cari Username
-                        </button>
                     </div>
                     <div class="col-md-3">
                         <label class="form-label" for="secret_password">PPP Password</label>
                         <input type="text" class="form-control @error('form.secret_password')
                                 is-invalid
-                            @enderror" id="secret_password" wire:model="form.secret_password" x-model='password'
-                            :disabled="secretType === 'existing_secret'" />
+                            @enderror" id="secret_password" wire:model="form.secret_password" x-model='password' />
                         @error('form.secret_password')
                         <div class="error">
                             {{ $message }}
@@ -317,19 +290,6 @@
         </div>
     </form>
 
-
-    <div class="offcanvas offcanvas-bottom" style="height: 100%" tabindex="-1" id="searchUsername"
-        aria-labelledby="searchUsernameLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="searchUsernameLabel">Pilih Username PPOE</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <div class="table-responsive text-nowrap">
-                <livewire:secret-table />
-            </div>
-        </div>
-    </div>
 
     @section('page-script')
     <script>

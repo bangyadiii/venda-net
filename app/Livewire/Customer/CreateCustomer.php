@@ -45,35 +45,32 @@ class CreateCustomer extends Component
         $customer->fill($this->form->only(
             Customer::make()->getFillable()
         ));
-        if ($this->form->secret_type === 'add_secret') {
-            try {
-                $client = Router::getClient($router->host, $router->username, $router->password);
-                $profile = Profile::getProfile($client, $plan->ppp_profile_id);
+        try {
+            $client = Router::getClient($router->host, $router->username, $router->password);
+            $profile = Profile::getProfile($client, $plan->ppp_profile_id);
 
-                $id = Secret::addSecret(
-                    $client,
-                    $this->form->secret_username,
-                    $this->form->secret_password,
-                    $this->form->ppp_service,
-                    $profile['name'],
-                    $this->form->local_address,
-                    $this->form->remote_address,
-                    $this->form->ip_type,
-                );
-                \throw_if(!$id, new Exception('Failed to create secret'));
+            $id = Secret::addSecret(
+                $client,
+                $this->form->secret_username,
+                $this->form->secret_password,
+                $this->form->ppp_service,
+                $profile['name'],
+                $this->form->local_address,
+                $this->form->remote_address,
+                $this->form->ip_type,
+            );
+            \throw_if(!$id, new Exception('Failed to create secret'));
 
-                $customer->secret_id = $id;
-            } catch (\Throwable $th) {
-                $this->dispatch('toast', title: $th->getMessage(), type: 'error');
-                return redirect()->back();
-            }
-        } else {
-            $customer->secret_id = '';
+            $customer->secret_id = $id;
+            $customer->save();
+        } catch (\Throwable $th) {
+            $this->dispatch('toast', title: $th->getMessage(), type: 'error');
+            return redirect()->back();
         }
 
-        $customer->save();
-
         $isolirDate = Carbon::createFromDate(now()->year, now()->month, $customer->isolir_date);
+
+        // TOOD: check more detail about this
         if ($isolirDate->isPast()) {
             $isolirDate->addMonth();
         }

@@ -12,10 +12,8 @@
                         <!-- Logo -->
                         <div class="app-brand justify-content-center">
                             <a href="{{url('/')}}" class="app-brand-link gap-2">
-                                <span
-                                    class="app-brand-logo demo">@include('_partials.macros',["width"=>25,"withbg"=>'var(--bs-primary)'])</span>
-                                <span
-                                    class="app-brand-text demo text-body fw-bold uppercase">{{config('app.name')}}</span>
+                                <span class="app-brand-logo">
+                                    @include('_partials.logo',[ "height" => 60, 'width' => 150,"fillColor"=>'#697A8D'])
                             </a>
                         </div>
                         <!-- /Logo -->
@@ -47,8 +45,8 @@
 
                             <div class="mb-3">
                                 <label class="form-label" for="tarif">Tarif/Bulan</label>
-                                <input type="text" id="tarif" class="form-control" value='{{ currency($form->plan_price) }}'
-                                    disabled />
+                                <input type="text" id="tarif" class="form-control"
+                                    value='{{ currency($form->plan_price) }}' disabled />
                             </div>
 
                             <div class="mb-3">
@@ -58,7 +56,8 @@
 
                             <div class="mb-3">
                                 <label class="form-label" for="total">Total</label>
-                                <input type="text" id="total" class="form-control" value='{{ currency($form->total) }}' disabled />
+                                <input type="text" id="total" class="form-control" value='{{ currency($form->total) }}'
+                                    disabled />
                             </div>
 
                             <div class="mb-3">
@@ -70,17 +69,18 @@
                             @if ($form->billStatus != 'LUNAS')
                             <div class="mb-3">
                                 <button type="submit" class="btn btn-primary d-grid w-100" wire:loading.attr='disabled'>
-                                    <div class="spinner-border" role="status" wire:loading>
+                                    <output class="spinner-border" wire:loading>
                                         <span class="visually-hidden">Loading...</span>
-                                    </div>
+                                    </output>
                                     <span wire:loading.remove>
                                         Bayar Tagihan
                                     </span>
                                 </button>
                             </div>
                             @endif
-                            <a href="{{ route('invoices', ['bill_id' => $bill->id]) }}" class="btn btn-primary w-100 mb-3"
-                                wire:navigate>Lihat Invoice</a>
+                            <a href="{{ route('invoices', ['bill_id' => $bill->id]) }}"
+                                class="btn btn-primary w-100 mb-3" wire:navigate>
+                                Lihat Invoice</a>
 
                             <a href="{{ route('bill_checks') }}" class="btn btn-secondary w-100"
                                 wire:navigate>Kembali</a>

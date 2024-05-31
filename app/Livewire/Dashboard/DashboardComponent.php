@@ -6,7 +6,9 @@ use App\Enums\BillStatus;
 use App\Enums\ServiceStatus;
 use App\Models\Customer;
 use App\Models\Router;
+use App\Models\Secret;
 use Exception;
+use Illuminate\Support\Facades\Cookie;
 use Livewire\Component;
 
 class DashboardComponent extends Component
@@ -38,7 +40,8 @@ class DashboardComponent extends Component
     public function mount()
     {
         $this->routers = Router::all();
-        $this->router = $this->routers->first();
+        $routerId = request()->cookie('routerId');
+        $this->router =  $routerId ? Router::find($routerId) : $this->routers->first();
         $this->selectedRouterId = $this->router?->id;
         $this->totalCustomer = Customer::count();
         $this->paymentComplete = Customer::with('payments')
@@ -50,7 +53,7 @@ class DashboardComponent extends Component
 
     protected function initializeRouter()
     {
-        if (!$this->router || !$this->router->isConnected) {
+        if (!$this->router || !$this->router->isConnected()) {
             $this->dispatch('toast', title: 'Tidak bisa terhubung ke router', type: 'error');
             $this->hasError = true;
             return;
@@ -130,6 +133,7 @@ class DashboardComponent extends Component
     public function updatedSelectedRouterId()
     {
         $this->router = Router::find($this->selectedRouterId);
+        Cookie::queue('routerId', $this->router?->id, 60 * 24 * 30);  // 30 days
         $this->hasError = false;
         $this->resetResourceData();
         $this->resetTrafficData();
@@ -152,7 +156,7 @@ class DashboardComponent extends Component
 
         try {
             $client = Router::getClient($this->router->host, $this->router->username, $this->router->password);
-            $secrets = Router::getPPPSecret($client);
+            $secrets =  Secret::queryForClient($client)->get();
             $onlineSecrets = Router::getOnlinePPP($client);
             if (empty($secrets) && empty($onlineSecrets)) {
                 throw new Exception('No secret or online secret available');

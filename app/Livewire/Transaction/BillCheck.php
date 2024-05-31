@@ -17,7 +17,7 @@ class BillCheck extends Component
 
     public function store()
     {
-        $this->validate();
-        return $this->redirectIntended("payment/" . $this->form->customer_id, navigate: true);
+        $this->form->validate();
+        return $this->redirectRoute('payment.index', ['id' => $this->form->customer_id], navigate: true);
     }
 }
