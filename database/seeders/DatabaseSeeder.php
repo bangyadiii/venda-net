@@ -19,13 +19,15 @@ class DatabaseSeeder extends Seeder
             ->where('username', 'admin')
             ->firstOrCreate([
                 'name' => 'Admin',
-                'email' => 'admin@admin.com',
                 'username' => 'admin',
                 'password' => Hash::make('password'),
             ]);
 
         $this->call([
             SettingSeeder::class,
+            RouterSeeder::class,
+            PlanSeeder::class,
+            CustomerSeeder::class,
         ]);
     }
 }

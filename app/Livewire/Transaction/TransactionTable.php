@@ -3,20 +3,21 @@
 namespace App\Livewire\Transaction;
 
 use App\Enums\PaymentMethod;
+use App\Enums\PaymentStatus;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Payment;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Rappasoft\LaravelLivewireTables\Views\Filters\DateFilter;
+use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
 
 class TransactionTable extends DataTableComponent
 {
     public function builder(): Builder
     {
         return Payment::query()
-            ->with(['bill'])
-            ->select('*') // Eager load anything
-        ;
+            ->with(['bill']);
     }
 
     public function configure(): void
@@ -28,10 +29,12 @@ class TransactionTable extends DataTableComponent
     {
         return [
             Column::make("Tanggal", "payment_date")
-                ->format(fn ($value) => Carbon::parse($value))
+                ->format(fn ($value) => Carbon::parse($value)->format('d/m/Y'))
                 ->sortable(),
-            Column::make("No Pelanggan", "bill.customer.id"),
-            Column::make("Nama", "bill.customer.customer_name"),
+            Column::make("No Pelanggan", "bill.customer.id")
+                ->searchable(),
+            Column::make("Nama", "bill.customer.customer_name")
+                ->searchable(),
             Column::make("Telp/WA", "bill.customer.phone_number"),
             Column::make("Paket", "bill.plan.name"),
             Column::make("Tarif", "bill.plan.price")
@@ -45,12 +48,11 @@ class TransactionTable extends DataTableComponent
                 ->sortable(),
             Column::make("Metode", "method")
                 ->sortable()
-                ->format(fn ($value) => match($value) {
+                ->format(fn ($value) => match ($value) {
                     PaymentMethod::CASH => '<span class="badge text-bg-success">Tunai</span>',
                     PaymentMethod::MIDTRANS => '<span class="badge text-bg-secondary">Midtrans</span>',
                 })
-                ->html()
-                ,
+                ->html(),
             Column::make('Action')
                 ->label(
                     fn ($row, Column $column) => view('components.livewire.datatables.action-column')->with(
@@ -60,6 +62,25 @@ class TransactionTable extends DataTableComponent
                         ]
                     )
                 )->html(),
+        ];
+    }
+
+    public function filters(): array
+    {
+        return [
+            SelectFilter::make('Metode', 'method')
+                ->options([
+                    '' => 'Semua',
+                    PaymentMethod::CASH->value => 'Tunai',
+                    PaymentMethod::MIDTRANS->value => 'Midtrans',
+                ])
+                ->filter(function (Builder $builder, $value) {
+                    $builder->where('method', $value);
+                }),
+            DateFilter::make('Tanggal Pembayaran')
+                ->filter(function (Builder $builder, $value) {
+                    $builder->whereDate('payment_date', $value);
+                }),
         ];
     }
 }

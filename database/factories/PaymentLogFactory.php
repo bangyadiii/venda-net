@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Payment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,9 @@ class PaymentLogFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'payment_id' => Payment::factory(),
+            'status_code' =>  200,
+            'transaction_id' => $this->faker->uuid,
         ];
     }
 }

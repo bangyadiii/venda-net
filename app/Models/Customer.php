@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\InstallmentStatus;
 use App\Enums\ServiceStatus;
+use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -50,7 +51,12 @@ class Customer extends Model
 
     public function setActiveDateAttribute($value)
     {
-        if (strlen($value)) {
+        if ($value instanceof DateTime) {
+            $this->attributes['active_date'] = Carbon::parse($value);
+            return;
+        }
+
+        if (\is_string($value) && strlen($value)) {
             $this->attributes['active_date'] = Carbon::createFromFormat('Y-m-d', $value);
         } else {
             $this->attributes['active_date'] = null;
@@ -59,7 +65,7 @@ class Customer extends Model
 
     public function setIsolirDateAttribute($value)
     {
-        if (strlen($value) && is_numeric($value)) {
+        if (!empty($value) && is_numeric($value)) {
             $this->attributes['isolir_date'] = $value;
         } else {
             $this->attributes['isolir_date'] = null;
