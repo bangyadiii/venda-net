@@ -1,6 +1,7 @@
 <?php
 
 use App\Console\Commands\CheckLatePayments;
+use App\Console\Commands\CreateAdmin;
 use App\Console\Commands\PaymentReminderCommand;
 
 return [
@@ -19,6 +20,7 @@ return [
     'commands' => [
         PaymentReminderCommand::class,
         CheckLatePayments::class,
+        CreateAdmin::class,
     ],
 
     /*
