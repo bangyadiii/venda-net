@@ -10,15 +10,14 @@
 
   <title>{{ config('app.name') }}</title>
   <meta name="description"
-    content="{{ config('variables.templateDescription') ? config('variables.templateDescription') : '' }}" />
+    content="{{ config('variables.description') ? config('variables.description') : '' }}" />
   <meta name="keywords"
-    content="{{ config('variables.templateKeyword') ? config('variables.templateKeyword') : '' }}" />
+    content="{{ config('variables.keyword') ? config('variables.keyword') : '' }}" />
   <!-- laravel CRUD token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   @livewireStyles
-  <!-- Canonical SEO -->
-  <link rel="canonical" href="{{ config('variables.productPage') ? config('variables.productPage') : '' }}" />
+
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" />
 
