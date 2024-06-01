@@ -18,7 +18,8 @@
                         @foreach ($routers as $router)
                         <li>
                             <button class="dropdown-item" wire:click='syncSecret({{ $router->id }})'
-                                wire:confirm='Are you sure to sync secret from {{ $router->host }}?'>
+                                wire:confirm='Apakah anda yakin ingin mengimport secret dari {{ $router->host }}?' 
+                                wire:loading.attr='disabled'>
                                 {{ $router->host }}
                             </button>
                         </li>

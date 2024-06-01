@@ -37,13 +37,14 @@
                                 <td>{{ $router->isolir_action == 'change_profile' ? 'Ganti Profile' : 'Disable Secret'}}
                                 </td>
                                 @else
-                                <td>-
-                                    @endif
-                                <td>{{ !empty($router->profiles) ? $router->profiles->where('id', $router->isolir_profile_id)->first()?->name : '-'}}
+                                <td>-</td>
+                                @endif
+                                <td>
+                                    <livewire:router.router-profile lazy :router="$router">
                                 </td>
 
-                                <td><span
-                                        class="badge bg-label-{{ $router->isConnected ? 'success' : 'danger' }} me-1">{{ $router->isConnected ? 'Connected' : 'Disconnected' }}</span>
+                                <td>
+                                    <livewire:router.router-connection lazy :router="$router">
                                 </td>
                                 <td>
                                     <div class="dropdown">

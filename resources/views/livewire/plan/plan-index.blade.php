@@ -22,7 +22,7 @@
                             @foreach ($routers as $router)
                             <li>
                                 <button class="dropdown-item" wire:click='syncPlan({{ $router->id }})'
-                                    wire:confirm='Are you sure to sync plans from {{ $router->host }}?'>
+                                    wire:confirm='Apakah kamu yakin ingin import profile dari {{ $router->host }}?' wire:loading.attr='disabled'>
                                     {{ $router->host }}
                                 </button>
                             </li>

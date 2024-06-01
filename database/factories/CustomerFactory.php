@@ -26,7 +26,7 @@ class CustomerFactory extends Factory
             'installment_status' => $this->faker->randomElement([InstallmentStatus::INSTALLED, InstallmentStatus::NOT_INSTALLED]),
             'service_status' => $this->faker->randomElement(['active', 'inactive']),
             'active_date' => $this->faker->dateTime,
-            'isolir_date' => $this->faker->dateTime,
+            'isolir_date' => $this->faker->dateTime->format('d'),
             'secret_id' => $this->faker->randomNumber(),
         ];
     }

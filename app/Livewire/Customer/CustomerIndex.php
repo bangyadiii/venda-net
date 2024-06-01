@@ -9,6 +9,7 @@ use App\Models\Plan;
 use App\Models\Router;
 use App\Models\Secret;
 use Livewire\Component;
+use RouterOS\Exceptions\ConnectException;
 
 class CustomerIndex extends Component
 {
@@ -20,11 +21,18 @@ class CustomerIndex extends Component
 
     public function syncSecret($routerId)
     {
-        $router = Router::findOrFail($routerId);
-        $client = Router::getClient($router->host, $router->username, $router->password);
-        $secrets = Secret::queryForClient($client)->get();
+        try {
+            $router = Router::findOrFail($routerId);
+            $client = Router::getClient($router->host, $router->username, $router->password);
+            $secrets = Secret::queryForClient($client)->get();
+        } catch (ConnectException $th) {
+            $this->dispatch('toast', title: 'Tidak bisa terkoneksi ke router', type: 'error');
+            return;
+        }
+
         if ($secrets->isEmpty()) {
-            return $this->dispatch('toast', title: 'No secrets found', type: 'error');
+            $this->dispatch('toast', title: 'No secrets found', type: 'error');
+            return;
         }
 
         $customerIds = Customer::query()

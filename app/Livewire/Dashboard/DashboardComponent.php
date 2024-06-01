@@ -10,6 +10,7 @@ use App\Models\Secret;
 use Exception;
 use Illuminate\Support\Facades\Cookie;
 use Livewire\Component;
+use RouterOS\Exceptions\ConnectException;
 
 class DashboardComponent extends Component
 {
@@ -78,6 +79,8 @@ class DashboardComponent extends Component
             ];
             $this->dispatch('updateCpuChart', $this->cpuUsage);
             $this->dispatch('updateMemoryChart', $this->memory);
+        } catch (ConnectException $th) {
+            $this->dispatch('toast', title: 'Tidak bisa terkoneksi ke router', type: 'error');
         } catch (\Throwable $th) {
             $this->dispatch('toast', title: $th->getMessage(), type: 'error');
         }
@@ -163,6 +166,8 @@ class DashboardComponent extends Component
             }
             $this->secret = count($secrets);
             $this->onlineSecret = count($onlineSecrets);
+        } catch (ConnectException $th) {
+            $this->dispatch('toast', title: "Tidak bisa koneksi ke router", type: 'error');
         } catch (\Throwable $th) {
             $this->dispatch('toast', title: $th->getMessage(), type: 'error');
         }

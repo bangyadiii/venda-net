@@ -44,12 +44,16 @@
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label class="form-label" for="tarif">Tarif Paket</label>
-                                <input value="{{ $plan_price ? currency($plan_price) : null }}" type="text" class="form-control" disabled />
+                                <input value="{{ $plan_price ? currency($plan_price) : null }}" type="text"
+                                    class="form-control" disabled />
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label class="form-label" for="diskon">Diskon</label>
-                                <input type="number" class="form-control" wire:model.blur='form.discount'
-                                    wire:dirty.class="" />
+
+                                <div class="input-group">
+                                    <span class="input-group-text">Rp</span>
+                                    <input type="number" class="form-control" wire:model.live='form.discount' />
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -63,7 +67,8 @@
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label class="form-label" for="nominal">Nominal</label>
-                                <input type="text" class="form-control" disabled value="{{ $nominal ? currency($nominal) : null }}" />
+                                <input type="text" class="form-control" disabled
+                                    value="{{ currency($nominal) }}" />
                             </div>
                         </div>
                         <div class="row">
@@ -73,11 +78,12 @@
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label class="form-label" for="total_ppn">Total PPN</label>
-                                <input type="text" class="form-control" disabled value='{{ $total_ppn ? currency($total_ppn) : null }}' />
+                                <input type="text" class="form-control" disabled
+                                    value='{{ currency($total_ppn) }}' />
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label class="form-label" for="tagihan">Total Tagihan</label>
-                                <input type="number" class="form-control" disabled wire:model="grand_total" />
+                                <input type="text" class="form-control" disabled value='{{ currency($grand_total) ?? 0 }}' />
                             </div>
                         </div>
 
@@ -95,9 +101,9 @@
                         </div>
 
                         <button type="submit" class="btn btn-primary" wire:loading.attr='disabled'>
-                            <div class="spinner-border" role="status" wire:loading>
+                            <output class="spinner-border" wire:loading>
                                 <span class="visually-hidden">Loading...</span>
-                            </div>
+                            </output>
                             <span wire:loading.remove>
                                 Simpan
                             </span>

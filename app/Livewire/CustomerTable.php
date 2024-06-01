@@ -7,8 +7,14 @@ use App\Enums\ServiceStatus;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Customer;
+use App\Models\Plan;
 use App\Models\Router;
 use App\Models\Secret;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Rappasoft\LaravelLivewireTables\Views\Filters\DateFilter;
+use Rappasoft\LaravelLivewireTables\Views\Filters\DateRangeFilter;
+use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
 
 class CustomerTable extends DataTableComponent
 {
@@ -33,15 +39,13 @@ class CustomerTable extends DataTableComponent
                     )
                 )->html(),
             Column::make("No Pelanggan", "id")
-                ->sortable()
                 ->searchable(),
             Column::make("Name", "customer_name")
-                ->sortable()
                 ->searchable(),
             Column::make("No Telp/WA", "phone_number")
-                ->sortable(),
+                ->searchable(),
             Column::make("Alamat", "address")
-                ->sortable(),
+                ->searchable(),
             Column::make("Paket", "plan.name"),
             Column::make("Status Pemasangan", "installment_status")
                 ->format(
@@ -59,9 +63,9 @@ class CustomerTable extends DataTableComponent
                         ServiceStatus::SUSPENDED => '<span class="badge text-bg-danger">Suspend</span>',
                         default => 'Tidak Diketahui',
                     }
-                )->html()
-                ->sortable(),
+                )->html(),
             Column::make("Tanggal Aktif", "active_date")
+                ->format(fn ($value) => Carbon::parse($value)->format('d/m/Y'))
                 ->sortable(),
             Column::make("Tanggal Isolir", "isolir_date")
                 ->sortable(),
@@ -86,5 +90,44 @@ class CustomerTable extends DataTableComponent
         } catch (\Throwable $th) {
             $this->dispatch('toast', title: $th->getMessage(), type: 'error');
         }
+    }
+
+    public function filters(): array
+    {
+        $paket = Plan::pluck('name', 'id')->toArray();
+        array_unshift($paket, 'Semua');
+
+        return [
+            SelectFilter::make('Paket')
+                ->options($paket)
+                ->filter(function (Builder $builder, $value) {
+                    $builder->where('plan_id', $value);
+                }),
+            SelectFilter::make('Status Pemasangan')
+                ->options([
+                    '' => 'Semua',
+                    InstallmentStatus::INSTALLED->value => 'Terpasang',
+                    InstallmentStatus::NOT_INSTALLED->value => 'Belum Terpasang',
+                ])
+                ->filter(function (Builder $builder, $value) {
+                    $builder->where('installment_status', $value);
+                }),
+            SelectFilter::make('Status Layanan')
+                ->options([
+                    '' => 'Semua',
+                    ServiceStatus::ACTIVE->value => 'Aktif',
+                    ServiceStatus::INACTIVE->value => 'Non Aktif',
+                    ServiceStatus::SUSPENDED->value => 'Suspended',
+                ])
+                ->filter(function (Builder $builder, $value) {
+                    $builder->where('service_status', $value);
+                }),
+            DateRangeFilter::make('Tanggal Aktif')
+                ->setFilterPillValues([0 => 'minDate', 1 => 'maxDate'])
+                ->filter(function (Builder $builder, $dateRange) {
+                    $builder->whereDate('active_date', '>=', $dateRange['minDate'])
+                        ->whereDate('active_date', '<=', $dateRange['maxDate']);
+                }),
+        ];
     }
 }

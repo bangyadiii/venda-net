@@ -76,12 +76,29 @@ class CreateTransaction extends Component
             'payment_id' => $payment->id,
             'message' => $this->form->note,
         ]);
+
+        $this->currentBill->discount = $this->form->discount;
+        $this->currentBill->total_amount = $this->grand_total;
         $this->currentBill->status = BillStatus::PAID;
         $this->currentBill->save();
         $this->resetElement();
 
         $this->dispatch('toast', title: 'Berhasil disimpan');
         return $this->redirectRoute('transactions.index', navigate: true);
+    }
+
+    public function updated($name, $value)
+    {
+        if ($name == 'form.discount') {
+            if ($this->plan_price < (int) $value) {
+                $this->dispatch('toast', title: 'Diskon tidak boleh melebihi harga paket');
+                $this->form->discount = $this->plan_price;
+            }
+
+            $this->nominal = $this->plan_price - (int) $this->form->discount;
+            $this->total_ppn = $this->nominal * ($this->form->tax_rate / 100);
+            $this->grand_total = $this->nominal + $this->total_ppn;
+        }
     }
 
     public function updatedCustomerId()
