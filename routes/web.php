@@ -29,9 +29,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')
-    ->prefix('dashboard')
     ->group(function () {
-        Route::get('/', DashboardComponent::class)->name('analytics.index');
+        Route::get('/dashboard', DashboardComponent::class)->name('analytics.index');
         Route::prefix('routers')->group(function () {
             Route::get('/', RouterIndex::class)->name('routers.index');
             Route::get('/create', CreateRouter::class)->name('routers.create');

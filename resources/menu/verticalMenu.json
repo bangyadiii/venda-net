@@ -7,19 +7,19 @@
       "slug": "analytics.index"
     },
     {
-      "url": "/dashboard/routers",
+      "url": "/routers",
       "name": "Setting Router",
       "icon": "menu-icon tf-icons bx bx-server",
       "slug": "routers.index"
     },
     {
-      "url": "/dashboard/plans",
+      "url": "/plans",
       "name": "Setting Paket",
       "icon": "menu-icon tf-icons bx bx-globe",
       "slug": "plans.index"
     },
     {
-      "url": "/dashboard/customers",
+      "url": "/customers",
       "name": "Data Pelanggan",
       "icon": "menu-icon tf-icons bx bx-user",
       "slug": "customers.index"
