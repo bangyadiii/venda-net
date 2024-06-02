@@ -47,12 +47,12 @@ class Secret extends Model
     private function fetchSecrets()
     {
         try {
-            $this->query = new Query('/ppp/secret/print');
-            if (!$this->client) {
-                $this->client = Router::getLastClient();
+            $query = new Query('/ppp/secret/print');
+            if (!static::$client) {
+                static::$client = Router::getLastClient();
             }
 
-            return $this->client->query($this->query)->read();
+            return static::$client->query($query)->read();
         } catch (\Throwable $th) {
             return [];
         }

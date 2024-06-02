@@ -4,13 +4,15 @@ namespace App\Livewire\Dashboard;
 
 use App\Enums\BillStatus;
 use App\Enums\ServiceStatus;
+use App\Models\Bill;
 use App\Models\Customer;
 use App\Models\Router;
 use App\Models\Secret;
-use Exception;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use RouterOS\Exceptions\ConnectException;
+use RouterOS\Exceptions\StreamException;
 
 class DashboardComponent extends Component
 {
@@ -37,6 +39,8 @@ class DashboardComponent extends Component
     public $suspended = 0;
     public $secret = 0;
     public $onlineSecret = 0;
+    public $totalBayar = 0;
+    public $totalBelumBayar = 0;
 
     public function mount()
     {
@@ -47,9 +51,21 @@ class DashboardComponent extends Component
         $this->totalCustomer = Customer::count();
         $this->paymentComplete = Customer::with('payments')
             ->whereHas('bills', function ($query) {
-                $query->where('status', BillStatus::PAID);
-            })->count();
-        $this->suspended = Customer::where('service_status', ServiceStatus::SUSPENDED)->count();
+                $query->where('status', BillStatus::PAID)
+                    ->where(DB::raw('MONTH(due_date)'), now()->month);
+            })
+            ->count();
+        $this->suspended = Customer::where('service_status', ServiceStatus::SUSPENDED)
+            ->count();
+        $this->totalBelumBayar = Bill::where('status', BillStatus::UNPAID)
+            ->where(DB::raw('MONTH(due_date)'), now()->month)
+            ->sum('total_amount');
+
+        $this->totalBayar = Bill::where('status', BillStatus::PAID)
+            ->where(DB::raw('MONTH(due_date)'), now()->month)
+            ->sum('total_amount');
+
+        $this->initializeRouter();
     }
 
     protected function initializeRouter()
@@ -80,7 +96,32 @@ class DashboardComponent extends Component
             $this->dispatch('updateCpuChart', $this->cpuUsage);
             $this->dispatch('updateMemoryChart', $this->memory);
         } catch (ConnectException $th) {
-            $this->dispatch('toast', title: 'Tidak bisa terkoneksi ke router', type: 'error');
+            if (!$this->hasError) {
+                $this->dispatch('toast', title: 'Tidak bisa terkoneksi ke router', type: 'error');
+                $this->hasError = true;
+            }
+        } catch (StreamException $th) {
+            \info($th->getMessage());
+        } catch (\Throwable $th) {
+            $this->dispatch('toast', title: $th->getMessage(), type: 'error');
+        }
+    }
+
+    public function fetchSecrets()
+    {
+        try {
+            $client = Router::getClient($this->router->host, $this->router->username, $this->router->password);
+            $this->secret = Secret::queryForClient($client)->count();
+            $onlineSecrets = Router::getOnlinePPP($client);
+
+            $this->onlineSecret = count($onlineSecrets);
+        } catch (ConnectException $th) {
+            if (!$this->hasError) {
+                $this->dispatch('toast', title: 'Tidak bisa terkoneksi ke router', type: 'error');
+                $this->hasError = true;
+            }
+        } catch (StreamException $th) {
+            \info($th->getMessage());
         } catch (\Throwable $th) {
             $this->dispatch('toast', title: $th->getMessage(), type: 'error');
         }
@@ -155,23 +196,6 @@ class DashboardComponent extends Component
             return view('livewire.analytics.index');
         }
 
-        $this->initializeRouter();
-
-        try {
-            $client = Router::getClient($this->router->host, $this->router->username, $this->router->password);
-            $secrets =  Secret::queryForClient($client)->get();
-            $onlineSecrets = Router::getOnlinePPP($client);
-            if (empty($secrets) && empty($onlineSecrets)) {
-                throw new Exception('No secret or online secret available');
-            }
-            $this->secret = count($secrets);
-            $this->onlineSecret = count($onlineSecrets);
-        } catch (ConnectException $th) {
-            $this->dispatch('toast', title: "Tidak bisa koneksi ke router", type: 'error');
-        } catch (\Throwable $th) {
-            $this->dispatch('toast', title: $th->getMessage(), type: 'error');
-        }
-
         return view('livewire.analytics.index');
     }
 
@@ -184,6 +208,8 @@ class DashboardComponent extends Component
             $this->version = $response['version'] ?? '-';
             $response = Router::getInterfaces($client);
             $this->interfaces = array_map(fn ($interface) => $interface['name'], $response ?? []);
+        } catch (ConnectException $th) {
+            $this->dispatch('toast', title: 'Tidak bisa terkoneksi ke router', type: 'error');
         } catch (\Throwable $th) {
             $this->dispatch('toast', title: $th->getMessage(), type: 'error');
         }
@@ -196,6 +222,7 @@ class DashboardComponent extends Component
             'free' => 0,
             'total' => 0,
         ];
+        $this->interfaces = [];
         $this->dispatch('updateCpuChart', $this->cpuUsage);
         $this->dispatch('updateMemoryChart', $this->memory);
     }

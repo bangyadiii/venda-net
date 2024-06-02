@@ -21,4 +21,9 @@ class Plan extends Model
     {
         return $this->belongsTo(Router::class);
     }
+
+    public function customers()
+    {
+        return $this->hasMany(Customer::class);
+    }
 }

@@ -55,7 +55,7 @@
                                             <a class="dropdown-item" href="{{ route('routers.edit', $router->id) }}"
                                                 wire:navigate><i class="bx bx-edit-alt me-1"></i> Edit</a>
                                             <button class="dropdown-item" wire:click='delete({{ $router->id }})'
-                                                wire:confirm='Are you sure to delete this?'><i
+                                                wire:confirm='Are you sure to delete this?' wire:loading.attr='disabled'><i
                                                     class="bx bx-trash me-1"></i>
                                                 Delete</button>
                                         </div>

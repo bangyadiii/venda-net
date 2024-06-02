@@ -35,7 +35,7 @@ class TaxSetting extends Component
         $this->setting->value = $this->ppn;
         $this->setting->save();
 
-        $this->dispatch('toast', title: 'Saved to database');
+        $this->dispatch('toast', title: 'Data berhasil disimpan');
         return $this->redirect(route('tax'), navigate: true);
     }
 }

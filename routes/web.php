@@ -71,3 +71,5 @@ Route::middleware('auth')
 Route::get('/bill-checks', BillCheck::class)->name('bill_checks');
 Route::get('/payment/{id}', CreateOnlinePayment::class)->name('payment.index');
 Route::get('/invoices/read', ViewInvoice::class)->name('invoices');
+
+Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);

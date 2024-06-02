@@ -7,7 +7,8 @@
                         <div class="card-title d-flex justify-content-between">
                             <div>
                                 <span class="fw-semibold d-block mb-1">Pelanggan</span>
-                                <h3 class="card-title mb-2">{{ $totalCustomer }}</h3>
+                                <h3 class="card-title mb-2">{{ $totalCustomer }}
+                                </h3>
                             </div>
                             <div class="avatar flex-shrink-0">
                                 <img src="{{asset('assets/img/icons/unicons/users.png')}}" alt="chart success"
@@ -23,7 +24,9 @@
                         <div class="card-title d-flex justify-content-between">
                             <div>
                                 <span class="fw-semibold d-block mb-1">Sudah Bayar</span>
-                                <h3 class="card-title text-nowrap mb-1">{{ $paymentComplete }}</h3>
+                                <h3 class="card-title text-nowrap mb-1">{{ $paymentComplete }}
+                                    <span class="fs-5 text-secondary">(+{{ currency($totalBayar) }})</span>
+                                </h3>
                             </div>
                             <div class="avatar flex-shrink-0">
                                 <img src="{{asset('assets/img/icons/unicons/coin.png')}}" alt="Credit Card"
@@ -39,7 +42,9 @@
                         <div class="card-title d-flex justify-content-between">
                             <div>
                                 <span class="fw-semibold d-block mb-1">Belum Bayar</span>
-                                <h3 class="card-title text-nowrap mb-1">{{ $totalCustomer - $paymentComplete }}</h3>
+                                <h3 class="card-title text-nowrap mb-1">{{ $totalCustomer - $paymentComplete }}
+                                    <span class="fs-5 text-secondary">(-{{ currency($totalBelumBayar) }})</span>
+                                </h3>
                             </div>
                             <div class="avatar flex-shrink-0">
                                 <img src="{{asset('assets/img/icons/unicons/coin-warning.png')}}" alt="Credit Card"
@@ -107,8 +112,7 @@
                     <div class="col-md-9 col-xl-8" x-data="trafficChartData()" x-init="initTrafficChart()"
                         wire:poll.3s='fetchTrafficData' wire:ignore>
                         <h5 class="card-header m-0 me-2">Traffic</h5>
-                        <div wire:loading wire:target="selectedRouterId, interface"
-                            class="loading-overlay">
+                        <div wire:loading wire:target="selectedRouterId, interface" class="loading-overlay">
                             <output class="spinner-border text-primary">
                                 <span class="visually-hidden">Loading...</span>
                             </output>
@@ -118,7 +122,7 @@
                     <div class="col-md-3 col-xl-4 pt-3 row">
                         <div class="col-6 col-md-12 col-lg-12 col-xl-6" wire:ignore x-data="cpuChart()"
                             x-init="initCpuChart()" wire:poll.3s='fetchRouterResource'>
-                            <div wire:loading wire:target="selectedRouterId, interface" class="loading-overlay">
+                            <div wire:loading wire:target="selectedRouterId" class="loading-overlay">
                                 <output class="spinner-border text-primary">
                                     <span class="visually-hidden">Loading...</span>
                                 </output>
@@ -129,7 +133,7 @@
 
                         <div class="col-6 col-md-12 col-lg-12 col-xl-6" wire:ignore x-data="memoryChart()"
                             x-init="initMemoryChart()">
-                            <div wire:loading wire:target="selectedRouterId, interface" class="loading-overlay">
+                            <div wire:loading wire:target="selectedRouterId" class="loading-overlay">
                                 <output class="spinner-border text-primary">
                                     <span class="visually-hidden">Loading...</span>
                                 </output>
@@ -162,7 +166,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" wire:poll.3s='fetchSecrets'>
                     <div class="col-md-4 col-12 my-4">
                         <div class="card">
                             <div class="card-body">

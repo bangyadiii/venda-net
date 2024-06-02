@@ -41,8 +41,6 @@ class CreatePlan extends Component
                 $client,
                 $this->form->name,
                 $this->form->speed_limit,
-                'pool_PPPoE', // TODO: change this to dynamic value
-                'pool_PPPoE' // TODO: change this to dynamic value
             );
             \throw_if(!$id, new \Exception('Failed to create profile'));
             $plan = new Plan($this->form->all());
@@ -53,7 +51,7 @@ class CreatePlan extends Component
             return \redirect()->back();
         }
 
-        $this->dispatch('toast', title: 'Saved to database', type: 'success');
+        $this->dispatch('toast', title: 'Data berhasil disimpan', type: 'success');
         return $this->redirectRoute('plans.index', navigate: true);
     }
 }

@@ -50,13 +50,12 @@ class Profile extends Model
     private function fetchProfiles()
     {
         try {
-            $this->query = new Query('/ppp/profile/print');
+            $query = new Query('/ppp/profile/print');
             if (!static::$client) {
-                $this->client = Router::getLastClient();
+                static::$client = Router::getLastClient();
             }
 
-            $resp = static::$client->query($this->query)->read();
-            return $resp;
+            return static::$client->query($query)->read();
         } catch (\Throwable $th) {
             return [];
         }
@@ -76,14 +75,12 @@ class Profile extends Model
         return $client->query($query)->read();
     }
 
-    public static function createProfile(Client $client, $name, $rate_limit, $local_address = 'pool_PPPoE', $remote_address = 'pool_PPPoE'): false|string
+    public static function createProfile(Client $client, $name, $rate_limit): false|string
     {
         try {
             $query = (new Query('/ppp/profile/add'))
                 ->add('=name=' . $name)
-                ->add('=rate-limit=' . $rate_limit)
-                ->add('=local-address=' . $local_address)
-                ->add('=remote-address=' . $remote_address);
+                ->add('=rate-limit=' . $rate_limit);
             $response = $client->query($query)->read();
             return $response['after']['ret'];
         } catch (\Throwable $th) {
@@ -92,15 +89,13 @@ class Profile extends Model
         }
     }
 
-    public static function updateProfile(Client $client, $id, $name, $rate_limit, $local_address = 'pool_PPPoE', $remote_address = 'pool_PPPoE'): false|string
+    public static function updateProfile(Client $client, $id, $name, $rate_limit): false|string
     {
         try {
             $query = (new Query('/ppp/profile/set'))
                 ->equal('.id', $id)
                 ->equal('name', $name)
-                ->equal('rate-limit', $rate_limit)
-                ->equal('local-address', $local_address)
-                ->equal('remote-address', $remote_address);
+                ->equal('rate-limit', $rate_limit);
             $response = $client->query($query)->read();
             if (empty($response)) return true;
 

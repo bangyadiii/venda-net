@@ -7,6 +7,7 @@ use App\Models\Profile;
 use App\Models\Router;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
+use RouterOS\Exceptions\ConnectException;
 
 class CreateRouter extends Component
 {
@@ -23,10 +24,10 @@ class CreateRouter extends Component
         try {
             Router::create($this->form->all());
 
-            $this->dispatch('toast', title: 'Saved to database', type: 'success');
+            $this->dispatch('toast', title: 'Data berhasil disimpan', type: 'success');
             return $this->redirectRoute('routers.index', navigate: true);
         } catch (\Throwable $th) {
-            $this->dispatch('toast', title: 'Failed to save to database', type: 'error');
+            $this->dispatch('toast', title: 'Oops... Data gagal untuk disimpan', type: 'error');
         }
     }
 
@@ -44,12 +45,15 @@ class CreateRouter extends Component
             $this->form->is_connected = true;
             $this->form->profiles = Profile::queryForClient($client)->get()->toArray();
 
-            $this->dispatch('toast', title: 'Connection successful', type: 'success');
-        } catch (\Throwable $th) {
+            $this->dispatch('toast', title: 'Koneksi berhasil', type: 'success');
+        } catch (ConnectException $th) {
             Log::error($th->getMessage());
             $this->form->is_connected = false;
             $this->form->profiles = [];
-            $this->dispatch('toast', title: 'Connection failed', type: 'error');
+            $this->dispatch('toast', title: 'Tidak bisa terkoneksi', type: 'error');
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            $this->dispatch('toast', title: $th->getMessage(), type: 'error');
         }
     }
 }

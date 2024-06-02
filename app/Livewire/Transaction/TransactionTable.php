@@ -45,7 +45,10 @@ class TransactionTable extends DataTableComponent
                 ->format(fn ($value) => Carbon::parse($value)->format('F Y')),
             Column::make("PPN(%)", "bill.tax_rate"),
             Column::make("Total", "amount")
-                ->format(fn ($value) => currency($value)),
+                ->format(fn ($value) => currency($value))
+                ->footer(function ($rows) {
+                    return 'Jumlah: ' . \currency($rows->sum('amount'));
+                }),
             Column::make("Metode", "method")
                 ->format(fn ($value) => match ($value) {
                     PaymentMethod::CASH => '<span class="badge text-bg-success">Tunai</span>',

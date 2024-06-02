@@ -25,6 +25,12 @@ class Router extends Model
 
     public Collection $profiles;
 
+    // relations
+    public function plans()
+    {
+        return $this->hasMany(Plan::class);
+    }
+
     public static function getLastClient(): ?Client
     {
         $router =  Router::latest()->first();
@@ -66,7 +72,7 @@ class Router extends Model
             'pass' => $password,
             'port' => 8728,
             'attempts' => 1,
-            'timeout' => 2,
+            'timeout' => 10,
             'socket_timeout' => 20,
         ];
 

@@ -23,7 +23,7 @@ class EditRouter extends Component
         } catch (\Throwable $th) {
             $this->form->profiles = [];
             $this->form->is_connected = false;
-            $this->dispatch('toast', title: 'Connection failed', type: 'error');
+            $this->dispatch('toast', title: 'Koneksi gagal', type: 'error');
         }
     }
 
@@ -40,7 +40,7 @@ class EditRouter extends Component
         ));
         $this->router->saveOrFail();
 
-        $this->dispatch('toast', title: 'Saved to database', type: 'success');
+        $this->dispatch('toast', title: 'Data berhasil disimpan', type: 'success');
         return $this->redirectRoute('routers.index', navigate: true);
     }
 
@@ -57,11 +57,11 @@ class EditRouter extends Component
             $client = Router::getClient($this->form->host, $this->form->username, $this->form->password);
             $this->form->is_connected = true;
             $this->form->profiles = Profile::queryForClient($client)->get()->toArray();
-            $this->dispatch('toast', title: 'Connection successful', type: 'success');
+            $this->dispatch('toast', title: 'Koneksi berhasil', type: 'success');
         } catch (\Throwable $th) {
             $this->form->is_connected = false;
             $this->form->profiles = [];
-            $this->dispatch('toast', title: 'Connection failed', type: 'error');
+            $this->dispatch('toast', title: 'Koneksi gagal', type: 'error');
         }
     }
 }
