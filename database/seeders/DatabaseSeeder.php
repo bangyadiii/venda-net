@@ -15,14 +15,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::query()
-            ->where('username', 'admin')
-            ->firstOrCreate([
-                'name' => 'Admin',
-                'username' => 'admin',
-                'password' => Hash::make('password'),
-            ]);
-
         $this->call([
             SettingSeeder::class,
             RouterSeeder::class,

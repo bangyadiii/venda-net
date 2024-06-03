@@ -69,6 +69,7 @@ class CreateOnlinePayment extends Component
                 ->create(new TransactionDto($params));
 
             DB::commit();
+            \info('snapToken:' . $transactionToken->token);
             $this->dispatch('midtrans:payment', snapToken: $transactionToken->token);
         } catch (\Exception $e) {
             DB::rollBack();

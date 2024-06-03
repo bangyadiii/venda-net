@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Transaction;
 
+use App\Enums\BillStatus;
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
@@ -18,8 +19,11 @@ class TransactionTable extends DataTableComponent
     public function builder(): Builder
     {
         return Payment::query()
-            ->with(['bill']);
+            ->withWhereHas('bill', fn ($query) => $query->where('bills.status', BillStatus::PAID))
+            ->where('payments.status', PaymentStatus::SUCCESS)
+            ->select('*');
     }
+
 
     public function configure(): void
     {
@@ -30,7 +34,8 @@ class TransactionTable extends DataTableComponent
     {
         return [
             Column::make("Tanggal", "payment_date")
-                ->format(fn ($value) => Carbon::parse($value)->format('d/m/Y'))
+                ->format(fn ($value) => Carbon::parse($value)
+                    ->format('d/m/Y H:i'))
                 ->sortable(),
             Column::make("No Pelanggan", "bill.customer.id")
                 ->searchable(),
@@ -59,7 +64,7 @@ class TransactionTable extends DataTableComponent
                 ->label(
                     fn ($row, Column $column) => view('components.livewire.datatables.action-column')->with(
                         [
-                            'printRoute' => route('invoices', ['bill_id' => $row->bill_id]),
+                            'printRoute' => \route('invoices', ['bill_id' => $row->bill_id]),
                             'deleteMethod' => 'delete(' . $row->id . ')',
                         ]
                     )

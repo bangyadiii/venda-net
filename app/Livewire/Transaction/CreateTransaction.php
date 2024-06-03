@@ -52,7 +52,7 @@ class CreateTransaction extends Component
     public function store()
     {
         if (!$this->currentBill || $this->currentBill->status != BillStatus::UNPAID) {
-            $this->dispatch('toast', title: 'Tagihan tidak ditemukan');
+            $this->dispatch('toast', title: 'Tagihan tidak ditemukan', type: 'error');
             return \redirect()->back();
         }
         $customer = Customer::find($this->customer_id);
@@ -68,7 +68,7 @@ class CreateTransaction extends Component
         ]);
 
         if (!$payment) {
-            $this->dispatch('toast', title: 'Gagal menyimpan transaksi');
+            $this->dispatch('toast', title: 'Gagal menyimpan transaksi', type: 'error');
             return $this->redirect('transactions.create', navigate: true);
         }
 
@@ -91,7 +91,7 @@ class CreateTransaction extends Component
     {
         if ($name == 'form.discount') {
             if ($this->plan_price < (int) $value) {
-                $this->dispatch('toast', title: 'Diskon tidak boleh melebihi harga paket');
+                $this->dispatch('toast', title: 'Diskon tidak boleh melebihi harga paket', type: 'error');
                 $this->form->discount = $this->plan_price;
             }
 
@@ -112,7 +112,7 @@ class CreateTransaction extends Component
             ->where('installment_status', InstallmentStatus::INSTALLED)
             ->find($this->customer_id);
         if (!$this->customer) {
-            $this->dispatch('toast', title: 'Pelanggan tidak ditemukan atau belum terinstallasi');
+            $this->dispatch('toast', title: 'Pelanggan tidak ditemukan atau belum terinstallasi', type: 'error');
             $this->customer_id = null;
             return;
         }
