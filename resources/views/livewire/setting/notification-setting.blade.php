@@ -74,17 +74,17 @@
                         </ul>
 
                         <button type="submit" class="btn btn-primary" wire:loading.attr='disabled' :disabled="!changed">
-                            <div class="spinner-border" role="status" wire:loading>
+                            <output class="spinner-border" wire:loading>
                                 <span class="visually-hidden">Loading...</span>
-                            </div>
+                            </output>
                             <span wire:loading.remove>
                                 Simpan
                             </span>
                         </button>
-                        <button class="btn btn-secondary" wire:loading.attr='disabled' x-show="changed" x-transition>
-                            <div class="spinner-border" role="status" wire:loading>
+                        <button type="button" class="btn btn-secondary" wire:loading.attr='disabled' wire:click='cancel' x-show="changed" x-transition>
+                            <output class="spinner-border" wire:loading>
                                 <span class="visually-hidden">Loading...</span>
-                            </div>
+                            </output>
                             <span wire:loading.remove>
                                 Batal Simpan
                             </span>
