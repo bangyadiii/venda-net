@@ -81,7 +81,7 @@ class DashboardComponent extends Component
 
     public function fetchRouterResource()
     {
-        if ($this->hasError) {
+        if ($this->hasError || !$this->router) {
             return;
         }
 
@@ -129,7 +129,7 @@ class DashboardComponent extends Component
 
     public function fetchTrafficData()
     {
-        if ($this->hasError) {
+        if ($this->hasError || !$this->router) {
             return;
         }
 
@@ -177,6 +177,9 @@ class DashboardComponent extends Component
     public function updatedSelectedRouterId()
     {
         $this->router = Router::find($this->selectedRouterId);
+        if (!$this->router) {
+            return;
+        }
         Cookie::queue('routerId', $this->router?->id, 60 * 24 * 30);  // 30 days
         $this->hasError = false;
         $this->resetResourceData();
