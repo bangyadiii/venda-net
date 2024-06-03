@@ -41,13 +41,14 @@ class TransactionTable extends DataTableComponent
                 ->searchable(),
             Column::make("Nama", "bill.customer.customer_name")
                 ->searchable(),
-            Column::make("Telp/WA", "bill.customer.phone_number"),
             Column::make("Paket", "bill.plan.name"),
             Column::make("Tarif", "bill.plan.price")
                 ->format(fn ($value) => currency($value))
                 ->sortable(),
             Column::make("Tagihan", "bill.due_date")
                 ->format(fn ($value) => Carbon::parse($value)->format('F Y')),
+            Column::make("Diskon", "bill.discount")
+                ->format(fn ($value) => currency($value)),
             Column::make("PPN(%)", "bill.tax_rate"),
             Column::make("Total", "amount")
                 ->format(fn ($value) => currency($value))
