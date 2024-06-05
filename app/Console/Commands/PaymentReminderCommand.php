@@ -53,6 +53,7 @@ class PaymentReminderCommand extends Command
                 'TAGIHAN' => $customer->plan->price,
                 'ISOLIR' => $customer->isolir_date,
                 'BANK' => $bank,
+                'PAYMENT_URL' => route('payment.index', ['id' => $customer->id]),
             ];
             $content = replacePlaceholder($template, $data);
             $notification = new PaymentReminderNotification($customer->phone_number, $content);

@@ -77,6 +77,9 @@
                             <li>
                                 [BANK] = data Bank Perusahaan
                             </li>
+                             <li>
+                                [PAYMENT_URL] = Url Pembayaran
+                            </li>
                         </ul>
 
                         <div class="mb-3 col-4">
