@@ -12,6 +12,7 @@ use App\Livewire\Router\CreateRouter;
 use App\Livewire\Router\EditRouter;
 use App\Livewire\Router\RouterIndex;
 use App\Livewire\Setting\NotificationSetting;
+use App\Livewire\Setting\SettingComponent;
 use App\Livewire\Setting\TaxSetting;
 use App\Livewire\Transaction\BillCheck;
 use App\Livewire\Transaction\CreateOnlinePayment;
@@ -64,8 +65,9 @@ Route::middleware('auth')
 Route::middleware('auth')
     ->prefix('settings')
     ->group(function () {
-        Route::get('/notifications', NotificationSetting::class)->name('notifications.index');
-        Route::get('/tax', TaxSetting::class)->name('tax');
+        Route::get('/', SettingComponent::class)->name('settings');
+        // Route::get('/notifications', NotificationSetting::class)->name('notifications.index');
+        // Route::get('/tax', TaxSetting::class)->name('tax');
     });
 
 Route::get('/bill-checks', BillCheck::class)->name('bill_checks');

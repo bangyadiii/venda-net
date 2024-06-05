@@ -6,6 +6,7 @@ use App\Enums\BillStatus;
 use App\Enums\InstallmentStatus;
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
+use App\Jobs\GenerateMonthlyBills;
 use App\Jobs\UnisolateCustomerJob;
 use App\Livewire\Forms\TransactionForm;
 use App\Models\Bill;
@@ -81,6 +82,7 @@ class CreateTransaction extends Component
         $this->currentBill->total_amount = $this->grand_total;
         $this->currentBill->status = BillStatus::PAID;
         $this->currentBill->save();
+        \dispatch(new GenerateMonthlyBills);
         $this->resetElement();
 
         $this->dispatch('toast', title: 'Berhasil disimpan');

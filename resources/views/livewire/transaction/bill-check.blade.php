@@ -16,7 +16,7 @@
                                     @include('_partials.logo',[ "height" => 60, 'width' => 150,"fillColor"=>'#697A8D'])
                             </a>
                         </div>
-                        <form id="formAuthentication" class="mb-3" wire:submit.prevent='store'>
+                        <form class="mb-3" wire:submit.prevent='store'>
                             @csrf
                             <div class="mb-3">
                                 <label for="nopel" class="form-label">Nomor Pelanggan</label>
@@ -32,9 +32,9 @@
                             </div>
                             <div class="mb-3">
                                 <button type="submit" class="btn btn-primary d-grid w-100" wire:loading.attr='disabled'>
-                                    <div class="spinner-border" role="status" wire:loading>
+                                    <output class="spinner-border" wire:loading>
                                         <span class="visually-hidden">Loading...</span>
-                                    </div>
+                                    </output>
                                     <span wire:loading.remove>
                                         Cek Tagihan
                                     </span>

@@ -29,5 +29,10 @@ class SettingSeeder extends Seeder
             'key' => 'whatsapp_template',
             'value' => config('template-notif.template'),
         ]);
+
+        Setting::create([
+            'key' => 'rekening',
+            'value' => 'BCA 1234567890 a/n PT. ABCD',
+        ]);
     }
 }

@@ -25,28 +25,16 @@
       "slug": "customers.index"
     },
     {
-      "menuHeader": "Transaksi"
-    },
-    {
       "url": "/transactions",
       "name": "Transaksi Pembayaran",
       "icon": "menu-icon tf-icons bx bx-money-withdraw",
       "slug": "transactions.index"
     },
     {
-      "menuHeader": "Settings"
-    },
-    {
-      "url": "/settings/notifications",
-      "name": "Setting Notifikasi",
-      "icon": "menu-icon tf-icons bx bxs-megaphone",
-      "slug": "notifications.index"
-    },
-    {
-      "url": "/settings/tax",
-      "name": "Setting Pajak",
-      "icon": "menu-icon tf-icons bx bx-purchase-tag-alt",
-      "slug": "tax"
+      "url": "/settings",
+      "name": "Pengaturan",
+      "icon": "menu-icon tf-icons bx bx-cog",
+      "slug": "settings.index"
     }
   ]
 }

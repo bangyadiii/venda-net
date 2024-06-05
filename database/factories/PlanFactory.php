@@ -20,8 +20,8 @@ class PlanFactory extends Factory
         return [
             'ppp_profile_id' => $this->faker->randomNumber(),
             'name' => $this->faker->word,
-            'price' => $this->faker->randomFloat(2, 0, 100000),
-            'speed_limit' => $this->faker->randomNumber(),
+            'price' => $this->faker->randomFloat(2, 0, 200_000),
+            'speed_limit' => $this->faker->randomNumber() . 'M',
             'router_id' => Router::factory()
         ];
     }
