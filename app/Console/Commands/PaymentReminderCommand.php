@@ -31,6 +31,7 @@ class PaymentReminderCommand extends Command
     public function handle()
     {
         $template = Setting::where('key', 'whatsapp_template')->first()->value;
+        $bank = Setting::query()->where('key', 'rekening')->first()?->value ?? '';
 
         $customers = Customer::with(['bills', 'plan'])
             ->where('service_status', ServiceStatus::ACTIVE)
@@ -51,6 +52,7 @@ class PaymentReminderCommand extends Command
                 'TARIFPAKET' => $customer->plan->price,
                 'TAGIHAN' => $customer->plan->price,
                 'ISOLIR' => $customer->isolir_date,
+                'BANK' => $bank,
             ];
             $content = replacePlaceholder($template, $data);
             $notification = new PaymentReminderNotification($customer->phone_number, $content);
