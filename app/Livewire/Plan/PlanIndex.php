@@ -34,6 +34,10 @@ class PlanIndex extends Component
              * @var \Illuminate\Database\Eloquent\Collection $profiles
              */
             $profiles = Profile::queryForClient($client)->get();
+            if ($profiles->isEmpty()) {
+                $this->dispatch('toast', title: 'No profile found', type: 'error');
+                return;
+            }
             $plans = Plan::query()->where('router_id', $routerId)->get();
             $planIds = $plans->pluck('ppp_profile_id')->toArray();
             $profiles = $profiles->filter(
@@ -50,7 +54,8 @@ class PlanIndex extends Component
                 ]);
             });
 
-            $this->dispatch('toast', title: 'Synced with mikrotik', type: 'success');
+            $this->dispatch('toast', title: 'Berhasil import profile mikrotik', type: 'success');
+            return $this->redirectRoute('plan.index', navigate: true);
         } catch (ConnectException $th) {
             $this->dispatch('toast', title: 'Tidak bisa terkoneksi ke router', type: 'error');
         } catch (\Throwable $th) {

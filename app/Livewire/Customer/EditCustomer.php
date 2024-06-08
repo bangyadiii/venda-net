@@ -60,6 +60,10 @@ class EditCustomer extends Component
         $router = $plan->router;
         $this->customer->fill($this->form->all());
 
+        if (!$this->customer->auto_isolir) {
+            $this->customer->isolir_date = null;
+        }
+
         try {
             $client = Router::getClient($router->host, $router->username, $router->password);
             $values = [

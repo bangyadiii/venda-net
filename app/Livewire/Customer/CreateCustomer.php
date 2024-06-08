@@ -45,6 +45,11 @@ class CreateCustomer extends Component
         $customer->fill($this->form->only(
             Customer::make()->getFillable()
         ));
+
+        if (!$customer->auto_isolir) {
+            $customer->isolir_date = null;
+        }
+
         try {
             $client = Router::getClient($router->host, $router->username, $router->password);
             $profile = Profile::getProfile($client, $plan->ppp_profile_id);

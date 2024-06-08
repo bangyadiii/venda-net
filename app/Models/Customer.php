@@ -27,6 +27,7 @@ class Customer extends Model
         'installment_status',
         'service_status',
         'active_date',
+        'auto_isolir',
         'isolir_date',
         'secret_id',
     ];

@@ -19,9 +19,6 @@ class CheckLatePayments extends Command
         /** @var \Illuminate\Database\Eloquent\Collection $customers */
         $customers = Customer::query()
             ->where('service_status', ServiceStatus::ACTIVE)
-            ->whereHas('plan.router', function ($query) {
-                $query->where('auto_isolir', true);
-            })
             ->whereHas('bills', function ($query) {
                 $query
                     ->where('total_amount', '>', 0)

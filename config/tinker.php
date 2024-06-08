@@ -2,6 +2,7 @@
 
 use App\Console\Commands\CheckLatePayments;
 use App\Console\Commands\CreateAdmin;
+use App\Console\Commands\GenerateMonthlyBill;
 use App\Console\Commands\PaymentReminderCommand;
 
 return [
@@ -21,6 +22,7 @@ return [
         PaymentReminderCommand::class,
         CheckLatePayments::class,
         CreateAdmin::class,
+        GenerateMonthlyBill::class,
     ],
 
     /*

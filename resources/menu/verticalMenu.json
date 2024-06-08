@@ -8,7 +8,7 @@
     },
     {
       "url": "/routers",
-      "name": "Setting Router",
+      "name": "Setting Mikrotik",
       "icon": "menu-icon tf-icons bx bx-server",
       "slug": "routers.index"
     },

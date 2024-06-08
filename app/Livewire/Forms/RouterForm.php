@@ -13,7 +13,6 @@ class RouterForm extends Form
     public string $host;
     public $username;
     public $password;
-    public $auto_isolir = true;
     public $isolir_action = 'disable_secret';
     public $isolir_profile_id;
     public $is_connected = false;
@@ -28,8 +27,7 @@ class RouterForm extends Form
             ],
             'username' => 'required|string',
             'password' => 'nullable|string',
-            'auto_isolir' => 'required|boolean',
-            'isolir_action' => 'nullable|required_if:auto_isolir,true|in:change_profile,disable_secret',
+            'isolir_action' => 'required|in:change_profile,disable_secret',
             'isolir_profile_id' => 'nullable|required_if:isolir_action,change_profile|string',
         ];
     }
@@ -38,7 +36,6 @@ class RouterForm extends Form
         'host' => 'Host',
         'username' => 'Username',
         'password' => 'Password',
-        'auto_isolir' => 'Auto Isolir',
         'isolir_action' => 'Isolir Action',
         'isolir_profile_id' => 'Isolir Profile',
     ];
@@ -48,7 +45,6 @@ class RouterForm extends Form
         $this->host = $router->host;
         $this->username = $router->username;
         $this->password = $router->password;
-        $this->auto_isolir = $router->auto_isolir;
         $this->isolir_action = $router->isolir_action;
         $this->isolir_profile_id = $router->isolir_profile_id;
     }

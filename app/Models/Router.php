@@ -16,9 +16,7 @@ class Router extends Model
         'host',
         'username',
         'password',
-        'last_connected_at',
 
-        'auto_isolir',
         'isolir_action',
         'isolir_profile_id'
     ];
@@ -98,9 +96,6 @@ class Router extends Model
                 'username' => $username,
                 'password' => $password,
                 'host' => $host,
-            ],
-            [
-                'last_connected_at' => now(),
             ]
         );
     }

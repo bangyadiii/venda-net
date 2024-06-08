@@ -1,6 +1,6 @@
 <div>
     <h4 class="py-3 mb-4">
-        <span class="text-muted fw-light">Router Settings</span>
+        <span class="text-muted fw-light">Setting Mikrotik</span>
     </h4>
 
     <div class="row">
@@ -16,29 +16,18 @@
                         <thead>
                             <tr>
                                 <th>Host</th>
-                                <th>Auto Isolir</th>
-                                <th>Action Isolir</th>
-                                <th>Profile Isolir</th>
+                                <th>Aksi Isolir</th>
+                                <th>Profil Isolir</th>
                                 <th>Koneksi</th>
-                                <th>Actions</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
                             @foreach ($routers as $router)
                             <tr wire:key='{{ $router->id }}'>
                                 <td><span class="fw-medium">{{ $router->host }}</span></td>
-                                <td>
-                                    <span
-                                        class="badge bg-label-{{ $router->auto_isolir == 1 ? 'success' : 'danger' }} me-1">
-                                        {{ $router->auto_isolir == 1 ? 'Yes' : 'No'}}
-                                    </span>
-                                </td>
-                                @if ($router->auto_isolir)
                                 <td>{{ $router->isolir_action == 'change_profile' ? 'Ganti Profile' : 'Disable Secret'}}
                                 </td>
-                                @else
-                                <td>-</td>
-                                @endif
                                 <td>
                                     <livewire:router.router-profile lazy :router="$router">
                                 </td>

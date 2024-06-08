@@ -200,6 +200,7 @@
                     'not_installed': ['inactive']
                 },
                 activeDate: $wire.entangle('form.active_date'),
+                notIsolir: !$wire.entangle('form.auto_isolir'),
                 isolirDate: $wire.entangle('form.isolir_date'),
             }">
                 <div class="row mb-3">
@@ -250,7 +251,8 @@
                 </div>
                 <div class="row">
                     <div class="col-md-4 mb-2">
-                        <label class="form-label" for="isolir_date">Batas Pembayaran / ISOLIR</label>
+                        <label class="form-label" for="isolir_date" x-show='!notIsolir' x-transition>Batas Pembayaran /
+                            ISOLIR</label>
                         <select type="text" id="isolir_date" class="form-select @error('form.isolir_date')
                             is-invalid
                         @enderror" wire:model='form.isolir_date' x-model="isolirDate" :disabled="isSameDate">
@@ -266,6 +268,12 @@
                         </div>
                         @enderror
                     </div>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"
+                        wire:model='form.auto_isolir' x-model='notIsolir'>
+                    <label class="form-check-label" for="flexSwitchCheckDefault">Jangan isolir otomatis pelanggan
+                        ini?</label>
                 </div>
                 <div class="form-check mb-3">
                     <input class="form-check-input" type="checkbox" id="toggle-date" x-on:click="toggleIsolirDate"

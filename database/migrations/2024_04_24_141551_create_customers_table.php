@@ -26,6 +26,7 @@ return new class extends Migration
                 ->default('active');
 
             $table->date('active_date')->nullable();
+            $table->boolean('auto_isolir')->default(true);
             $table->tinyInteger('isolir_date')->nullable();
             $table->string('secret_id')->unique();
 

@@ -18,6 +18,7 @@ class CustomerForm extends Form
     public $plan_id;
     public $installment_status = INstallmentStatus::NOT_INSTALLED;
     public $service_status = ServiceStatus::INACTIVE;
+    public $auto_isolir = true;
     public $active_date;
     public $isolir_date;
 
@@ -86,6 +87,7 @@ class CustomerForm extends Form
             'installment_status' => ['required', Rule::enum(InstallmentStatus::class)],
             'service_status' => ['required', Rule::enum(ServiceStatus::class)],
             'active_date' => 'nullable|required_if:installment_status,installed|date',
+            'auto_isolir' => 'required|boolean',
             'isolir_date' => 'nullable|required_if:installment_status,installed|integer|between:1,31',
             'ppp_service' => 'required|string',
             'secret_username' => 'required|string',
@@ -105,6 +107,7 @@ class CustomerForm extends Form
         'installment_status' => 'Status Pemasangan',
         'service_status' => 'Status Layanan',
         'active_date' => 'Tanggal Aktif',
+        'auto_isolir' => 'Tidak Isolir Otomatis',
         'isolir_date' => 'Tanggal Isolir',
         'ppp_service' => 'Service',
         'secret_username' => 'Secret Username',
@@ -124,6 +127,7 @@ class CustomerForm extends Form
         $this->installment_status = $customer->installment_status;
         $this->service_status = $customer->service_status;
         $this->active_date = $customer->active_date;
+        $this->auto_isolir = $customer->auto_isolir;
         $this->isolir_date = $customer->isolir_date;
     }
 }

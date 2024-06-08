@@ -78,7 +78,7 @@
             <div class="card-body">
                 <div class="row p-1">
                     <div class="col-md-4">
-                        <label class="form-label" for="router">Router</label>
+                        <label class="form-label" for="router">Router Mikrotik</label>
                         <select type="text" id="router" class="form-select @error('selectedRouterId')
                         is-invalid
                     @enderror" wire:model.live='selectedRouterId' wire:loading.attr='disabled'>

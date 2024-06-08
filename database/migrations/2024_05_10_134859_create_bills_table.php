@@ -29,6 +29,8 @@ return new class extends Migration
             $table->foreignId('plan_id')
                 ->constrained('plans')
                 ->cascadeOnDelete();
+            
+            $table->string('invoice_link')->nullable();
 
             $table->timestamps();
         });

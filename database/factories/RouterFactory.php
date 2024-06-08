@@ -20,8 +20,6 @@ class RouterFactory extends Factory
             'host' => $this->faker->ipv4,
             'username' => $this->faker->userName,
             'password' => $this->faker->password,
-            'last_connected_at' => $this->faker->dateTime,
-            'auto_isolir' => $this->faker->boolean,
             'isolir_action' => $this->faker->word,
             'isolir_profile_id' => $this->faker->randomNumber()
         ];

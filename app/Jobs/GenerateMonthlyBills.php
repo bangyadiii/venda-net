@@ -22,7 +22,7 @@ class GenerateMonthlyBills implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct()
+    public function __construct(private Customer $customer)
     {
         //
     }
@@ -32,37 +32,28 @@ class GenerateMonthlyBills implements ShouldQueue
      */
     public function handle(): void
     {
-        $customers = Customer::with('plan')
-            ->where('service_status', ServiceStatus::ACTIVE)
-            ->whereDoesntHave('bills', function ($query) {
-                $query->where(DB::raw('MONTH(due_date)'), now()->month);
-            })
-            ->get();
+        if ($this->customer->plan) {
+            $isolir = Carbon::createFromDate(now()->year, now()->month, $this->customer->isolir_date);
+            if ($isolir->isPast()) {
+                $isolir->addMonth();
+            }
 
-        foreach ($customers as $customer) {
-            if ($customer->plan) {
-                $isolir = Carbon::createFromDate(now()->year, now()->month, $customer->isolir_date);
-                if($isolir->isPast()) {
-                    $isolir->addMonth();
-                }
+            $bill = Bill::query()
+                ->where('customer_id', $this->customer->id)
+                ->where(DB::raw('DATE(due_date)'), $isolir)
+                ->first();
 
-                $bill = Bill::query()
-                    ->where('customer_id', $customer->id)
-                    ->where(DB::raw('DATE(due_date)'), $isolir)
-                    ->first();
-
-                if (!$bill) {
-                    $tax = (int) Setting::where('key', 'ppn')->first()->value ?? 0;
-                    Bill::create([
-                        'customer_id' => $customer->id,
-                        'discount' => 0,
-                        'tax_rate' => $tax,
-                        'total_amount' => $customer->plan->price * (1 + $tax / 100),
-                        'status' => BillStatus::UNPAID,
-                        'due_date' => $isolir,
-                        'plan_id' => $customer->plan_id,
-                    ]);
-                }
+            if (!$bill) {
+                $tax = (int) Setting::where('key', 'ppn')->first()->value ?? 0;
+                Bill::create([
+                    'customer_id' => $this->customer->id,
+                    'discount' => 0,
+                    'tax_rate' => $tax,
+                    'total_amount' => $this->customer->plan->price * (1 + $tax / 100),
+                    'status' => BillStatus::UNPAID,
+                    'due_date' => $isolir,
+                    'plan_id' => $this->customer->plan_id,
+                ]);
             }
         }
     }

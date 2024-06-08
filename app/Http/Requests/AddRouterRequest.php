@@ -25,7 +25,6 @@ class AddRouterRequest extends FormRequest
             'host' => ['required', 'string'],
             'username' => ['required', 'string'],
             'password' => ['string'],
-            'auto_isolir' => ['required', 'boolean'],
             'isolir_action' => ['required', 'string', 'in:change_profile,disabled_secret'],
             'isolir_profile' => ['required_if:isolir_action,change_profile', 'string'],
         ];
