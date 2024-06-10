@@ -28,9 +28,10 @@ return new class extends Migration
             $table->date('active_date')->nullable();
             $table->boolean('auto_isolir')->default(true);
             $table->tinyInteger('isolir_date')->nullable();
-            $table->string('secret_id')->unique();
+            $table->string('secret_id')->nullable()->unique();
 
             $table->foreignId('plan_id')
+                ->nullable()
                 ->constrained('plans')
                 ->cascadeOnDelete();
             $table->timestamps();

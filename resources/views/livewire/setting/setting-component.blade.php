@@ -1,12 +1,12 @@
 <div>
-    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Setting /</span> Notifikasi</h4>
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Pengaturan</span></h4>
 
     <!-- Basic Layout -->
     <div class="row">
         <div class="col-xl">
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Setting Notifikasi</h5>
+                    <h5 class="mb-0">Pengaturan</h5>
                 </div>
                 <div class="card-body">
                     <form wire:submit='store' x-data="{

@@ -3,16 +3,13 @@
 namespace App\Livewire\Transaction;
 
 use App\Enums\BillStatus;
-use App\Enums\InstallmentStatus;
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
-use App\Jobs\GenerateMonthlyBills;
 use App\Jobs\UnisolateCustomerJob;
 use App\Livewire\Forms\TransactionForm;
 use App\Models\Bill;
 use App\Models\Customer;
 use App\Models\Payment;
-use App\Models\PaymentLog;
 use App\Models\Setting;
 use Carbon\Carbon;
 use Livewire\Component;
@@ -60,8 +57,9 @@ class CreateTransaction extends Component
 
         \dispatch(new UnisolateCustomerJob($customer));
 
-        $payment = Payment::create([
+        $payment = Payment::query()->updateOrCreate([
             'bill_id' => $this->currentBill->id,
+        ], [
             'amount' => $this->grand_total,
             'status' => PaymentStatus::SUCCESS,
             'method' => PaymentMethod::CASH,
@@ -73,16 +71,10 @@ class CreateTransaction extends Component
             return $this->redirect('transactions.create', navigate: true);
         }
 
-        PaymentLog::create([
-            'payment_id' => $payment->id,
-            'message' => $this->form->note,
-        ]);
-
         $this->currentBill->discount = $this->form->discount;
         $this->currentBill->total_amount = $this->grand_total;
         $this->currentBill->status = BillStatus::PAID;
         $this->currentBill->save();
-        \dispatch(new GenerateMonthlyBills);
         $this->resetElement();
 
         $this->dispatch('toast', title: 'Berhasil disimpan');
@@ -111,10 +103,10 @@ class CreateTransaction extends Component
         }
 
         $this->customer = Customer::with('plan')
-            ->where('installment_status', InstallmentStatus::INSTALLED)
             ->find($this->customer_id);
+
         if (!$this->customer) {
-            $this->dispatch('toast', title: 'Pelanggan tidak ditemukan atau belum terinstallasi', type: 'error');
+            $this->dispatch('toast', title: 'Pelanggan tidak ditemukan', type: 'error');
             $this->customer_id = null;
             return;
         }

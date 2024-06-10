@@ -37,10 +37,7 @@ class CreateCustomer extends Component
     public function store()
     {
         $this->form->validate();
-        $plan = Plan::with('router')
-            ->findOrFail($this->form->plan_id);
 
-        $router = $plan->router;
         $customer = new Customer();
         $customer->fill($this->form->only(
             Customer::make()->getFillable()
@@ -49,29 +46,36 @@ class CreateCustomer extends Component
         if (!$customer->auto_isolir) {
             $customer->isolir_date = null;
         }
+        if ($this->form->plan_id) {
+            try {
+                $plan = Plan::with('router')
+                    ->findOrFail($this->form->plan_id);
 
-        try {
-            $client = Router::getClient($router->host, $router->username, $router->password);
-            $profile = Profile::getProfile($client, $plan->ppp_profile_id);
+                $router = $plan->router;
 
-            $id = Secret::addSecret(
-                $client,
-                $this->form->secret_username,
-                $this->form->secret_password,
-                $this->form->ppp_service,
-                $profile['name'],
-                $this->form->local_address,
-                $this->form->remote_address,
-                $this->form->ip_type,
-            );
-            \throw_if(!$id, new Exception('Failed to create secret'));
+                $client = Router::getClient($router->host, $router->username, $router->password);
+                $profile = Profile::getProfile($client, $plan->ppp_profile_id);
 
-            $customer->secret_id = $id;
-            $customer->save();
-        } catch (\Throwable $th) {
-            $this->dispatch('toast', title: $th->getMessage(), type: 'error');
-            return redirect()->back();
+                $id = Secret::addSecret(
+                    $client,
+                    $this->form->secret_username,
+                    $this->form->secret_password,
+                    $this->form->ppp_service,
+                    $profile['name'],
+                    $this->form->local_address,
+                    $this->form->remote_address,
+                    $this->form->ip_type,
+                );
+                \throw_if(!$id, new Exception('Failed to create secret'));
+
+                $customer->secret_id = $id;
+            } catch (\Throwable $th) {
+                $this->dispatch('toast', title: $th->getMessage(), type: 'error');
+                return redirect()->back();
+            }
         }
+
+        $customer->save();
 
         $isolirDate = Carbon::createFromDate(now()->year, now()->month, $customer->isolir_date);
 

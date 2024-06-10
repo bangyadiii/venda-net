@@ -35,7 +35,7 @@ return [
     'notes'                  => 'Catatan',
     'shipping'               => 'Pengiriman',
     'paid'                   => 'lunas',
-    'unpaid'                 => 'belum lunas',
+    'unpaid'                 => 'belum dibayar',
     'due'                    => 'Jatuh Tempo',
     'page'                   => 'Halaman',
 ];

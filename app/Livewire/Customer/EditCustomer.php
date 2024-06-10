@@ -54,44 +54,47 @@ class EditCustomer extends Component
     public function store()
     {
         $this->form->validate();
-        $plan = Plan::with('router')
-            ->findOrFail($this->form->plan_id);
-
-        $router = $plan->router;
         $this->customer->fill($this->form->all());
 
         if (!$this->customer->auto_isolir) {
             $this->customer->isolir_date = null;
         }
 
-        try {
-            $client = Router::getClient($router->host, $router->username, $router->password);
-            $values = [
-                'name' => $this->form->secret_username,
-                'password' => $this->form->secret_password,
-                'service' => $this->form->ppp_service,
-                'profile' => $plan->ppp_profile_id,
-            ];
+        if ($this->form->plan_id) {
+            try {
+                $plan = Plan::with('router')
+                    ->findOrFail($this->form->plan_id);
 
-            if ($this->form->ip_type === 'remote_address') {
-                $values['remote-address'] = $this->form->remote_address;
-                $values['local-address'] = $this->form->local_address;
+                $router = $plan->router;
+
+                $client = Router::getClient($router->host, $router->username, $router->password);
+                $values = [
+                    'name' => $this->form->secret_username,
+                    'password' => $this->form->secret_password,
+                    'service' => $this->form->ppp_service,
+                    'profile' => $plan->ppp_profile_id,
+                ];
+
+                if ($this->form->ip_type === 'remote_address') {
+                    $values['remote-address'] = $this->form->remote_address;
+                    $values['local-address'] = $this->form->local_address;
+                }
+
+                $id = Secret::updateSecret(
+                    $client,
+                    $this->customer->secret_id,
+                    $values
+                );
+                \throw_if(!$id, new Exception('Failed to update secret'));
+
+                $this->customer->secret_id = $id;
+            } catch (\Throwable $th) {
+                $this->dispatch('toast', title: $th->getMessage(), type: 'error');
+                return redirect()->back();
             }
-
-            $id = Secret::updateSecret(
-                $client,
-                $this->customer->secret_id,
-                $values
-            );
-            \throw_if(!$id, new Exception('Failed to update secret'));
-
-            $this->customer->secret_id = $id;
-
-            $this->customer->save();
-        } catch (\Throwable $th) {
-            $this->dispatch('toast', title: $th->getMessage(), type: 'error');
-            return redirect()->back();
         }
+
+        $this->customer->save();
         $unPaidBills =  Bill::query()
             ->where('customer_id', $this->customer->id)
             ->where('status', BillStatus::UNPAID)

@@ -38,78 +38,70 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="mb-3 col-md-4">
-                                <label class="form-label" for="paket">Paket</label>
-                                <input wire:model='plan_name' type="text" class="form-control" disabled />
-                            </div>
-                            <div class="mb-3 col-md-4">
-                                <label class="form-label" for="tarif">Tarif Paket</label>
-                                <input value="{{ $plan_price ? currency($plan_price) : null }}" type="text"
-                                    class="form-control" disabled />
-                            </div>
-                            <div class="mb-3 col-md-4">
-                                <label class="form-label" for="diskon">Diskon</label>
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label class="form-label" for="paket">Paket</label>
+                                    <input wire:model='plan_name' type="text" class="form-control" disabled />
+                                </div>
+                                <div class="row">
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label" for="pembayaran">Pembayaran</label>
+                                        <input type="text" class="form-control" disabled wire:model='isolir_month'>
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label" for="name">Untuk Periode Pemakaian</label>
+                                        <input type="text" class="form-control" disabled wire:model='period' />
+                                    </div>
+                                </div>
 
-                                <div class="input-group">
-                                    <span class="input-group-text">Rp</span>
-                                    <input type="number" class="form-control" wire:model.live='form.discount' />
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label" for="tarif">Tarif Paket</label>
+                                    <input value="{{ $plan_price ? currency($plan_price) : null }}" type="text"
+                                        class="form-control" disabled />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="diskon">Diskon</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" wire:model.live='form.discount' />
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="nominal">Nominal</label>
+                                    <input type="text" class="form-control" disabled value="{{ currency($nominal) }}" />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="ppn">PPN (%)</label>
+                                    <input type="text" class="form-control" disabled wire:model='form.tax_rate'></input>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="total_ppn">Total PPN</label>
+                                    <input type="text" class="form-control" disabled
+                                        value='{{ currency($total_ppn) }}' />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="tagihan">Total Tagihan</label>
+                                    <input type="text" class="form-control" disabled
+                                        value='{{ currency($grand_total) ?? 0 }}' />
                                 </div>
                             </div>
+
                         </div>
-                        <div class="row">
-                            <div class="mb-3 col-md-4">
-                                <label class="form-label" for="pembayaran">Pembayaran</label>
-                                <input type="text" class="form-control" disabled wire:model='isolir_month'>
-                            </div>
-                            <div class="mb-3 col-md-4">
-                                <label class="form-label" for="name">Untuk Periode Pemakaian</label>
-                                <input type="text" class="form-control" disabled wire:model='period' />
-                            </div>
-                            <div class="mb-3 col-md-4">
-                                <label class="form-label" for="nominal">Nominal</label>
-                                <input type="text" class="form-control" disabled
-                                    value="{{ currency($nominal) }}" />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="mb-3 col-md-4">
-                                <label class="form-label" for="ppn">PPN (%)</label>
-                                <input type="text" class="form-control" disabled wire:model='form.tax_rate'></input>
-                            </div>
-                            <div class="mb-3 col-md-4">
-                                <label class="form-label" for="total_ppn">Total PPN</label>
-                                <input type="text" class="form-control" disabled
-                                    value='{{ currency($total_ppn) }}' />
-                            </div>
-                            <div class="mb-3 col-md-4">
-                                <label class="form-label" for="tagihan">Total Tagihan</label>
-                                <input type="text" class="form-control" disabled value='{{ currency($grand_total) ?? 0 }}' />
-                            </div>
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="submit" class="btn btn-primary" wire:loading.attr='disabled'>
+                                <output class="spinner-border" wire:loading>
+                                    <span class="visually-hidden">Loading...</span>
+                                </output>
+                                <span wire:loading.remove>
+                                    Bayar
+                                </span>
+                            </button>
+                            <a class="btn btn-secondary" wire:navigate href="{{ route('transactions.index') }}"
+                                wire:loading.attr='disabled'>Batal</a>
                         </div>
 
-                        <div class="row">
-                            <div class="mb-3 col-md-4">
-                                <label class="form-label" for="method">Metode Pembayaran</label>
-                                <select type="text" class="form-select" id="method" wire:model='method'>
-                                    <option value="cash">Tunai</option>
-                                </select>
-                            </div>
-                            <div class="mb-3 col-md-4">
-                                <label class="form-label" for="note">Keterangan</label>
-                                <textarea type="text" class="form-control" id="note" wire:model='note'></textarea>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary" wire:loading.attr='disabled'>
-                            <output class="spinner-border" wire:loading>
-                                <span class="visually-hidden">Loading...</span>
-                            </output>
-                            <span wire:loading.remove>
-                                Simpan
-                            </span>
-                        </button>
-                        <a class="btn btn-secondary" wire:navigate href="{{ route('transactions.index') }}"
-                            wire:loading.attr='disabled'>Batal</a>
                     </form>
                 </div>
             </div>

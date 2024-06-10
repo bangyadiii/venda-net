@@ -26,7 +26,7 @@
     },
     {
       "url": "/transactions",
-      "name": "Transaksi Pembayaran",
+      "name": "Tagihan & Pembayaran",
       "icon": "menu-icon tf-icons bx bx-money-withdraw",
       "slug": "transactions.index"
     },

@@ -22,11 +22,11 @@ class BillFactory extends Factory
             'id' => $this->faker->randomNumber(),
             'customer_id' => $this->faker->randomNumber(),
             'plan_id' => Plan::factory(),
-            'discount' => $this->faker->randomFloat(2, 0, 100),
-            'tax_rate' => $this->faker->randomFloat(2, 0, 100),
-            'total_amount' => $this->faker->randomFloat(2, 0, 100000),
-            'due_date' => $this->faker->dateTime,
-            'status' => $this->faker->randomElement([BillStatus::PAID, BillStatus::UNPAID]),
+            'discount' => 0,
+            'tax_rate' => 11,
+            'total_amount' => $this->faker->randomFloat(2, 0, 100_000),
+            'due_date' => $this->faker->dateTimeBetween(\now()->subYears(2), \now()),
+            'status' => BillStatus::UNPAID,
         ];
     }
 }

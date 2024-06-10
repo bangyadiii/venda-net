@@ -82,7 +82,7 @@ class CustomerForm extends Form
             'customer_name' => 'required|string',
             'phone_number' => ['required', 'string', Rule::unique('customers', 'phone_number')->ignore($this->customer_id)],
             'address' => 'nullable|string',
-            'plan_id' => 'required|integer',
+            'plan_id' => 'nullable|integer',
             'discount' => 'nullable|integer',
             'installment_status' => ['required', Rule::enum(InstallmentStatus::class)],
             'service_status' => ['required', Rule::enum(ServiceStatus::class)],

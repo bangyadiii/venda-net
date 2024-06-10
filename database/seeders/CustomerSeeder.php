@@ -19,17 +19,22 @@ class CustomerSeeder extends Seeder
     {
         $plans = Plan::all();
 
-        Customer::factory()
+        $customers = Customer::factory()
             ->recycle($plans)
-            ->count(10)
-            ->has(
-                Bill::factory()
-                    ->count(3)
-                    ->has(
-                        Payment::factory()
-                            ->count(3)
-                    )
-            )
+            ->count(5)
             ->create();
+
+        foreach ($customers as $customer) {
+            Bill::factory()
+                ->sequence(function ($sequence) use ($customer) {
+                    return [
+                        'customer_id' => $customer->id,
+                        'plan_id' => $customer->plan->id,
+                        'discount' => 0,
+                        'total_amount' => $customer->plan->price * 1.11,
+                    ];
+                })
+                ->create();
+        }
     }
 }

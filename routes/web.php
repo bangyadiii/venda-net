@@ -62,13 +62,7 @@ Route::middleware('auth')
         Route::get('/create', CreateTransaction::class)->name('create');
     });
 
-Route::middleware('auth')
-    ->prefix('settings')
-    ->group(function () {
-        Route::get('/', SettingComponent::class)->name('settings');
-        // Route::get('/notifications', NotificationSetting::class)->name('notifications.index');
-        // Route::get('/tax', TaxSetting::class)->name('tax');
-    });
+Route::middleware('auth')->get('/settings', SettingComponent::class)->name('settings');
 
 Route::get('/bill-checks', BillCheck::class)->name('bill_checks');
 Route::get('/payment/{id}', CreateOnlinePayment::class)->name('payment.index');
