@@ -61,7 +61,7 @@ return [
      |
      */
 
-    'ssl'         => false, // Enable ssl support (if port is not set this parameter must change default port to ssl port)
+    'ssl'         => true, // Enable ssl support (if port is not set this parameter must change default port to ssl port)
 
     // @see https://www.php.net/manual/en/context.ssl.php
     'ssl_options' => [

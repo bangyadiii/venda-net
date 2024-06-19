@@ -10,6 +10,7 @@ use App\Models\Router;
 use App\Models\Secret;
 use Livewire\Component;
 use RouterOS\Exceptions\ConnectException;
+use RouterOS\Query;
 
 class CustomerIndex extends Component
 {
@@ -24,14 +25,18 @@ class CustomerIndex extends Component
         try {
             $router = Router::findOrFail($routerId);
             $client = Router::getClient($router->host, $router->username, $router->password);
-            $secrets = Secret::queryForClient($client)->get();
+            $query = new Query('/ppp/secret/print');
+            $secrets = $client->query($query)->read();
+
+            if ($secrets->isEmpty()) {
+                $this->dispatch('toast', title: 'No secrets found', type: 'error');
+                return;
+            }
         } catch (ConnectException $th) {
             $this->dispatch('toast', title: 'Tidak bisa terkoneksi ke router', type: 'error');
             return;
-        }
-
-        if ($secrets->isEmpty()) {
-            $this->dispatch('toast', title: 'No secrets found', type: 'error');
+        } catch (\Throwable $th) {
+            $this->dispatch('toast', title: $th->getMessage(), type: 'error');
             return;
         }
 

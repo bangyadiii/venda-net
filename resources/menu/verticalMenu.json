@@ -34,7 +34,7 @@
       "url": "/settings",
       "name": "Pengaturan",
       "icon": "menu-icon tf-icons bx bx-cog",
-      "slug": "settings.index"
+      "slug": "settings"
     }
   ]
 }

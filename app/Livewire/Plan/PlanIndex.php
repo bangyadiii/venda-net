@@ -17,11 +17,11 @@ class PlanIndex extends Component
     public function mount()
     {
         $this->routers = Router::all();
-        $this->plans = Plan::with('router')->get();
     }
 
     public function render()
     {
+        $this->plans = Plan::with('router')->get();
         return view('livewire.plan.plan-index');
     }
 
@@ -55,7 +55,6 @@ class PlanIndex extends Component
             });
 
             $this->dispatch('toast', title: 'Berhasil import profile mikrotik', type: 'success');
-            return $this->redirectRoute('plan.index', navigate: true);
         } catch (ConnectException $th) {
             $this->dispatch('toast', title: 'Tidak bisa terkoneksi ke router', type: 'error');
         } catch (\Throwable $th) {
