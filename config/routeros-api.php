@@ -17,8 +17,7 @@ return [
     'host' => '192.168.88.1', // Address of Mikrotik RouterOS
     'user' => 'admin',        // Username
     'pass' => null,           // Password
-    'port' => env('ROUTER_OS_PORT', 8728),           // RouterOS API port number for access (if not set use default or default with SSL if SSL enabled)
-    'ssl_port' => env('ROUTER_OS_PORT', 8729),           // RouterOS API port number for access (if not set use default or default with SSL if SSL enabled)
+    'port' => (int) env('ROUTER_OS_PORT', 8728),           // RouterOS API port number for access (if not set use default or default with SSL if SSL enabled)
 
     /*
      |--------------------------------------------------------------------------
