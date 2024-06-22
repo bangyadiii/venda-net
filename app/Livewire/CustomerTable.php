@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Enums\InstallmentStatus;
 use App\Enums\ServiceStatus;
+use App\Exports\CustomerExport;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Customer;
@@ -12,6 +13,7 @@ use App\Models\Router;
 use App\Models\Secret;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Maatwebsite\Excel\Facades\Excel;
 use Rappasoft\LaravelLivewireTables\Views\Filters\DateFilter;
 use Rappasoft\LaravelLivewireTables\Views\Filters\DateRangeFilter;
 use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
@@ -24,6 +26,22 @@ class CustomerTable extends DataTableComponent
     public function configure(): void
     {
         $this->setPrimaryKey('id');
+    }
+
+    public function bulkActions(): array
+    {
+        return [
+            'export' => 'Export',
+        ];
+    }
+
+    public function export()
+    {
+        $customers = $this->getSelected();
+
+        $this->clearSelected();
+
+        return Excel::download(new CustomerExport($customers), 'customers.xlsx');
     }
 
     public function columns(): array

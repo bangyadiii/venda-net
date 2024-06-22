@@ -174,6 +174,7 @@ return [
     Barryvdh\Debugbar\ServiceProvider::class,
     MidtransServiceProvider::class,
     Sentry\Laravel\ServiceProvider::class,
+    Maatwebsite\Excel\ExcelServiceProvider::class,
   ])->toArray(),
 
   /*
@@ -191,6 +192,7 @@ return [
     // 'Example' => App\Facades\Example::class,
     'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
     'Sentry' => Sentry\Laravel\Facade::class,
+    'Excel' => Maatwebsite\Excel\Facades\Excel::class,
   ])->toArray(),
 
 ];

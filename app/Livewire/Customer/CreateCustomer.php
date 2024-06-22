@@ -3,6 +3,8 @@
 namespace App\Livewire\Customer;
 
 use App\Enums\BillStatus;
+use App\Enums\InstallmentStatus;
+use App\Enums\ServiceStatus;
 use App\Livewire\Forms\CustomerForm;
 use App\Models\Bill;
 use App\Models\Customer;
@@ -77,24 +79,25 @@ class CreateCustomer extends Component
 
         $customer->save();
 
-        $isolirDate = Carbon::createFromDate(now()->year, now()->month, $customer->isolir_date);
+        if ($customer->service_status == ServiceStatus::ACTIVE && $customer->installment_status == InstallmentStatus::INSTALLED) {
+            $isolirDate = Carbon::createFromDate(now()->year, now()->month, $customer->isolir_date);
+            if ($isolirDate->isPast()) {
+                $isolirDate->addMonth();
+            }
 
-        // TOOD: check more detail about this
-        if ($isolirDate->isPast()) {
-            $isolirDate->addMonth();
+            $tax = (int) Setting::where('key', 'ppn')->first()->value ?? 0;
+            $bill = $customer->bills()->create([
+                'due_date' => $isolirDate,
+                'plan_id' => $customer->plan_id,
+                'total_amount' => ($plan->price - $this->form->discount) * ($tax / 100 + 1),
+                'tax_rate' => $tax,
+                'discount' => $this->form->discount,
+                'status' => BillStatus::UNPAID,
+            ]);
+
+            $bill->invoice_link = $this->createInvoice($customer, $bill, $plan);
+            $bill->save();
         }
-
-        $tax = (int) Setting::where('key', 'ppn')->first()->value ?? 0;
-        $bill = $customer->bills()->create([
-            'due_date' => $isolirDate,
-            'plan_id' => $customer->plan_id,
-            'total_amount' => ($plan->price - $this->form->discount) * ($tax / 100 + 1),
-            'tax_rate' => $tax,
-            'discount' => $this->form->discount,
-            'status' => BillStatus::UNPAID,
-        ]);
-        $bill->invoice_link = $this->createInvoice($customer, $bill, $plan);
-        $bill->save();
 
         $this->dispatch('toast', title: 'Customer created successfully', type: 'success');
         return $this->redirectRoute('customers.index', navigate: true);

@@ -4,12 +4,14 @@ namespace App\Livewire\Transaction;
 
 use App\Enums\BillStatus;
 use App\Enums\PaymentMethod;
+use App\Exports\BillExport;
 use App\Models\Bill;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Plan;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Maatwebsite\Excel\Facades\Excel;
 use Rappasoft\LaravelLivewireTables\Views\Filters\DateFilter;
 use Rappasoft\LaravelLivewireTables\Views\Filters\DateRangeFilter;
 use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
@@ -24,9 +26,28 @@ class TransactionTable extends DataTableComponent
             ->setDefaultSort('due_date', 'desc');
     }
 
+    public function bulkActions(): array
+    {
+        return [
+            'export' => 'Export',
+        ];
+    }
+
+    public function export()
+    {
+        $bills = $this->getSelected();
+
+        $this->clearSelected();
+
+        return Excel::download(new BillExport($bills), 'bills.xlsx');
+    }
+
+
     public function columns(): array
     {
         return [
+            Column::make("No Pelanggan", "id")
+                ->hideIf(true),
             Column::make("No Pelanggan", "customer.id")
                 ->searchable(),
             Column::make("Nama", "customer.customer_name")
@@ -83,7 +104,7 @@ class TransactionTable extends DataTableComponent
                 ->label(
                     fn ($row, Column $column) => view('components.livewire.datatables.action-column')->with(
                         [
-                            'printRoute' => route('invoices', ['id' => $row->id]),
+                            'printRoute' => route('invoices', ['bill_id' => $row->id]),
                             // 'deleteMethod' => 'delete(' . $row->id . ')',
                         ]
                     )
