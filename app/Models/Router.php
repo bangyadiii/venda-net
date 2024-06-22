@@ -68,7 +68,7 @@ class Router extends Model
             'host' => $host,
             'user' => $username,
             'pass' => $password,
-            'port' => \config('routeros-api.port', true),
+            'port' => \config('routeros-api.port', true) ? \config('routeros-api.ssl_port') : \config('routeros-api.port'),
             'attempts' => 1,
             'timeout' => 10,
             'socket_timeout' => 20,
