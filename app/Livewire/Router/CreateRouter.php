@@ -56,5 +56,6 @@ class CreateRouter extends Component
         ], $profiles);
 
         $this->dispatch('toast', title: 'Koneksi berhasil', type: 'success');
+        $client->disconnect();
     }
 }
