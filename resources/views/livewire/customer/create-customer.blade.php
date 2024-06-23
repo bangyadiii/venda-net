@@ -97,8 +97,7 @@
             </div>
         </div>
 
-
-        <div class="card mb-4" x-show="planId" x-transition>
+        <div class="card mb-4">
             <div class="card-body" x-data="{
                 username: $wire.entangle('form.secret_username'),
                 password: $wire.entangle('form.secret_password'),
@@ -145,34 +144,10 @@
                         @enderror
                     </div>
                 </div>
-                <div class="mb-3 row" x-data="{
-                        ipType: $wire.entangle('form.ip_type'),
-                        localAddress: $wire.entangle('form.local_address'),
-                        remoteAddress: $wire.entangle('form.remote_address'),
-                    }">
-                    <div class="col-md-4 mb-2">
-                        <label class="form-label" for="ip_type">Type IP</label>
-                        <select id="ip_type" class="form-select @error('form.ip_type')
-                            is-invalid
-                        @enderror" wire:model='form.ip_type' x-model="ipType" x-on:change="
-                        if ($event.target.value === 'ip_pool') {
-                            localAddress = '';
-                            remoteAddress = '';
-                        }">
-                            @foreach ($form->ipTypeSelect as $ipType)
-                            <option value="{{ $ipType['value'] }}">{{ $ipType['label'] }}</option>
-                            @endforeach
-                        </select>
-                        @error('form.ip_type')
-                        <div class="error">
-                            {{ $message }}
-                        </div>
-                        @enderror
-                    </div>
+                <div class="mb-3 row">
                     <div class="col-md-4 mb-2">
                         <label class="form-label" for="local_address">Local Address</label>
-                        <input type="text" class="form-control" :disabled="ipType == 'ip_pool'" x-model='localAddress'
-                            wire:model='form.local_address' />
+                        <input type="text" class="form-control" wire:model='form.local_address' />
                         @error('form.local_address')
                         <div class="error">
                             {{ $message }}
@@ -181,8 +156,7 @@
                     </div>
                     <div class="col-md-4 mb-2">
                         <label class="form-label" for="remote_address">Remote Address</label>
-                        <input type="text" class="form-control" :disabled="ipType == 'ip_pool'" x-model="remoteAddress"
-                            wire:model='form.remote_address' />
+                        <input type="text" class="form-control" wire:model='form.remote_address' />
                         @error('form.remote_address')
                         <div class="error">
                             {{ $message }}

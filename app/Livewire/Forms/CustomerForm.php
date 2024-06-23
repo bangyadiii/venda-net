@@ -26,17 +26,7 @@ class CustomerForm extends Form
     public $secret_password;
     public $ppp_service;
     public $discount = 0;
-    public $ip_type = 'ip_pool';
-    public $ipTypeSelect = [
-        [
-            'value' => 'ip_pool',
-            'label' => 'IP Pool',
-        ],
-        [
-            'value' => 'remote_address',
-            'label' => 'Remote Address',
-        ]
-    ];
+
     public $local_address;
     public $remote_address;
 
@@ -94,7 +84,6 @@ class CustomerForm extends Form
             'secret_password' => 'required|string',
             'local_address' => 'nullable|string',
             'remote_address' => 'nullable|string',
-            'ip_type' => 'required|string|in:ip_pool,remote_address',
         ];
     }
 
@@ -114,7 +103,6 @@ class CustomerForm extends Form
         'secret_password' => 'Secret Password',
         'local_address' => 'Local Address',
         'remote_address' => 'Remote Address',
-        'ip_type' => 'IP Type',
     ];
 
     public function setCustomer(Customer $customer)

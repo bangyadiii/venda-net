@@ -4,6 +4,7 @@ namespace App\Livewire\Customer;
 
 use App\Enums\InstallmentStatus;
 use App\Enums\ServiceStatus;
+use App\Models\Client;
 use App\Models\Customer;
 use App\Models\Plan;
 use App\Models\Router;
@@ -22,52 +23,45 @@ class CustomerIndex extends Component
 
     public function syncSecret($routerId)
     {
-        try {
-            $router = Router::findOrFail($routerId);
-            $client = Router::getClient($router->host, $router->username, $router->password);
-            $query = new Query('/ppp/secret/print');
-            $secrets = $client->query($query)->read();
-
-            if ($secrets->isEmpty()) {
-                $this->dispatch('toast', title: 'No secrets found', type: 'error');
-                return;
-            }
-        } catch (ConnectException $th) {
-            $this->dispatch('toast', title: 'Tidak bisa terkoneksi ke router', type: 'error');
+        $router = Router::findOrFail($routerId);
+        $client = new Client();
+        if (!$client->connect($router->host, $router->username, $router->password)) {
+            $this->dispatch('toast', title: 'Router tidak terkoneksi', type: 'error');
             return;
-        } catch (\Throwable $th) {
-            $this->dispatch('toast', title: $th->getMessage(), type: 'error');
+        }
+        $secrets = $client->comm('/ppp/secret/print');
+
+        if (empty($secrets)) {
+            $this->dispatch('toast', title: 'No secrets found', type: 'error');
             return;
         }
 
-        $customerIds = Customer::query()
+        $secretsIds = Customer::query()
             ->whereHas('plan.router', fn ($query) => $query->where('id', $routerId))
             ->get()
             ->pluck('secret_id')
             ->toArray();
-
-        $secrets = $secrets->filter(fn ($secret) => !in_array($secret->id, $customerIds));
+        $secrets = array_filter($secrets, fn ($secret) => !in_array($secret['.id'], $secretsIds));
         $plans = Plan::query()->where('router_id', $routerId)->get();
-        if ($plans->isEmpty() && $secrets->isNotEmpty()) {
+        if ($plans->isEmpty() && empty($secrets)) {
             return $this->dispatch('toast', title: 'Silakan import paket terlebih dahulu', type: 'error');
         }
+
         $errorCustomers = collect();
-        $secrets->each(function ($secret) use ($plans, $errorCustomers) {
-            $plan = $plans->where('name', $secret->profile)->first();
+        foreach ($secrets as $secret) {
+            $plan = $plans->where('name', $secret['profile'])->first();
             if (!$plan) {
-                $errorCustomers->push($secret->name);
+                $errorCustomers->push($secret['name']);
                 return;
             }
             Customer::create([
                 'plan_id' => $plan->id,
-                'secret_id' => $secret->id,
-                'customer_name' => $secret->name,
-                'phone_number' => $secret->phone_number,
-                'address' => $secret->address,
+                'secret_id' => $secret['.id'],
+                'customer_name' => $secret['name'],
                 'installment_status' => InstallmentStatus::INSTALLED,
                 'service_status' => ServiceStatus::ACTIVE,
             ]);
-        });
+        };
 
         $this->dispatch('toast', title: 'Synced with mikrotik', type: 'success');
         if ($errorCustomers->isNotEmpty())

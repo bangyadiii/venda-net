@@ -73,12 +73,9 @@ class EditCustomer extends Component
                     'password' => $this->form->secret_password,
                     'service' => $this->form->ppp_service,
                     'profile' => $plan->ppp_profile_id,
+                    'remote-address' => $this->form->remote_address,
+                    'local-address' => $this->form->local_address,
                 ];
-
-                if ($this->form->ip_type === 'remote_address') {
-                    $values['remote-address'] = $this->form->remote_address;
-                    $values['local-address'] = $this->form->local_address;
-                }
 
                 $id = Secret::updateSecret(
                     $client,

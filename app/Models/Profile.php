@@ -64,8 +64,10 @@ class Profile extends Model
     public static function getProfile(Client $client, string $id): array
     {
         $query = (new Query('/ppp/profile/print'))
-            ->where('name', $id);
-        return $client->query($query)->read();
+            ->where('.id', $id);
+        $response = $client->query($query)->read();
+        if (isset($response[0]) && $response[0]['.id'] === $id) return $response[0];
+        return [];
     }
 
     public static function getProfileByName(Client $client, $name): array

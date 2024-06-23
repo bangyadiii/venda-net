@@ -31,9 +31,9 @@ return [
      */
 
     'attempts'        => 5,   // Count of attempts to establish TCP session
-    'delay'           => 1,    // Delay between attempts in seconds
-    'timeout'         => 15,   // Max timeout for instantiating connection with RouterOS
-    'socket_timeout'  => 130,   // Max timeout for read from RouterOS
+    'delay'           => 3,    // Delay between attempts in seconds
+    'timeout'         => 3,   // Max timeout for instantiating connection with RouterOS
+    'socket_timeout'  => 5,   // Max timeout for read from RouterOS
     'socket_blocking' => true, // Set blocking mode on a socket stream
 
     // @see https://www.php.net/manual/en/context.socket.php
@@ -61,7 +61,7 @@ return [
      |
      */
 
-    'ssl'         => true, // Enable ssl support (if port is not set this parameter must change default port to ssl port)
+    'ssl'         => false, // Enable ssl support (if port is not set this parameter must change default port to ssl port)
 
     // @see https://www.php.net/manual/en/context.ssl.php
     'ssl_options' => [

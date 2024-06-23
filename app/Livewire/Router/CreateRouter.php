@@ -3,6 +3,7 @@
 namespace App\Livewire\Router;
 
 use App\Livewire\Forms\RouterForm;
+use App\Models\Client;
 use App\Models\Profile;
 use App\Models\Router;
 use Illuminate\Support\Facades\Log;
@@ -41,9 +42,19 @@ class CreateRouter extends Component
             ]
         );
         try {
-            $client = Router::getClient($this->form->host, $this->form->username, $this->form->password);
+            $client = new Client();
+            if (!$client->connect($this->form->host, $this->form->username, $this->form->password)) {
+                $this->form->is_connected = false;
+                $this->form->profiles = [];
+                $this->dispatch('toast', title: 'Tidak bisa terkoneksi', type: 'error');
+                return;
+            }
             $this->form->is_connected = true;
-            $this->form->profiles = Profile::queryForClient($client)->get()->toArray();
+            $profiles = $client->comm('/ppp/profile/print');
+            $this->form->profiles = \array_map(fn ($profile) => [
+                'id' => $profile['.id'],
+                'name' => $profile['name'],
+            ], $profiles);
 
             $this->dispatch('toast', title: 'Koneksi berhasil', type: 'success');
         } catch (ConnectException $th) {

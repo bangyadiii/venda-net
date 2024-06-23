@@ -5,6 +5,7 @@ namespace App\Livewire\Dashboard;
 use App\Enums\BillStatus;
 use App\Enums\ServiceStatus;
 use App\Models\Bill;
+use App\Models\Client;
 use App\Models\Customer;
 use App\Models\Router;
 use App\Models\Secret;
@@ -113,22 +114,15 @@ class DashboardComponent extends Component
             return;
         }
 
-        try {
-            $client = Router::getClient($this->router->host, $this->router->username, $this->router->password);
-            $this->secret = Secret::queryForClient($client)->count();
-            $onlineSecrets = Router::getOnlinePPP($client);
-
-            $this->onlineSecret = count($onlineSecrets);
-        } catch (ConnectException $th) {
-            if (!$this->hasError) {
-                $this->dispatch('toast', title: 'Tidak bisa terkoneksi ke router', type: 'error');
-                $this->hasError = true;
-            }
-        } catch (StreamException $th) {
-            \info($th->getMessage());
-        } catch (\Throwable $th) {
-            $this->dispatch('toast', title: $th->getMessage(), type: 'error');
+        $client =  new Client();
+        if (!$client->connect($this->router->host, $this->router->username, $this->router->password)) {
+            $this->dispatch('toast', title: 'Tidak bisa terkoneksi ke router', type: 'error');
+            $this->hasError = true;
+            return;
         }
+        $this->secret = count($client->comm("/ppp/secret/print"));
+        $this->onlineSecret = count($client->comm("/ppp/active/print"));
+        $client->disconnect();
     }
 
     public function fetchTrafficData()

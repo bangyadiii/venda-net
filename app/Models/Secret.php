@@ -110,18 +110,20 @@ class Secret extends Model
      * @param string $type
      * @return false|string
      */
-    public static function addSecret(Client $client, string $username, string $pw, $service, $profile, $remote, $local, $type): false|string
+    public static function addSecret(Client $client, string $username, string $pw, $service, $profile, $remote, $local): false|string
     {
         $query = new Query('/ppp/secret/add');
         $query->add('=name=' . $username)
             ->add('=password=' . $pw)
             ->add('=service=' . $service)
-            ->add('=profile=' . $profile);
-        if ($type === 'remote_address') {
-            $query->add('=remote-address=' . $remote);
+            ->add('=profile=' . $profile)
+            ->add('=remote-address=' . $remote);
+        if($local) {
             $query->add('=local-address=' . $local);
         }
+
         $response = $client->query($query)->read();
+
         if (!isset($response['after']['ret'])) {
             return false;
         }
@@ -135,7 +137,7 @@ class Secret extends Model
             ->where('.id', $id);
 
         $res =  $client->query($query)->read();
-        if(isset($res['after']['message'])) {
+        if (isset($res['after']['message'])) {
             throw new Exception($res['after']['message']);
         }
         return $res[0];

@@ -59,15 +59,15 @@ class CreateCustomer extends Component
                 $profile = Profile::getProfile($client, $plan->ppp_profile_id);
 
                 $id = Secret::addSecret(
-                    $client,
-                    $this->form->secret_username,
-                    $this->form->secret_password,
-                    $this->form->ppp_service,
-                    $profile['name'],
-                    $this->form->local_address,
-                    $this->form->remote_address,
-                    $this->form->ip_type,
+                    client: $client,
+                    username: $this->form->secret_username,
+                    pw: $this->form->secret_password,
+                    service:$this->form->ppp_service,
+                    profile: $profile['name'],
+                    local: $this->form->local_address,
+                    remote: $this->form->remote_address,
                 );
+                dd($id);
                 \throw_if(!$id, new Exception('Failed to create secret'));
 
                 $customer->secret_id = $id;
