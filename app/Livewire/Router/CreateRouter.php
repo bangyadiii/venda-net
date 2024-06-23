@@ -41,30 +41,20 @@ class CreateRouter extends Component
                 'form.password' => 'nullable',
             ]
         );
-        try {
-            $client = new Client();
-            if (!$client->connect($this->form->host, $this->form->username, $this->form->password)) {
-                $this->form->is_connected = false;
-                $this->form->profiles = [];
-                $this->dispatch('toast', title: 'Tidak bisa terkoneksi', type: 'error');
-                return;
-            }
-            $this->form->is_connected = true;
-            $profiles = $client->comm('/ppp/profile/print');
-            $this->form->profiles = \array_map(fn ($profile) => [
-                'id' => $profile['.id'],
-                'name' => $profile['name'],
-            ], $profiles);
-
-            $this->dispatch('toast', title: 'Koneksi berhasil', type: 'success');
-        } catch (ConnectException $th) {
-            Log::error($th->getMessage());
+        $client = new Client();
+        if (!$client->connect($this->form->host, $this->form->username, $this->form->password)) {
             $this->form->is_connected = false;
             $this->form->profiles = [];
             $this->dispatch('toast', title: 'Tidak bisa terkoneksi', type: 'error');
-        } catch (\Throwable $th) {
-            Log::error($th->getMessage());
-            $this->dispatch('toast', title: $th->getMessage(), type: 'error');
+            return;
         }
+        $this->form->is_connected = true;
+        $profiles = $client->comm('/ppp/profile/print');
+        $this->form->profiles = \array_map(fn ($profile) => [
+            'id' => $profile['.id'],
+            'name' => $profile['name'],
+        ], $profiles);
+
+        $this->dispatch('toast', title: 'Koneksi berhasil', type: 'success');
     }
 }
