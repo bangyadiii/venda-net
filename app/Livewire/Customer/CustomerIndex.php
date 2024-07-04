@@ -8,10 +8,8 @@ use App\Models\Client;
 use App\Models\Customer;
 use App\Models\Plan;
 use App\Models\Router;
-use App\Models\Secret;
 use Livewire\Component;
-use RouterOS\Exceptions\ConnectException;
-use RouterOS\Query;
+
 
 class CustomerIndex extends Component
 {
@@ -26,14 +24,12 @@ class CustomerIndex extends Component
         $router = Router::findOrFail($routerId);
         $client = new Client();
         if (!$client->connect($router->host, $router->username, $router->password)) {
-            $this->dispatch('toast', title: 'Router tidak terkoneksi', type: 'error');
-            return;
+            return $this->dispatch('toast', title: 'Router tidak terkoneksi', type: 'error');
         }
         $secrets = $client->comm('/ppp/secret/print');
 
         if (empty($secrets)) {
-            $this->dispatch('toast', title: 'No secrets found', type: 'error');
-            return;
+            return $this->dispatch('toast', title: 'No secrets found', type: 'error');
         }
 
         $secretsIds = Customer::query()
@@ -52,14 +48,15 @@ class CustomerIndex extends Component
             $plan = $plans->where('name', $secret['profile'])->first();
             if (!$plan) {
                 $errorCustomers->push($secret['name']);
-                return;
+                continue;
             }
+
             Customer::create([
                 'plan_id' => $plan->id,
                 'secret_id' => $secret['.id'],
                 'customer_name' => $secret['name'],
                 'installment_status' => InstallmentStatus::INSTALLED,
-                'service_status' => ServiceStatus::ACTIVE,
+                'service_status' => $router->isolir_profile_id == $plan->id ? ServiceStatus::SUSPENDED : ServiceStatus::ACTIVE,
             ]);
         };
 

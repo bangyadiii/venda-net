@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Customer\CreateCustomer;
 use App\Livewire\Customer\CustomerIndex;
 use App\Livewire\Customer\EditCustomer;
+use App\Livewire\Customer\ShowCustomer;
 use App\Livewire\Dashboard\DashboardComponent;
 use App\Livewire\Plan\CreatePlan;
 use App\Livewire\Plan\EditPlan;
@@ -49,6 +50,7 @@ Route::middleware('auth')
             ->prefix('customers')->group(function () {
                 Route::get('/', CustomerIndex::class)->name('index');
                 Route::get('/create', CreateCustomer::class)->name('create');
+                Route::get('/{customer}', ShowCustomer::class)->name('show');
                 Route::get('/{customer}/edit', EditCustomer::class)->name('edit');
                 Route::delete('/{customer}/delete', CreateCustomer::class)->name('delete');
             });

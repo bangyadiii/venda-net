@@ -39,6 +39,15 @@ class CreateOnlinePayment extends Component
 
     public function store()
     {
+        if (!$this->bill) {
+            $this->dispatch('toast', title: 'Tagihan tidak ditemukan', type: 'error');
+            return;
+        }
+        if ($this->bill->total_amount <= 0) {
+            $this->dispatch('toast', title: 'Tidak bisa melakukan pembayaran karena total tagihan Rp 0', type: 'error');
+            return;
+        }
+
         $orderId = \rand(1, 5000) . '.' . $this->bill->id;
         $params = [
             'transaction_details' => [
@@ -69,7 +78,7 @@ class CreateOnlinePayment extends Component
                 ->create(new TransactionDto($params));
 
             DB::commit();
-            \info('snapToken:' . $transactionToken->token);
+            \info('snapToken:' . $transactionToken?->token ?? '-');
             $this->dispatch('midtrans:payment', snapToken: $transactionToken->token);
         } catch (\Exception $e) {
             DB::rollBack();

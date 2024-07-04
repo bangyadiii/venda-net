@@ -28,7 +28,7 @@ return new class extends Migration
             $table->date('active_date')->nullable();
             $table->boolean('auto_isolir')->default(true);
             $table->tinyInteger('isolir_date')->nullable();
-            $table->string('secret_id')->nullable()->unique();
+            $table->string('secret_id')->nullable();
 
             $table->foreignId('plan_id')
                 ->nullable()

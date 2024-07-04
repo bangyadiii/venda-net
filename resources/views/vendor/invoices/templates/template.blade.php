@@ -18,6 +18,14 @@
             padding: 20px;
         }
 
+        .w-full {
+            width: 100%;
+        }
+
+        .w-half {
+            width: 50%;
+        }
+
         .invoice-title {
             display: flex;
             justify-content: space-between;
@@ -153,8 +161,8 @@
 
         <hr class="my-4">
 
-        <div class="row">
-            <div class="col-sm-6">
+        <div style="display: flex">
+            <div class="w-half">
                 <div class="text-muted">
                     <h5 class="font-size-16 mb-3">Kepada: </h5>
                     <h5 class="font-size-15 mb-2">{{ $invoice->buyer->name }}</h5>
@@ -162,7 +170,7 @@
                     <p>{{ $invoice->buyer->phone }}</p>
                 </div>
             </div>
-            <div class="col-sm-6">
+            <div class="w-half">
                 <div class="text-muted text-sm-end">
                     <div>
                         <h5 class="font-size-15 mb-1">{{ __('invoices::invoice.date') }}:</h5>
@@ -170,7 +178,8 @@
                     </div>
                     <div class="mt-4">
                         <h5 class="font-size-15 mb-1">Periode</h5>
-                        <p>24 Juli - 23 Agustus</p>
+                        <p>{{ $invoice->dueDate->copy()->subMonth()->addDay()->format('d F') . ' - ' . $invoice->getDueDate()}}
+                        </p>
                     </div>
                 </div>
             </div>

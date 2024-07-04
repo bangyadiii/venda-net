@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Plan;
 
+use App\Models\Client;
 use App\Models\Plan;
 use App\Models\Profile;
 use App\Models\Router;
@@ -29,30 +30,32 @@ class PlanIndex extends Component
     {
         try {
             $router = Router::findOrFail($routerId);
-            $client = Router::getClient($router->host, $router->username, $router->password);
-            /**
-             * @var \Illuminate\Database\Eloquent\Collection $profiles
-             */
-            $profiles = Profile::queryForClient($client)->get();
-            if ($profiles->isEmpty()) {
+            $client = new Client();
+
+            if (!$client->connect($router->host, $router->username, $router->password)) {
+                $this->dispatch('toast', title: 'Router tidak terkoneksi', type: 'error');
+                return;
+            }
+            $profiles = $client->comm('/ppp/profile/print');
+            if (empty($profiles)) {
                 $this->dispatch('toast', title: 'No profile found', type: 'error');
                 return;
             }
             $plans = Plan::query()->where('router_id', $routerId)->get();
             $planIds = $plans->pluck('ppp_profile_id')->toArray();
-            $profiles = $profiles->filter(
-                fn ($profile) =>
-                !in_array($profile->id, $planIds) && !\in_array($profile->name, ['default', 'default-encryption'])
-            );
-            $profiles->each(function ($profile) use ($router) {
+            $profiles = \array_filter($profiles, function ($profile) use ($planIds) {
+                return  !in_array($profile['.id'], $planIds);
+            });
+
+            foreach ($profiles as $profile) {
                 Plan::create([
                     'router_id' => $router->id,
-                    'ppp_profile_id' => $profile->id,
-                    'name' => $profile->name,
-                    'speed_limit' => $profile->rate_limit,
+                    'ppp_profile_id' => $profile['.id'],
+                    'name' => $profile['name'],
+                    'speed_limit' => $profile['rate-limit'] ?? null,
                     'price' => 0,
                 ]);
-            });
+            }
 
             $this->dispatch('toast', title: 'Berhasil import profile mikrotik', type: 'success');
         } catch (ConnectException $th) {

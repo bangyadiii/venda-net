@@ -62,12 +62,11 @@ class CreateCustomer extends Component
                     client: $client,
                     username: $this->form->secret_username,
                     pw: $this->form->secret_password,
-                    service:$this->form->ppp_service,
+                    service: $this->form->ppp_service,
                     profile: $profile['name'],
                     local: $this->form->local_address,
                     remote: $this->form->remote_address,
                 );
-                dd($id);
                 \throw_if(!$id, new Exception('Failed to create secret'));
 
                 $customer->secret_id = $id;
@@ -75,11 +74,13 @@ class CreateCustomer extends Component
                 $this->dispatch('toast', title: $th->getMessage(), type: 'error');
                 return redirect()->back();
             }
+        } else {
+            $customer->plan_id = null;
         }
 
         $customer->save();
 
-        if ($customer->service_status == ServiceStatus::ACTIVE && $customer->installment_status == InstallmentStatus::INSTALLED) {
+        if ($customer->service_status == ServiceStatus::ACTIVE && $customer->installment_status == InstallmentStatus::INSTALLED && isset($customer->plan_id)) {
             $isolirDate = Carbon::createFromDate(now()->year, now()->month, $customer->isolir_date);
             if ($isolirDate->isPast()) {
                 $isolirDate->addMonth();
@@ -89,9 +90,9 @@ class CreateCustomer extends Component
             $bill = $customer->bills()->create([
                 'due_date' => $isolirDate,
                 'plan_id' => $customer->plan_id,
-                'total_amount' => ($plan->price - $this->form->discount) * ($tax / 100 + 1),
+                'total_amount' => ($plan->price - (int) $this->form->discount) * ($tax / 100 + 1),
                 'tax_rate' => $tax,
-                'discount' => $this->form->discount,
+                'discount' => (int)$this->form->discount,
                 'status' => BillStatus::UNPAID,
             ]);
 

@@ -51,6 +51,7 @@ class CustomerTable extends DataTableComponent
                 ->label(
                     fn ($row, Column $column) => view('components.livewire.datatables.action-column')->with(
                         [
+                            'showLink' => route('customers.show', $row),
                             'editLink' => route('customers.edit', $row),
                             'deleteMethod' => 'delete(' . $row->id . ')',
                         ]
@@ -64,7 +65,8 @@ class CustomerTable extends DataTableComponent
                 ->searchable(),
             Column::make("Alamat", "address")
                 ->searchable(),
-            Column::make("Paket", "plan.name"),
+            Column::make("Paket", "plan.name")
+                ->format(fn ($value) => $value ?? '-'),
             Column::make("Status Pemasangan", "installment_status")
                 ->format(
                     fn ($value) => match ($value) {
@@ -87,10 +89,9 @@ class CustomerTable extends DataTableComponent
                 ->sortable(),
             Column::make("Tanggal Isolir", "isolir_date")
                 ->sortable(),
-            // TODO: Tambahkan kolom secret_username (tambahkan relation)
-            // Column::make("Username Secret", "secret_username")
-            //     ->sortable()
-            //     ->searchable(),
+
+            // Column::make("IP Remote ", "remote_address")
+            //     ->format(fn ($value) => '<a href="' . $value . '" target="_blank">' . $value . '</a>' ?? '-'),
         ];
     }
 

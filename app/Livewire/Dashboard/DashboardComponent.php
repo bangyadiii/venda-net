@@ -33,7 +33,7 @@ class DashboardComponent extends Component
     public $interfaces = [];
     public $boardName = '-';
     public $version = '-';
-    public $interface = 'ether1';
+    public $interface;
     public $hasError = false;
     public $totalCustomer = 0;
     public $paymentComplete = 0;
@@ -149,7 +149,6 @@ class DashboardComponent extends Component
             }
             return;
         }
-
         $data = [
             'rx' => (int)$response[0]['rx-bits-per-second'],
             'tx' => (int)$response[0]['tx-bits-per-second'],
@@ -209,6 +208,7 @@ class DashboardComponent extends Component
             $this->version = $response['version'] ?? '-';
             $response = Router::getInterfaces($client);
             $this->interfaces = array_map(fn ($interface) => $interface['name'], $response ?? []);
+            $this->interface = $this->interfaces[0] ?? null;
         } catch (ConnectException $th) {
             $this->dispatch('toast', title: 'Tidak bisa terkoneksi ke router', type: 'error');
         } catch (\Throwable $th) {

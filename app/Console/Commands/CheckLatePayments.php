@@ -21,7 +21,6 @@ class CheckLatePayments extends Command
             ->where('service_status', ServiceStatus::ACTIVE)
             ->whereHas('bills', function ($query) {
                 $query
-                    ->where('total_amount', '>', 0)
                     ->where('status', BillStatus::UNPAID)
                     ->where('due_date', '<', Carbon::now());
             })->get();

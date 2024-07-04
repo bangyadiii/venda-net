@@ -41,6 +41,11 @@ class PaymentReminderCommand extends Command
                     ->where('total_amount', '>', 0);
             })
             ->get();
+        \info('asda '. $customers->count());
+        if($customers->isEmpty()) {
+            $this->info('No customers with due payments found');
+            return Command::SUCCESS;
+        }
 
         foreach ($customers as $customer) {
             $data = [

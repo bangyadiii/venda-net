@@ -5,6 +5,7 @@ namespace App\Livewire\Transaction;
 use App\Enums\BillStatus;
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
+use App\Enums\ServiceStatus;
 use App\Jobs\UnisolateCustomerJob;
 use App\Livewire\Forms\TransactionForm;
 use App\Models\Bill;
@@ -34,7 +35,7 @@ class CreateTransaction extends Component
 
     public function mount()
     {
-        $this->customers = Customer::all();
+        $this->customers = Customer::where('service_status', ServiceStatus::ACTIVE)->get();
         $tax = (int) Setting::where('key', 'ppn')->first()->value ?? 0;
         if ($this->customer_id) {
             $this->customer = Customer::with(['bills', 'plan'])->find($this->customer_id);

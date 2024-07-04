@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use RouterOS\Query;
 
 class IsolirCustomerJob implements ShouldQueue
 {
@@ -36,7 +37,10 @@ class IsolirCustomerJob implements ShouldQueue
         } else {
             throw new \Exception('Action tidak ditemukan');
         }
-
+        // remove session if exist
+        $query = (new Query('/ppp/active/remove'))
+            ->equal('.id', $this->customer->secret_id);
+        $client->query($query)->read();
         $this->customer->update(['service_status' => ServiceStatus::SUSPENDED]);
     }
 }

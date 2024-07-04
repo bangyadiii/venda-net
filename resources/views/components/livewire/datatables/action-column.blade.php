@@ -1,4 +1,10 @@
 <div>
+    @isset( $showLink )
+    <a href="{{ $showLink }}" class="btn btn-link p-0" wire:navigate wire:loading.attr='disabled'>
+        <i class='bx bx-show'></i>
+    </a>
+    @endif
+
     @isset( $editLink )
     <a href="{{ $editLink }}" class="btn btn-link p-0" wire:navigate wire:loading.attr='disabled'>
         <i class='bx bx-pencil'></i>

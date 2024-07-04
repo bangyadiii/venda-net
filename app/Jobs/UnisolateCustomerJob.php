@@ -11,8 +11,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use RouterOS\Client;
-use RouterOS\Query;
 
 class UnisolateCustomerJob implements ShouldQueue
 {

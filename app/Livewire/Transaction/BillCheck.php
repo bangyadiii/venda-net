@@ -19,8 +19,11 @@ class BillCheck extends Component
     public function store()
     {
         $this->form->validate();
-        Bill::query()->where('customer_id', $this->form->customer_id)
-            ->latest()->firstOrFail();
+        $bill = Bill::query()->where('customer_id', $this->form->customer_id)
+            ->latest()->first();
+        if (!$bill) {
+            return $this->dispatch('toast', title: 'Tagihan tidak ditemukan', type: 'error');
+        }
 
         return $this->redirectRoute('payment.index', ['id' => $this->form->customer_id], navigate: true);
     }

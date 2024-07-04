@@ -118,7 +118,7 @@ class Secret extends Model
             ->add('=service=' . $service)
             ->add('=profile=' . $profile)
             ->add('=remote-address=' . $remote);
-        if($local) {
+        if ($local) {
             $query->add('=local-address=' . $local);
         }
 
@@ -172,12 +172,18 @@ class Secret extends Model
 
                 $client->query($query)->read();
             } elseif ($type == 'change_profile') {
+                $profile = Profile::getProfile($client, $default);
                 $query = (new Query('/ppp/secret/set'))
                     ->equal('.id', $id)
-                    ->equal('profile', $default);
+                    ->equal('profile', $profile['name']);
 
                 $client->query($query)->read();
             }
+
+            // remove session if exist
+            $query = (new Query('/ppp/active/remove'))
+                ->equal('.id', $id);
+            $client->query($query)->read();
         } catch (\Throwable $th) {
             return false;
         }
