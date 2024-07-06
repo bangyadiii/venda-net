@@ -23,10 +23,10 @@ class ViewInvoice extends Component
     private Plan $plan;
 
     #[Url(as: 'bill_id', except: '')]
-    public ?int $billId;
+    public ?int $billId = null;
 
     #[Url(as: 'order_id', except: '')]
-    public ?string $orderId;
+    public ?string $orderId = null;
 
     #[Url(as: 'transaction_status', except: '')]
     public ?string $trxStatus;
