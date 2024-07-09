@@ -20,10 +20,11 @@ class RouterIndex extends Component
 
     public function delete($id)
     {
-        $router = Router::with('plans.customers')->find($id);
-        if ($router->loadExists('plans.customers')) {
+        $router = Router::query()->withCount('customers')->find($id);
+        if ($router->customers_count > 0) {
             return $this->dispatch('toast', title: 'Tidak bisa menghapus router karena digunakan oleh pelanggan', type: 'success');
         }
+
         $router->delete();
         return $this->dispatch('toast', title: 'Data berhasil di hapus', type: 'success');
     }

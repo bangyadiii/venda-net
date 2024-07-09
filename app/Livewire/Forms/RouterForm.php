@@ -8,7 +8,7 @@ use Livewire\Form;
 
 class RouterForm extends Form
 {
-    public ?Router $router;
+    public ?Router $router = null;
 
     public string $host;
     public $username;
@@ -23,7 +23,7 @@ class RouterForm extends Form
     {
         return [
             'host' => [
-                'required', 'string',
+                'required', 'string', Rule::unique('routers', 'host')->ignore($this->router?->id)
             ],
             'username' => 'required|string',
             'password' => 'nullable|string',

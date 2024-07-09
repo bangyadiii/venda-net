@@ -47,6 +47,6 @@ class Invoice extends LaravelDailyInvoice
 
     public function getPaidDate()
     {
-        return $this->paidDate->toDateTimeString();
+        return $this->paidDate?->toDateTimeString() ?? null;
     }
 }

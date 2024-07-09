@@ -29,6 +29,11 @@ class Router extends Model
         return $this->hasMany(Plan::class);
     }
 
+    public function customers()
+    {
+        return $this->hasManyThrough(Customer::class, Plan::class);
+    }
+
     public static function getLastClient(): ?Client
     {
         $router =  Router::latest()->first();

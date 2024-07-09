@@ -148,11 +148,12 @@ class Secret extends Model
         $query = (new Query('/ppp/secret/set'))
             ->equal('.id', $id);
         foreach ($values as $key => $value) {
+            if (empty($value)) continue;
+
             $query->equal($key, $value);
         }
 
         $resp = $client->query($query)->read();
-
         if (empty($resp)) {
             return true;
         }
