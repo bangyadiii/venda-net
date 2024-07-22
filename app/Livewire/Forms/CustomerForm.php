@@ -78,7 +78,7 @@ class CustomerForm extends Form
             'service_status' => ['required', Rule::enum(ServiceStatus::class)],
             'active_date' => 'nullable|required_if:installment_status,installed|date',
             'auto_isolir' => 'required|boolean',
-            'isolir_date' => 'nullable|required_if:installment_status,installed|integer|between:1,31',
+            'isolir_date' => 'nullable|required_if:installment_status,installed',
             'ppp_service' => 'required|string',
             'secret_username' => 'required|string',
             'secret_password' => 'required|string',

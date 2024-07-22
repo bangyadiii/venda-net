@@ -63,6 +63,9 @@ class EditCustomer extends Component
         if (!$this->customer->auto_isolir) {
             $this->customer->isolir_date = null;
         }
+        if ($this->form->isolir_date == 'last_day') {
+            $this->customer->isolir_date = 'last_day';
+        }
 
         if ($this->form->plan_id) {
             try {
@@ -103,8 +106,6 @@ class EditCustomer extends Component
                         $values
                     );
                     \throw_if(!$id, new Exception('Failed to update secret'));
-
-                    $this->customer->secret_id = $id;
                 }
             } catch (\Throwable $th) {
                 $this->dispatch('toast', title: $th->getMessage(), type: 'error');
@@ -118,8 +119,10 @@ class EditCustomer extends Component
             ->where('status', BillStatus::UNPAID)
             ->get();
 
+        $date = isset($this->customer->isolir_date) && $this->customer->isolir_date == 'last_day' ?
+            now()->endOfMonth() : $this->customer->isolir_date;
 
-        $isolirDate = Carbon::createFromDate(now()->year, now()->month, $this->customer->isolir_date);
+        $isolirDate = Carbon::createFromDate(now()->year, now()->month, $date);
         if ($isolirDate->isPast()) {
             $isolirDate->addMonth();
         }

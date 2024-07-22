@@ -57,8 +57,8 @@ class TransactionTable extends DataTableComponent
             Column::make("Tarif", "plan.price")
                 ->format(fn ($value) => currency($value))
                 ->sortable(),
-            Column::make("Tagihan", "due_date")
-                ->format(fn ($value) => Carbon::parse($value)->format('F Y'))
+            Column::make("Tenggat", "due_date")
+                ->format(fn ($value) => Carbon::parse($value)->format('d F Y'))
                 ->sortable(),
             Column::make("Diskon", "discount")
                 ->format(fn ($value) => currency($value))

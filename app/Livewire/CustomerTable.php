@@ -60,6 +60,7 @@ class CustomerTable extends DataTableComponent
             Column::make("No Pelanggan", "id")
                 ->searchable(),
             Column::make("Name", "customer_name")
+                ->sortable()
                 ->searchable(),
             Column::make("No Telp/WA", "phone_number")
                 ->searchable(),
@@ -88,6 +89,12 @@ class CustomerTable extends DataTableComponent
                 ->format(fn ($value) => Carbon::parse($value)->format('d/m/Y'))
                 ->sortable(),
             Column::make("Tanggal Isolir", "isolir_date")
+                ->format(function ($value) {
+                    if($value == 'last_day'){
+                        return 'Akhir Bulan';
+                    }
+                    return $value;
+                })
                 ->sortable(),
 
             // Column::make("IP Remote ", "remote_address")

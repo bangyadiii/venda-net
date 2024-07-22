@@ -41,7 +41,8 @@ class PaymentReminderCommand extends Command
                     ->where('total_amount', '>', 0);
             })
             ->get();
-        \info('asda '. $customers->count());
+
+        \info('total customer yang ditagih : ' . $customers->count());
         if($customers->isEmpty()) {
             $this->info('No customers with due payments found');
             return Command::SUCCESS;
@@ -54,8 +55,8 @@ class PaymentReminderCommand extends Command
                 'PHONE' => $customer->phone_number,
                 'ALAMAT' => $customer->address,
                 'PAKET' => $customer->plan->name,
-                'TARIFPAKET' => $customer->plan->price,
-                'TAGIHAN' => $customer->plan->price,
+                'TARIFPAKET' => \currency($customer->plan->price),
+                'TAGIHAN' => currency($customer->bills->last()->total_amount),
                 'ISOLIR' => $customer->isolir_date,
                 'BANK' => $bank,
                 'PAYMENT_URL' => route('payment.index', ['id' => $customer->id]),

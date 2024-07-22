@@ -9,6 +9,7 @@ use App\Models\Router;
 use Exception;
 use Livewire\Component;
 use RouterOS\Exceptions\ConnectException;
+use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 class PlanIndex extends Component
 {
@@ -76,6 +77,11 @@ class PlanIndex extends Component
             $plan->delete();
 
             $this->dispatch('toast', title: 'Deleted from database', type: 'success');
+        } catch (NotFoundResourceException $th) {
+            $plan->delete();
+            $this->dispatch('toast', title: 'Deleted from database', type: 'success');
+        } catch (ConnectException $th) {
+            $this->dispatch('toast', title: 'Failed to connect to router', type: 'error');
         } catch (\Throwable $th) {
             $this->dispatch('toast', title: $th->getMessage(), type: 'error');
         }

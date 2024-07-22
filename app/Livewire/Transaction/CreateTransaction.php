@@ -11,6 +11,8 @@ use App\Livewire\Forms\TransactionForm;
 use App\Models\Bill;
 use App\Models\Customer;
 use App\Models\Payment;
+use App\Models\Router;
+use App\Models\Secret;
 use App\Models\Setting;
 use Carbon\Carbon;
 use Livewire\Component;
@@ -103,13 +105,19 @@ class CreateTransaction extends Component
             return;
         }
 
-        $this->customer = Customer::with('plan')
+        $this->customer = Customer::with(['plan', 'router'])
             ->find($this->customer_id);
 
         if (!$this->customer) {
             $this->dispatch('toast', title: 'Pelanggan tidak ditemukan', type: 'error');
             $this->customer_id = null;
             return;
+        }
+        $router = $this->customer->router;
+        try {
+            $client = Router::getClient($router->host, $router->username, $router->password);
+            $this->secret_username = Secret::getSecret($client, $this->customer->secret_id)['name'];
+        } catch (\Throwable $th) {
         }
 
         $this->currentBill = Bill::query()

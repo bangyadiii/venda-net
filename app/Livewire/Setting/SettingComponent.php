@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Setting;
 
+use App\Enums\BillStatus;
 use App\Livewire\Forms\SettingForm;
+use App\Models\Bill;
 use App\Models\Setting;
 use Livewire\Component;
 
@@ -50,6 +52,20 @@ class SettingComponent extends Component
         ], [
             'value' => $this->form->ppn
         ]);
+
+        $bills = Bill::query()
+            ->with('plan')
+            ->where('status', BillStatus::UNPAID)
+            ->whereDate('due_date', '>', now())
+            ->get();
+
+        foreach ($bills as $bill) {
+            $bill->update([
+                'tax_rate' => $this->form->ppn,
+                'total_amount' => $bill->plan->price * ($this->form->ppn / 100 + 1)
+            ]);
+        }
+
         $rekening = Setting::query()->updateOrCreate([
             'key' => 'rekening'
         ], [

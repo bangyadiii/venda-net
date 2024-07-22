@@ -81,7 +81,10 @@ class CreateCustomer extends Component
         $customer->save();
 
         if ($customer->service_status == ServiceStatus::ACTIVE && $customer->installment_status == InstallmentStatus::INSTALLED && isset($customer->plan_id)) {
-            $isolirDate = Carbon::createFromDate(now()->year, now()->month, $customer->isolir_date);
+            $date = isset($customer->isolir_date) && $customer->isolir_date == 'last_day' ?
+                now()->endOfMonth() : $customer->isolir_date;
+
+            $isolirDate = Carbon::createFromDate(now()->year, now()->month, $date);
             if ($isolirDate->isPast()) {
                 $isolirDate->addMonth();
             }

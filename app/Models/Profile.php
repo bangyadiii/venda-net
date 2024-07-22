@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use RouterOS\Client;
 use RouterOS\Query;
 use Sushi\Sushi;
+use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 class Profile extends Model
 {
@@ -115,10 +116,15 @@ class Profile extends Model
                 ->equal('.id', $id);
             $response = $client->query($query)->read();
             if (\is_array($response) && !empty($response)) {
+                if (\str_contains($response['after']['message'], 'no such item')) {
+                    throw new NotFoundResourceException();
+                }
                 throw new Exception('Failed to delete from Mikrotik');
             }
 
             return !isset($response['after']['ret']);
+        } catch (NotFoundResourceException $th) {
+            throw $th;
         } catch (\Throwable $th) {
             \info('error', ['error' => $th->getMessage()]);
             return false;
