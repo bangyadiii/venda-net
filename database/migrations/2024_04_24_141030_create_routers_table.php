@@ -16,6 +16,10 @@ return new class extends Migration
             $table->string('host');
             $table->string('username');
             $table->string('password');
+
+            $table->string('isolir_action')->nullable();
+            $table->string('isolir_profile_id')->nullable();
+
             $table->timestamps();
         });
     }

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
+use Sawirricardo\Midtrans\Laravel\MidtransServiceProvider;
 
 return [
 
@@ -16,7 +17,7 @@ return [
     |
     */
 
-  'name' => env('APP_NAME', 'Laravel'),
+  'name' => env('APP_NAME', 'Venda NET'),
 
   /*
     |--------------------------------------------------------------------------
@@ -70,7 +71,7 @@ return [
     |
     */
 
-  'timezone' => 'UTC',
+  'timezone' => 'Asia/Jakarta',
 
   /*
     |--------------------------------------------------------------------------
@@ -83,7 +84,7 @@ return [
     |
     */
 
-  'locale' => 'en',
+  'locale' => env('APP_LOCALE', 'id'),
 
   /*
     |--------------------------------------------------------------------------
@@ -166,10 +167,14 @@ return [
     App\Providers\AppServiceProvider::class,
     App\Providers\AuthServiceProvider::class,
     // App\Providers\BroadcastServiceProvider::class,
-    Yajra\DataTables\DataTablesServiceProvider::class,
     App\Providers\EventServiceProvider::class,
     App\Providers\RouteServiceProvider::class,
+    App\Providers\TelescopeServiceProvider::class,
     App\Providers\MenuServiceProvider::class,
+    Barryvdh\Debugbar\ServiceProvider::class,
+    MidtransServiceProvider::class,
+    Sentry\Laravel\ServiceProvider::class,
+    Maatwebsite\Excel\ExcelServiceProvider::class,
   ])->toArray(),
 
   /*
@@ -185,6 +190,9 @@ return [
 
   'aliases' => Facade::defaultAliases()->merge([
     // 'Example' => App\Facades\Example::class,
+    'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
+    'Sentry' => Sentry\Laravel\Facade::class,
+    'Excel' => Maatwebsite\Excel\Facades\Excel::class,
   ])->toArray(),
 
 ];

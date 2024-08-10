@@ -291,7 +291,7 @@ $dt-font-weight: $font-weight-medium !default;
 // * Z-index master list
 // *******************************************************************************
 
-$zindex-menu-fixed: 1080 !default;
+$zindex-menu-fixed: 10 !default;
 $zindex-modal: 1090 !default;
 $zindex-modal-backdrop: $zindex-modal - 1 !default;
 // $zindex-modal-top: 1090 !default; // (C)
